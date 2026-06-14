@@ -1,0 +1,63 @@
+# Notification-Channel Template (nur Senden)
+# ============================================
+#
+# Notification-Channels sind einfacher als volle Connectors:
+# - Nur Senden (kein Polling, kein Empfang)
+# - Keine Datenbank — Keys via Umgebungsvariablen oder .env
+# - Direkt als HTTP-Request implementiert
+#
+# Neue Notification-Channels hinzufügen:
+# ========================================
+#
+# 1. Umgebungsvariable oder .env-Datei setzen:
+#    NOTIFY_TELEGRAM_BOT_TOKEN=...
+#    NOTIFY_TELEGRAM_CHAT_ID=...
+#
+# 2. Eigene Sende-Funktion implementieren (Vorlage unten):
+#
+#    def send_telegram(text: str) -> bool:
+#        import os, json, urllib.request
+#        token = os.environ["NOTIFY_TELEGRAM_BOT_TOKEN"]
+#        chat_id = os.environ["NOTIFY_TELEGRAM_CHAT_ID"]
+#        url = f"https://api.telegram.org/bot{token}/sendMessage"
+#        data = json.dumps({"chat_id": chat_id, "text": text}).encode()
+#        req = urllib.request.Request(url, data=data,
+#              headers={"Content-Type": "application/json"})
+#        with urllib.request.urlopen(req, timeout=10) as resp:
+#            return resp.status < 400
+#
+# 3. Für volle bidirektionale Nutzung: connector_template.py verwenden.
+#
+# WICHTIG: Tokens/Keys NIEMALS hardcoden — immer Umgebungsvariablen nutzen.
+# Für die vollständige Connector-Implementierung: telegram_template.yaml
+
+# Referenz-Implementierungen (Notification-only)
+channels:
+  telegram:
+    status: reference
+    env_vars:
+      - NOTIFY_TELEGRAM_BOT_TOKEN
+      - NOTIFY_TELEGRAM_CHAT_ID
+    endpoint: "https://api.telegram.org/bot{token}/sendMessage"
+    payload: '{"chat_id": "{chat_id}", "text": "{content}", "parse_mode": "Markdown"}'
+
+  discord:
+    status: reference
+    env_vars:
+      - NOTIFY_DISCORD_WEBHOOK_URL
+    endpoint: "{NOTIFY_DISCORD_WEBHOOK_URL}"
+    payload: '{"content": "{content}"}'
+
+  slack:
+    status: reference
+    env_vars:
+      - NOTIFY_SLACK_WEBHOOK_URL
+    endpoint: "{NOTIFY_SLACK_WEBHOOK_URL}"
+    payload: '{"text": "{content}"}'
+
+  webhook:
+    status: reference
+    env_vars:
+      - NOTIFY_WEBHOOK_URL
+    endpoint: "{NOTIFY_WEBHOOK_URL}"
+    payload: '{"text": "{content}"}'

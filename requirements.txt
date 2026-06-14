@@ -1,0 +1,14 @@
+# connectors — Abhängigkeiten
+#
+# Kern-Modul: KEINE externen Abhängigkeiten (nur Python stdlib)
+#   urllib, json, threading, subprocess, abc, dataclasses, enum — alles stdlib
+#
+# Optionale Abhängigkeiten:
+#   pyyaml   — nur für Setup-Wizard (YAML-Template-Laden)
+#              Installieren: pip install pyyaml
+#
+# signal_connector.py benötigt signal-cli (externes Binary, kein pip-Paket):
+#   https://github.com/AsamK/signal-cli
+
+# Optional: Setup-Wizard
+pyyaml>=6.0

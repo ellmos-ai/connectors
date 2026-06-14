@@ -1,0 +1,106 @@
+# Template-Konfiguration für WhatsApp Business API Connector
+# Wird vom Setup-Wizard verwendet (python -m connectors.templates.setup_wizard)
+
+connector_name: WhatsApp
+connector_type: whatsapp
+connector_display_name: WhatsApp Business API
+connector_description: |
+  Implementiert BaseConnector für die WhatsApp Business API (Meta Cloud API).
+  Eingehende Nachrichten werden via Webhook empfangen (kein Polling).
+  Docs: https://developers.facebook.com/docs/whatsapp/cloud-api
+
+connector_module: whatsapp_connector
+connector_instance_name: whatsapp_main
+recipient_example: "49XXXXXXXXXX"
+
+auth_type: api_key
+auth_config_example: |
+  {
+    "api_token": os.environ["WA_API_TOKEN"],
+    "phone_number_id": os.environ["WA_PHONE_NUMBER_ID"],
+  }
+options_example: |
+  {}
+
+api_base_comment: "# WhatsApp Business API (Meta Cloud API)"
+api_base_url: "https://graph.facebook.com/v18.0"
+
+init_variables: |
+  self._api_token = self._resolve_secret(config.auth_config, "api_token")
+  self._phone_number_id = config.auth_config.get("phone_number_id", "")
+  self._session_data = None
+
+connect_validation: |
+  if not self._api_token or not self._phone_number_id:
+      self._status = ConnectorStatus.ERROR
+      return False
+
+connect_implementation: |
+  url = f"{self.API_BASE}/{self._phone_number_id}"
+  headers = {"Authorization": f"Bearer {self._api_token}"}
+  req = urllib.request.Request(url, headers=headers)
+  with urllib.request.urlopen(req, timeout=10) as resp:
+      self._session_data = json.loads(resp.read().decode("utf-8"))
+
+send_message_implementation: |
+  url = f"{self.API_BASE}/{self._phone_number_id}/messages"
+  headers = {
+      "Authorization": f"Bearer {self._api_token}",
+      "Content-Type": "application/json",
+  }
+  payload = {
+      "messaging_product": "whatsapp",
+      "to": recipient,
+      "type": "text",
+      "text": {"body": content},
+  }
+  data = json.dumps(payload).encode("utf-8")
+  req = urllib.request.Request(url, data=data, headers=headers)
+  with urllib.request.urlopen(req, timeout=15) as resp:
+      result = json.loads(resp.read().decode("utf-8"))
+      return result is not None
+
+get_messages_implementation: |
+  # WhatsApp Business API liefert eingehende Nachrichten via Webhook.
+  # Nutze process_webhook() in deinem HTTP-Handler.
+  return []
+
+parse_messages_implementation: |
+  pass
+
+helper_methods: |
+  def process_webhook(self, webhook_data):
+      """Eingehende Webhook-Daten von Meta verarbeiten."""
+      messages = []
+      try:
+          for entry in webhook_data.get("entry", []):
+              for change in entry.get("changes", []):
+                  value = change.get("value", {})
+                  for msg in value.get("messages", []):
+                      if msg.get("type") == "text":
+                          messages.append(Message(
+                              channel="whatsapp",
+                              sender=msg.get("from", ""),
+                              content=msg.get("text", {}).get("body", ""),
+                              timestamp=datetime.fromtimestamp(
+                                  int(msg.get("timestamp", 0))).isoformat(),
+                              direction="in",
+                              message_id=msg.get("id", ""),
+                              metadata={"type": msg.get("type", "text")},
+                          ))
+      except Exception as e:
+          print(f"[WhatsApp Webhook Error] {e}", file=sys.stderr)
+      return messages
+
+setup_questions:
+  - name: api_token
+    prompt: "WhatsApp Business API Token (von Meta Business Manager)"
+    type: secret
+    required: true
+    storage: auth_config
+
+  - name: phone_number_id
+    prompt: "Phone Number ID (aus WhatsApp Business Manager)"
+    type: text
+    required: true
+    storage: auth_config

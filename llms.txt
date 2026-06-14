@@ -1,0 +1,44 @@
+# connectors — LLM-Kontext
+
+Standalone Python-Modul für Messaging-Connectoren.
+Extrahiert aus BACH (`.AI/.OS/BACH/system/connectors/`), vollständig entkoppelt.
+
+## Kernkonzept
+
+Jeder Connector implementiert `BaseConnector` (base.py):
+- `connect() -> bool`
+- `disconnect() -> bool`
+- `send_message(recipient, content, attachments=None) -> bool`
+- `get_messages(since=None, limit=50) -> List[Message]`
+
+Factory: `from connectors import create_connector, ConnectorConfig`
+
+## Unterstützte Typen
+
+- `telegram`: Telegram Bot API, Long-Polling, stdlib-only
+- `discord`: Bot + Webhook-Modus, bidirektional
+- `signal`: via signal-cli (externes Binary erforderlich)
+- `whatsapp`: WhatsApp Business API, Empfang via Webhook
+- `homeassistant`: Home Assistant REST-API
+- `webhook`: Generischer HTTP Webhook (Stub/Basis)
+
+## Secrets
+
+NIEMALS hardcoden. Übergabe via:
+1. `os.environ` direkt in `auth_config`
+2. `.env`-Datei + python-dotenv
+3. Optionaler `SecretAdapter` (DI, für Frameworks)
+
+## BACH-Integration
+
+`SecretAdapter` überschreiben:
+
+    class BachAdapter(SecretAdapter):
+        def get_secret(self, key):
+            from hub.secrets_handler import SecretsHandler
+            return SecretsHandler().get_secret(key) or ""
+
+## Templates
+
+Neuen Connector erstellen: `python -m connectors.templates.setup_wizard`
+Template-Dateien: `templates/*_template.yaml`

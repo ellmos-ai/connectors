@@ -1,0 +1,126 @@
+# Template-Konfiguration für Telegram-Connector
+# Wird vom Setup-Wizard verwendet (python -m connectors.templates.setup_wizard)
+
+connector_name: Telegram
+connector_type: telegram
+connector_display_name: Telegram Bot API
+connector_description: |
+  Implementiert BaseConnector für die Telegram Bot API.
+  Benötigt: Bot-Token von @BotFather (als Env-Variable TG_BOT_TOKEN empfohlen).
+
+connector_module: telegram_connector
+connector_instance_name: telegram_main
+recipient_example: "CHAT_ID"
+
+auth_type: api_key
+auth_config_example: |
+  {"bot_token": os.environ["TG_BOT_TOKEN"]}
+options_example: |
+  {"owner_chat_id": ""}
+
+api_base_comment: "# Telegram Bot API"
+api_base_url: "https://api.telegram.org/bot{token}/{method}"
+
+init_variables: |
+  self._bot_token = self._resolve_secret(config.auth_config, "bot_token")
+  self._owner_chat_id = str(config.options.get("owner_chat_id", ""))
+  self._last_update_id = int(config.auth_config.get("last_update_id", 0))
+  self._bot_info = None
+
+connect_validation: |
+  if not self._bot_token:
+      self._status = ConnectorStatus.ERROR
+      return False
+
+connect_implementation: |
+  result = self._api_call("getMe")
+  if result:
+      self._bot_info = result
+
+send_message_implementation: |
+  params = {
+      "chat_id": recipient or self._owner_chat_id,
+      "text": content,
+      "parse_mode": "Markdown",
+  }
+  result = self._api_call("sendMessage", params)
+  if result is None:
+      params = {"chat_id": recipient or self._owner_chat_id, "text": content}
+      result = self._api_call("sendMessage", params)
+  return result is not None
+
+get_messages_implementation: |
+  params = {
+      "offset": self._last_update_id + 1,
+      "limit": min(limit, 100),
+      "timeout": 30,
+  }
+  result = self._api_call("getUpdates", params, timeout=40)
+  if not result:
+      return []
+
+parse_messages_implementation: |
+  for update in result:
+      self._last_update_id = max(self._last_update_id, update.get("update_id", 0))
+      msg = update.get("message")
+      if not msg:
+          continue
+      chat = msg.get("chat", {})
+      sender_id = str(chat.get("id", ""))
+      if self._owner_chat_id and sender_id != self._owner_chat_id:
+          continue
+      content = msg.get("text", "") or msg.get("caption", "")
+      if not content:
+          continue
+      messages.append(Message(
+          channel="telegram",
+          sender=sender_id,
+          content=content,
+          timestamp=datetime.fromtimestamp(msg.get("date", 0)).isoformat(),
+          direction="in",
+          message_id=str(msg.get("message_id", "")),
+          metadata={"update_id": update.get("update_id", 0)},
+      ))
+
+helper_methods: |
+  def _api_call(self, method, params=None, retries=3, timeout=15):
+      import json, socket, time, urllib.request, urllib.error
+      url = self.API_BASE.format(token=self._bot_token, method=method)
+      for attempt in range(retries):
+          if params:
+              data = json.dumps(params, ensure_ascii=False).encode("utf-8")
+              req = urllib.request.Request(
+                  url, data=data,
+                  headers={"Content-Type": "application/json; charset=utf-8"})
+          else:
+              req = urllib.request.Request(url)
+          try:
+              with urllib.request.urlopen(req, timeout=timeout) as resp:
+                  body = json.loads(resp.read().decode("utf-8"))
+                  if body.get("ok"):
+                      return body.get("result")
+                  return None
+          except Exception as e:
+              if attempt == retries - 1:
+                  print(f"[Telegram API Error] {method}: {e}", file=sys.stderr)
+              time.sleep(2 * (attempt + 1))
+      return None
+
+setup_questions:
+  - name: bot_token
+    prompt: "Bot-Token von @BotFather (oder Env-Variable TG_BOT_TOKEN nutzen)"
+    type: secret
+    required: true
+    storage: auth_config
+
+  - name: owner_chat_id
+    prompt: "Owner Chat-ID (optional, für Nachrichten-Filter)"
+    type: text
+    required: false
+    storage: options
+
+  - name: default_channel
+    prompt: "Default Channel/Chat-ID für ausgehende Nachrichten"
+    type: text
+    required: false
+    storage: options
