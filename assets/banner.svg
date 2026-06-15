@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&amp;display=swap');
+      .wordmark {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 800;
+        font-size: 76px;
+        letter-spacing: -0.03em;
+      }
+      .tagline {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        fill: #8595b0;
+        letter-spacing: -0.01em;
+      }
+      .chip-text {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 600;
+        font-size: 12px;
+        fill: #e2edff;
+      }
+    </style>
+
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05070f" />
+      <stop offset="50%" stop-color="#0b1021" />
+      <stop offset="100%" stop-color="#04060b" />
+    </linearGradient>
+
+    <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#add0ff" />
+    </linearGradient>
+
+    <linearGradient id="cyan-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+    
+    <linearGradient id="purple-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b927fc" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+
+    <radialGradient id="hub-glow" cx="260" cy="180" r="160" fx="260" fy="180">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="text-glow" cx="800" cy="170" r="260" fx="800" fy="170">
+      <stop offset="0%" stop-color="#4facfe" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#4facfe" stop-opacity="0" />
+    </radialGradient>
+
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.06" />
+    </pattern>
+
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="glow-strong" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="340" fill="url(#bg-grad)" rx="16"/>
+  
+  <!-- Subtle Grid Overlay -->
+  <rect width="1200" height="340" fill="url(#grid)" rx="16" />
+  
+  <!-- Glowing Background Orbs -->
+  <circle cx="260" cy="180" r="160" fill="url(#hub-glow)" />
+  <circle cx="800" cy="170" r="260" fill="url(#text-glow)" />
+
+  <!-- ==================== LEFT MOTIF: CONNECTORS & TOPOLOGY ==================== -->
+  
+  <!-- Vertical Bus/Source Bar (Leftmost safe-zone bound) -->
+  <line x1="85" y1="80" x2="85" y2="280" stroke="#1c2b4d" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 6"/>
+  <circle cx="85" cy="80" r="3" fill="#1c2b4d" />
+  <circle cx="85" cy="280" r="3" fill="#1c2b4d" />
+  
+  <!-- Active Cable 1 (Top) -->
+  <path d="M 85 190 Q 125 180 165 190" fill="none" stroke="url(#cyan-blue)" stroke-width="5" filter="url(#glow)"/>
+  <path d="M 85 190 Q 125 180 165 190" fill="none" stroke="#ffffff" stroke-width="1.8" />
+
+  <!-- Connected Plug 1 (Upper Left) -->
+  <g transform="translate(165, 160)">
+    <!-- Plug Body -->
+    <rect x="0" y="0" width="70" height="60" rx="8" fill="#111a2e" stroke="#00f2fe" stroke-width="2" />
+    <!-- Ridges on plug for grip -->
+    <rect x="12" y="10" width="5" height="40" rx="1.5" fill="#090d16" />
+    <rect x="26" y="10" width="5" height="40" rx="1.5" fill="#090d16" />
+    <rect x="40" y="10" width="5" height="40" rx="1.5" fill="#090d16" />
+    <!-- Connected Indicator Light (Glowing Green/Cyan) -->
+    <circle cx="56" cy="30" r="3.5" fill="#00f2fe" filter="url(#glow)" />
+    <!-- Prongs entering the socket -->
+    <rect x="70" y="14" width="12" height="5" rx="1.5" fill="#00f2fe" filter="url(#glow)"/>
+    <rect x="70" y="41" width="12" height="5" rx="1.5" fill="#00f2fe" filter="url(#glow)"/>
+  </g>
+
+  <!-- Central Multi-Socket Hub -->
+  <g transform="translate(232, 150)">
+    <!-- Outer socket frame -->
+    <rect x="0" y="0" width="60" height="80" rx="10" fill="#0b1121" stroke="#1f2d4d" stroke-width="3"/>
+    <rect x="5" y="5" width="50" height="70" rx="7" fill="#060912" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.4"/>
+    <!-- Connection Port Details (Slots inside socket) -->
+    <line x1="15" y1="20" x2="45" y2="20" stroke="#05080f" stroke-width="4" stroke-linecap="round"/>
+    <line x1="15" y1="33" x2="45" y2="33" stroke="#05080f" stroke-width="4" stroke-linecap="round"/>
+    <line x1="15" y1="47" x2="45" y2="47" stroke="#05080f" stroke-width="4" stroke-linecap="round"/>
+    <line x1="15" y1="60" x2="45" y2="60" stroke="#05080f" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Approaching/Unconnected Plug 2 (Lower Left) -->
+  <g transform="translate(130, 220)">
+    <!-- Curved Cable from bus line -->
+    <path d="M -45 50 Q -10 40 0 17" fill="none" stroke="url(#purple-blue)" stroke-width="4" filter="url(#glow)"/>
+    <path d="M -45 50 Q -10 40 0 17" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.8"/>
+    <!-- Plug Body -->
+    <rect x="0" y="0" width="55" height="34" rx="6" fill="#111a2e" stroke="#b927fc" stroke-width="1.5"/>
+    <rect x="10" y="6" width="4" height="22" rx="1" fill="#090d16" />
+    <rect x="21" y="6" width="4" height="22" rx="1" fill="#090d16" />
+    <rect x="32" y="6" width="4" height="22" rx="1" fill="#090d16" />
+    <!-- Unconnected indicator light (Purple Glow) -->
+    <circle cx="45" cy="17" r="2.5" fill="#b927fc" filter="url(#glow)" />
+    <!-- Prongs -->
+    <rect x="55" y="8" width="10" height="3.5" rx="1" fill="#b927fc" filter="url(#glow)"/>
+    <rect x="55" y="22.5" width="10" height="3.5" rx="1" fill="#b927fc" filter="url(#glow)"/>
+  </g>
+
+  <!-- Electrical Spark/Arc Jumping to Socket -->
+  <path d="M 195 233 L 204 227 L 210 236 L 221 221 L 232 228" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <path d="M 195 233 L 204 227 L 210 236 L 221 221 L 232 228" fill="none" stroke="#ffffff" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Network Topology Lines (Spreading from socket to the right) -->
+  <g opacity="0.85">
+    <!-- Glow Layers -->
+    <path d="M 292 190 Q 330 150 380 110" fill="none" stroke="url(#cyan-blue)" stroke-width="4" filter="url(#glow)"/>
+    <path d="M 292 190 L 430 180" fill="none" stroke="url(#cyan-blue)" stroke-width="3" filter="url(#glow)"/>
+    <path d="M 292 190 Q 330 230 380 270" fill="none" stroke="url(#cyan-blue)" stroke-width="4" filter="url(#glow)"/>
+    
+    <path d="M 380 110 L 470 110" fill="none" stroke="url(#cyan-blue)" stroke-width="3" filter="url(#glow)"/>
+    <path d="M 380 110 L 430 180" fill="none" stroke="url(#cyan-blue)" stroke-width="2.5" filter="url(#glow)"/>
+    <path d="M 380 270 L 430 180" fill="none" stroke="url(#cyan-blue)" stroke-width="2.5" filter="url(#glow)"/>
+    <path d="M 380 270 L 480 240" fill="none" stroke="url(#cyan-blue)" stroke-width="3" filter="url(#glow)"/>
+    <path d="M 470 110 L 480 240" fill="none" stroke="url(#cyan-blue)" stroke-width="3" filter="url(#glow)"/>
+    <path d="M 430 180 L 480 240" fill="none" stroke="url(#cyan-blue)" stroke-width="2.5" filter="url(#glow)"/>
+
+    <!-- Sharp White Cores -->
+    <path d="M 292 190 Q 330 150 380 110" fill="none" stroke="#ffffff" stroke-width="1.2" />
+    <path d="M 292 190 L 430 180" fill="none" stroke="#ffffff" stroke-width="1" />
+    <path d="M 292 190 Q 330 230 380 270" fill="none" stroke="#ffffff" stroke-width="1.2" />
+    <path d="M 380 110 L 470 110" fill="none" stroke="#ffffff" stroke-width="1" />
+    <path d="M 380 110 L 430 180" fill="none" stroke="#ffffff" stroke-width="0.8" />
+    <path d="M 380 270 L 430 180" fill="none" stroke="#ffffff" stroke-width="0.8" />
+    <path d="M 380 270 L 480 240" fill="none" stroke="#ffffff" stroke-width="1" />
+    <path d="M 470 110 L 480 240" fill="none" stroke="#ffffff" stroke-width="1" />
+  </g>
+
+  <!-- Glowing Data Packets traveling along links -->
+  <circle cx="342" cy="144" r="3.5" fill="#ffffff" filter="url(#glow)"/>
+  <circle cx="338" cy="235" r="3.5" fill="#ffffff" filter="url(#glow)"/>
+  <circle cx="455" cy="210" r="3" fill="#00f2fe" filter="url(#glow)"/>
+  
+  <!-- Topology Nodes -->
+  <!-- Node A -->
+  <circle cx="380" cy="110" r="14" fill="#00f2fe" fill-opacity="0.15" filter="url(#glow)"/>
+  <circle cx="380" cy="110" r="8" fill="#0a1021" stroke="#00f2fe" stroke-width="2"/>
+  <circle cx="380" cy="110" r="3.5" fill="#ffffff"/>
+
+  <!-- Node B (Junction) -->
+  <circle cx="430" cy="180" r="16" fill="#4facfe" fill-opacity="0.15" filter="url(#glow)"/>
+  <circle cx="430" cy="180" r="9" fill="#0a1021" stroke="#4facfe" stroke-width="2"/>
+  <circle cx="430" cy="180" r="3.5" fill="#00f2fe" filter="url(#glow)"/>
+
+  <!-- Node C -->
+  <circle cx="380" cy="270" r="14" fill="#00f2fe" fill-opacity="0.15" filter="url(#glow)"/>
+  <circle cx="380" cy="270" r="8" fill="#0a1021" stroke="#00f2fe" stroke-width="2"/>
+  <circle cx="380" cy="270" r="3.5" fill="#ffffff"/>
+
+  <!-- Node D -->
+  <circle cx="470" cy="110" r="12" fill="#00f2fe" fill-opacity="0.15" filter="url(#glow)"/>
+  <circle cx="470" cy="110" r="7" fill="#0a1021" stroke="#00f2fe" stroke-width="1.5"/>
+  <circle cx="470" cy="110" r="2.5" fill="#ffffff"/>
+
+  <!-- Node E -->
+  <circle cx="480" cy="240" r="12" fill="#4facfe" fill-opacity="0.15" filter="url(#glow)"/>
+  <circle cx="480" cy="240" r="7" fill="#0a1021" stroke="#4facfe" stroke-width="1.5"/>
+  <circle cx="480" cy="240" r="2.5" fill="#00f2fe" filter="url(#glow)"/>
+
+  <!-- Floating Energy Particles -->
+  <circle cx="190" cy="130" r="1.5" fill="#00f2fe" opacity="0.6"/>
+  <circle cx="220" cy="255" r="2" fill="#b927fc" opacity="0.5" filter="url(#glow)"/>
+  <circle cx="300" cy="100" r="2" fill="#00f2fe" opacity="0.7"/>
+  <circle cx="440" cy="280" r="1.5" fill="#4facfe" opacity="0.6"/>
+  <circle cx="410" cy="70" r="2" fill="#ffffff" opacity="0.5"/>
+
+
+  <!-- ==================== RIGHT SIDE: WORDMARK & TAGLINE ==================== -->
+  
+  <!-- Wordmark "connectors" -->
+  <text x="540" y="175" class="wordmark" fill="url(#text-grad)">connectors</text>
+  <!-- Futuristic Glowing Period -->
+  <circle cx="936" cy="161" r="5" fill="#00f2fe" filter="url(#glow)"/>
+
+  <!-- Tagline -->
+  <text x="540" y="215" class="tagline">Messaging connectors for autonomous agents</text>
+
+  <!-- Platform Chips / Supported Systems -->
+  
+  <!-- Telegram -->
+  <g>
+    <rect x="540" y="248" width="92" height="26" rx="13" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="554" cy="261" r="3.5" fill="#0088cc" filter="url(#glow)"/>
+    <circle cx="554" cy="261" r="3.5" fill="#0088cc"/>
+    <text x="566" y="265" class="chip-text">Telegram</text>
+  </g>
+
+  <!-- Discord -->
+  <g>
+    <rect x="642" y="248" width="88" height="26" rx="13" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="656" cy="261" r="3.5" fill="#5865F2" filter="url(#glow)"/>
+    <circle cx="656" cy="261" r="3.5" fill="#5865F2"/>
+    <text x="668" y="265" class="chip-text">Discord</text>
+  </g>
+
+  <!-- Signal -->
+  <g>
+    <rect x="740" y="248" width="80" height="26" rx="13" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="754" cy="261" r="3.5" fill="#3a76f0" filter="url(#glow)"/>
+    <circle cx="754" cy="261" r="3.5" fill="#3a76f0"/>
+    <text x="766" y="265" class="chip-text">Signal</text>
+  </g>
+
+  <!-- WhatsApp -->
+  <g>
+    <rect x="830" y="248" width="96" height="26" rx="13" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="844" cy="261" r="3.5" fill="#25D366" filter="url(#glow)"/>
+    <circle cx="844" cy="261" r="3.5" fill="#25D366"/>
+    <text x="856" y="265" class="chip-text">WhatsApp</text>
+  </g>
+
+  <!-- Webhooks -->
+  <g>
+    <rect x="936" y="248" width="96" height="26" rx="13" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <circle cx="950" cy="261" r="3.5" fill="#00f2fe" filter="url(#glow)"/>
+    <circle cx="950" cy="261" r="3.5" fill="#00f2fe"/>
+    <text x="962" y="265" class="chip-text">Webhooks</text>
+  </g>
+
+</svg>

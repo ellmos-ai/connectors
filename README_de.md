@@ -1,16 +1,17 @@
-[EN](README.md) | **DE** | [ES](README_es.md) | [JA](README_ja.md) | [RU](README_ru.md) | [ZH](README_zh-Hans.md)
+<img src="assets/banner.svg" width="100%" alt="connectors Banner">
 
 # connectors — Deutsch
 
-Standalone Python-Modul für Messaging-Connectoren: Telegram, Discord, Signal,
-WhatsApp, Home Assistant und generische HTTP-Webhooks.
+[🇬🇧 EN](README.md) | **🇩🇪 DE** | [🇪🇸 ES](README_es.md) | [🇯🇵 JA](README_ja.md) | [🇷🇺 RU](README_ru.md) | [🇨🇳 ZH](README_zh-Hans.md)
 
-Aus [BACH](../../.AI/.OS/BACH/) extrahiert (`.OS/BACH/system/connectors/`),
-vollständig entkoppelt. Kein Framework erforderlich. Keine zwingenden externen
-Abhängigkeiten (nur Python stdlib).
+> Messaging-Connectoren für autonome Agenten — Telegram, Discord, Signal, WhatsApp, Home Assistant und Webhooks.
 
-> **Status:** v1.0.0 — funktionsfähig, noch nicht als separates Paket veröffentlicht.
-> Offene Punkte: [TODO.md](TODO.md)
+[![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-v1.0.0-blue)](CHANGELOG.md)
+
+Aus [BACH](https://github.com/ellmos-ai/bach) extrahiert und vollständig entkoppelt. Kein Framework erforderlich. Keine externen Pflichtabhängigkeiten (nur Python stdlib).
+
+**Schnelleinstieg:** [Connectoren](#unterstützte-connectoren) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
 
 ## Unterstützte Connectoren
 
