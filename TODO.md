@@ -7,8 +7,8 @@ Status: `v1.0.0 — functional`
 ### Qualität
 
 - [ ] Unit-Tests für `BaseConnector`, `create_connector()` Factory, Fehlerfälle
-- [ ] Smoke-Tests ohne echte Secrets (Mock-Adapter)
-- [ ] Import-Verifikation als CI-Schritt (python -c "from connectors import ...")
+- [x] Smoke-Tests ohne echte Secrets (Mock-Adapter)
+- [x] Import-Verifikation als CI-Schritt (python -c "from connectors import ...")
 
 ### Erweiterungen
 
@@ -27,7 +27,7 @@ Status: `v1.0.0 — functional`
 
 ### Release-Vorbereitung (wenn veröffentlicht werden soll)
 
-- [ ] `pyproject.toml` erstellen
+- [x] `pyproject.toml` erstellen
 - [ ] Security-Audit (keine echten Secrets in Quellen)
 - [ ] GitHub-Repo anlegen (nur nach Audit)
 - [ ] `RELEASE_GATE.md` nach bestandenem Gate-Check
@@ -54,3 +54,9 @@ Status: `v1.0.0 — functional`
 - [x] Anonymisierungs-Grep: 0 Treffer auf echte Tokens/IDs/Pfade
 - [x] webhook-Korrektur: In BACH nicht vorhanden, klar als Neuentwicklung/Stub markiert
 - [x] Import-Verifikation: base.py + telegram_connector importierbar ohne BACH
+
+### v1.0.1 Hygiene (2026-06-25)
+
+- [x] Package-Installation über `pyproject.toml`
+- [x] GitHub-Actions-Smoke-Test für installierbare Imports
+- [x] Temp-Klon-unabhängiger Import-Smoke

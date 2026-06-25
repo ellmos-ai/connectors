@@ -14,13 +14,26 @@ Run:
 
 import sys
 import os
+import importlib.util
 
 # Allow running from any directory: add the parent of the 'connectors' package
-# directory (i.e. .MODULES/) so that "import connectors" resolves correctly.
+# directory when the checkout directory is named 'connectors'. In arbitrary
+# temp clones, load the local root package under the canonical package name.
 _here = os.path.dirname(os.path.abspath(__file__))
 _pkg_root = os.path.dirname(_here)      # connectors/
 _modules_root = os.path.dirname(_pkg_root)  # .MODULES/
-sys.path.insert(0, _modules_root)
+
+if os.path.basename(_pkg_root) == "connectors":
+    sys.path.insert(0, _modules_root)
+elif "connectors" not in sys.modules:
+    spec = importlib.util.spec_from_file_location(
+        "connectors",
+        os.path.join(_pkg_root, "__init__.py"),
+        submodule_search_locations=[_pkg_root],
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["connectors"] = module
+    spec.loader.exec_module(module)
 
 
 def test_base_imports():

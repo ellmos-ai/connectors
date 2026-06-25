@@ -1,5 +1,7 @@
 # connectors — LLM-Kontext
 
+## Last-checked: 2026-06-25
+
 Standalone Python-Modul für Messaging-Connectoren.
 Extrahiert aus BACH (`.AI/.OS/BACH/system/connectors/`), vollständig entkoppelt.
 
@@ -42,3 +44,9 @@ NIEMALS hardcoden. Übergabe via:
 
 Neuen Connector erstellen: `python -m connectors.templates.setup_wizard`
 Template-Dateien: `templates/*_template.yaml`
+
+## Validierung
+
+- Installierbar via `python -m pip install -e ".[wizard]"`
+- Smoke-Test: `python tests/test_imports.py`
+- Compile-Check: `python -m compileall -q -x "templates[\\/]+connector_template\\.py" .`

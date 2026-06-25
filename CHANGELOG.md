@@ -1,5 +1,18 @@
 # CHANGELOG — connectors
 
+## Unreleased
+
+### Technische Hygiene
+
+- `pyproject.toml` ergänzt, damit das Root-Package unabhängig vom Checkout-Namen
+  als `connectors` installierbar ist.
+- GitHub-Actions-Smoke-Test für installierbare Imports und Compile-Checks
+  hinzugefügt.
+- `connectors.templates` als Paket markiert, damit der Setup-Wizard im
+  gebauten Package erhalten bleibt.
+- Import-Smoke-Test robust gegen Temp-Klone gemacht, deren Ordner nicht
+  `connectors` heißt.
+
 ## v1.0.0 (2026-06-14)
 
 Erstes Release des neutralen, standalone Connector-Moduls.

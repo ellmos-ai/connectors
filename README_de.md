@@ -139,6 +139,17 @@ connectors/
 - **Setup-Wizard:** `pyyaml` (`pip install pyyaml`)
 - **signal_connector:** `signal-cli` Binary — https://github.com/AsamK/signal-cli
 
+## Entwicklungs-Smoke-Tests
+
+```bash
+python -m pip install -e ".[wizard]"
+python tests/test_imports.py
+python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+```
+
+`templates/connector_template.py` enthält bewusst Platzhalter und wird erst
+nach dem Rendern durch den Setup-Wizard als konkrete Connector-Datei kompiliert.
+
 ## Verwandte Projekte
 
 - **lock-master** (https://github.com/dev-bricks/lock-master) — verwandter Multi-Agenten-Baustein
