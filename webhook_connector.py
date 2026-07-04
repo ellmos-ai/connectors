@@ -107,11 +107,17 @@ class WebhookConnector(BaseConnector):
         Args:
             recipient: Wird ignoriert (Ziel ist via endpoint konfiguriert).
             content:   Nachrichtentext — ersetzt {content} im payload_template.
+            attachments: NICHT unterstuetzt (Warnung auf stderr).
         """
+        if attachments:
+            print("[Webhook] WARNUNG: attachments werden nicht unterstuetzt "
+                  "und wurden NICHT gesendet.", file=sys.stderr)
         try:
-            payload_str = self._payload_template.replace(
-                "{content}", content.replace('"', '\\"')
-            )
+            # {content} JSON-sicher einsetzen: json.dumps escapet ", \,
+            # Zeilenumbrueche und Control-Chars — naives str.replace erzeugte
+            # bei mehrzeiligen Nachrichten ungueltiges JSON.
+            escaped = json.dumps(content, ensure_ascii=False)[1:-1]
+            payload_str = self._payload_template.replace("{content}", escaped)
             data = payload_str.encode("utf-8")
             headers = {"Content-Type": self._content_type}
             if self._bearer_token:

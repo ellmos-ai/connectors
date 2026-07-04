@@ -36,3 +36,6 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Multi-Agent Lock-System (lokal, nie committen)
+LOCK*.txt

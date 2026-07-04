@@ -114,7 +114,11 @@ class DiscordConnector(BaseConnector):
 
     def send_message(self, recipient: str, content: str,
                      attachments: Optional[List[str]] = None) -> bool:
-        """Nachricht senden (Webhook hat Vorrang vor Bot, wenn endpoint gesetzt)."""
+        """Nachricht senden (Webhook hat Vorrang vor Bot, wenn endpoint gesetzt).
+
+        attachments werden derzeit NICHT unterstuetzt (Warnung auf stderr).
+        """
+        self._warn_attachments_unsupported(attachments)
         if self._webhook_url:
             return self._send_webhook(content)
         if self._bot_token:
@@ -266,9 +270,13 @@ class DiscordConnector(BaseConnector):
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError:
+        except urllib.error.HTTPError as e:
+            print(f"[Discord HTTP Error] {method} {endpoint}: HTTP {e.code}",
+                  file=sys.stderr)
             return None
-        except urllib.error.URLError:
+        except urllib.error.URLError as e:
+            print(f"[Discord URL Error] {method} {endpoint}: {e.reason}",
+                  file=sys.stderr)
             return None
 
     def _send_bot(self, channel_id: str, content: str) -> bool:

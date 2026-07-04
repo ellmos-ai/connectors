@@ -1,5 +1,36 @@
 # CHANGELOG — connectors
 
+## v1.1.0 (2026-07-04) — Modul-Review
+
+### Fixed
+
+- **Secrets im Klartext in `repr()`:** `ConnectorConfig.auth_config` (Bot-Token,
+  API-Keys) erschien im automatisch generierten Dataclass-`repr` — jedes
+  `print(config)`/Debug-Log leakte den Token. Jetzt `field(repr=False)`;
+  abgesichert durch Repr-Tests.
+- **Webhook-Payload konnte ungültiges JSON erzeugen:** `{content}` wurde per
+  naivem `str.replace` (nur `"` escaped) eingesetzt — jede mehrzeilige
+  Nachricht erzeugte ein defektes JSON-String-Literal, der HTTP-200 des
+  Empfängers täuschte trotzdem Erfolg vor. Jetzt JSON-sicheres Escaping via
+  `json.dumps` (deckt `\\`, Zeilenumbrüche, Control-Chars, Umlaute ab).
+- **`attachments` wurden von 5 Connectoren still verschluckt:** `send_message()`
+  akzeptierte den Parameter laut Kontrakt, ignorierte ihn aber (nur Signal
+  sendet Anhänge wirklich) und meldete `True` — stiller Datenverlust. Jetzt
+  laute stderr-Warnung „NICHT gesendet" über gemeinsamen Base-Helper
+  (`_warn_attachments_unsupported`); echte Attachment-Unterstützung pro
+  Kanal bleibt als TODO registriert.
+- **Discord/HomeAssistant verschluckten alle HTTP-Fehler:** `_api_call()` gab
+  bei 401/403/Rate-Limit still `None` zurück (ununterscheidbar von „keine
+  Nachrichten"). Jetzt stderr-Diagnose analog Telegram/WhatsApp (ohne Token).
+
+### Tests
+
+- Neue `tests/test_behavior.py` (15 Tests, gemockt, ohne Netz/Secrets):
+  `_resolve_secret()`-Matrix, Secret-freie Reprs, Attachments-Vertrag,
+  Webhook-JSON-Escaping, Factory (Case-Insensitivity, ValueError,
+  Adapter-Durchreichung, Abstraktheit). Erfüllt das offene TODO
+  „Unit-Tests für BaseConnector, Factory, Fehlerfälle". Gesamt: 8→23 grün.
+
 ## Unreleased
 
 ### Technische Hygiene

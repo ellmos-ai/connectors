@@ -119,7 +119,9 @@ class TelegramConnector(BaseConnector):
         """Nachricht an chat_id senden.
 
         Versucht zuerst Markdown; bei Parse-Fehler automatisch Plain-Text.
+        attachments werden derzeit NICHT unterstuetzt (Warnung auf stderr).
         """
+        self._warn_attachments_unsupported(attachments)
         try:
             params = {
                 "chat_id": recipient or self._owner_chat_id,

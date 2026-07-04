@@ -112,7 +112,9 @@ class WhatsAppConnector(BaseConnector):
         Args:
             recipient: Telefonnummer ohne "+" (z.B. "49XXXXXXXXXX").
             content:   Nachrichtentext.
+            attachments: NICHT unterstuetzt (Warnung auf stderr).
         """
+        self._warn_attachments_unsupported(attachments)
         try:
             url = f"{self.API_BASE}/{self._phone_number_id}/messages"
             headers = {

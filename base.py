@@ -63,7 +63,8 @@ class ConnectorConfig:
     connector_type: str     # "signal", "discord", "whatsapp", etc.
     endpoint: str = ""      # URL oder Pfad
     auth_type: str = "none" # "none", "api_key", "oauth", "token"
-    auth_config: Dict[str, str] = field(default_factory=dict)
+    # repr=False: auth_config enthaelt Secrets — darf nie in repr()/Logs landen
+    auth_config: Dict[str, str] = field(default_factory=dict, repr=False)
     options: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -175,6 +176,22 @@ class BaseConnector(ABC):
     def get_status(self) -> ConnectorStatus:
         """Aktuellen Status abfragen."""
         return self._status
+
+    def _warn_attachments_unsupported(
+        self, attachments: Optional[List[str]]
+    ) -> None:
+        """Warnt laut, wenn attachments uebergeben wurden, die dieser
+        Connector nicht unterstuetzt — statt sie still zu verschlucken
+        (send_message gaebe sonst True zurueck, obwohl die Datei nie
+        verschickt wurde)."""
+        if attachments:
+            import sys
+            print(
+                f"[{self.config.connector_type}] WARNUNG: attachments werden "
+                "von diesem Connector nicht unterstuetzt und wurden NICHT "
+                "gesendet.",
+                file=sys.stderr,
+            )
 
     def __repr__(self) -> str:
         return (

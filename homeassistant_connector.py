@@ -95,7 +95,9 @@ class HomeAssistantConnector(BaseConnector):
         Args:
             recipient: HA notify-Service-Name (z.B. "notify.mobile_app_phone").
             content:   Nachrichtentext.
+            attachments: NICHT unterstuetzt (Warnung auf stderr).
         """
+        self._warn_attachments_unsupported(attachments)
         return self.call_service("notify", recipient, {"message": content})
 
     def get_messages(self, since: Optional[str] = None,
@@ -169,7 +171,11 @@ class HomeAssistantConnector(BaseConnector):
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError:
+        except urllib.error.HTTPError as e:
+            print(f"[HomeAssistant HTTP Error] {method} {endpoint}: HTTP {e.code}",
+                  file=sys.stderr)
             return None
-        except urllib.error.URLError:
+        except urllib.error.URLError as e:
+            print(f"[HomeAssistant URL Error] {method} {endpoint}: {e.reason}",
+                  file=sys.stderr)
             return None

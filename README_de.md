@@ -7,7 +7,7 @@
 > Messaging-Connectoren für autonome Agenten — Telegram, Discord, Signal, WhatsApp, Home Assistant und Webhooks.
 
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-v1.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 
 Aus [BACH](https://github.com/ellmos-ai/bach) extrahiert und vollständig entkoppelt. Kein Framework erforderlich. Keine externen Pflichtabhängigkeiten (nur Python stdlib).
 

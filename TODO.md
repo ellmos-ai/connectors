@@ -1,12 +1,29 @@
 # TODO — connectors
 
-Status: `v1.0.0 — functional`
+Status: `v1.1.0 — functional`
+
+## Review 2026-07-04 (Modul-Review-Loop Lauf 5, frischer Subagent — alle Funde gefixt)
+
+- [x] **(hoch)** `ConnectorConfig.auth_config` leakte Secrets im Dataclass-`repr`
+      → `field(repr=False)` + Repr-Tests.
+- [x] **(hoch)** Webhook-Payload: naives `str.replace`-Escaping erzeugte bei
+      mehrzeiligen Nachrichten ungültiges JSON, HTTP-200 täuschte Erfolg vor
+      → JSON-sicheres Escaping via `json.dumps`.
+- [x] **(hoch)** `attachments` in 5 Connectoren still verschluckt (True trotz
+      nie gesendeter Datei) → gemeinsamer Base-Helper warnt laut auf stderr.
+- [x] **(mittel)** Discord/HA `_api_call()` verschluckte HTTP-Fehler ohne Log
+      → stderr-Diagnose analog Telegram/WhatsApp.
+- [ ] **(Folge)** Echte Attachment-Unterstützung: Telegram `sendDocument`,
+      Discord Multipart, WhatsApp Media-API (HA/Webhook: dokumentiert nicht
+      unterstützt).
 
 ## Offen
 
 ### Qualität
 
-- [ ] Unit-Tests für `BaseConnector`, `create_connector()` Factory, Fehlerfälle
+- [x] Unit-Tests für `BaseConnector`, `create_connector()` Factory, Fehlerfälle
+      (erledigt 2026-07-04: `tests/test_behavior.py`, 15 Tests — Secret-Matrix,
+      Reprs, Attachments-Vertrag, Webhook-Escaping, Factory; 8→23 grün)
 - [x] Smoke-Tests ohne echte Secrets (Mock-Adapter)
 - [x] Import-Verifikation als CI-Schritt (python -c "from connectors import ...")
 
