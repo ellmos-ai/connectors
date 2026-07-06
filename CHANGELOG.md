@@ -1,5 +1,12 @@
 # CHANGELOG — connectors
 
+## Unreleased
+
+### CI/CD & Testing
+
+- `pyproject.toml` um `test`-Extra erweitert (inkl. pytest und pyyaml), um Unit-Tests standardisiert auszuführen.
+- `llms.txt` Metadaten Last-checked auf 2026-07-06 aktualisiert.
+
 ## v1.1.0 (2026-07-04) — Modul-Review
 
 ### Fixed
@@ -31,7 +38,7 @@
   Adapter-Durchreichung, Abstraktheit). Erfüllt das offene TODO
   „Unit-Tests für BaseConnector, Factory, Fehlerfälle". Gesamt: 8→23 grün.
 
-## Unreleased
+## v1.0.1 (2026-06-25) — Hygiene
 
 ### Technische Hygiene
 

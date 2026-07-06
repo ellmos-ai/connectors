@@ -1,6 +1,6 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-06-25
+## Last-checked: 2026-07-06
 
 Standalone Python-Modul für Messaging-Connectoren.
 Extrahiert aus BACH (`.AI/.OS/BACH/system/connectors/`), vollständig entkoppelt.

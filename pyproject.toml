@@ -41,6 +41,7 @@ dependencies = []
 
 [project.optional-dependencies]
 wizard = ["pyyaml>=6.0"]
+test = ["pytest>=7.0", "pyyaml>=6.0"]
 
 [project.urls]
 Homepage = "https://github.com/ellmos-ai/connectors#readme"
