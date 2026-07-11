@@ -6,9 +6,9 @@
 ## Kontext
 
 Das neutrale `connectors`-Modul wurde aus `BACH/system/connectors/` extrahiert
-und in `.MODULES/connectors/` als standalone, BACH-freies Modul abgelegt (v1.0.0).
+und in `.MODULES/.CONNECTORS/connectors/` als standalone, BACH-freies Modul abgelegt (v1.0.0).
 
-Pfad: `C:\Users\User\OneDrive\.TOPICS\.AI\.MODULES\connectors\`
+Pfad: `C:\Users\User\OneDrive\.TOPICS\.AI\.MODULES\.CONNECTORS\connectors\`
 
 ## Offene Frage für BACH
 
@@ -22,7 +22,7 @@ Mögliche Optionen:
    → Kein Handlungsbedarf für BACH.
 
 2. **Partieller Import:** BACH importiert `BaseConnector`, `Message` etc. aus
-   `.MODULES/connectors/base.py`, behält aber eigene Connector-Implementierungen
+   `.MODULES/.CONNECTORS/connectors/base.py`, behält aber eigene Connector-Implementierungen
    (wegen VoiceSTT, DB-Registrierung, Daemon-Integration).
 
 3. **Vollständiger Reimport:** BACH stellt `system/connectors/` auf das Modul um,
