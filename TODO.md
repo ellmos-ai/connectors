@@ -2,6 +2,15 @@
 
 Status: `v1.1.0 — functional`
 
+## Review 2026-07-15 (Security-/Dependency-Audit)
+
+- [x] **(mittel)** Repository-Hygiene für lokale Messaging-Credentials gehärtet:
+      `.gitignore` schützt jetzt typische Token-, Credential-, Recovery-Code-,
+      Private-Key-, Zertifikats- und SQLite-Artefakte; Regressionstest ergänzt.
+- [x] Security-Audit „keine echten Secrets in Quellen“ durchgeführt: Treffer
+      waren Dokumentation, Platzhalter, Header-Erzeugung und Tests, keine realen
+      Credentials.
+
 ## Review 2026-07-04 (Modul-Review-Loop Lauf 5, frischer Subagent — alle Funde gefixt)
 
 - [x] **(hoch)** `ConnectorConfig.auth_config` leakte Secrets im Dataclass-`repr`
@@ -45,7 +54,7 @@ Status: `v1.1.0 — functional`
 ### Release-Vorbereitung (wenn veröffentlicht werden soll)
 
 - [x] `pyproject.toml` erstellen
-- [ ] Security-Audit (keine echten Secrets in Quellen)
+- [x] Security-Audit (keine echten Secrets in Quellen)
 - [ ] GitHub-Repo anlegen (nur nach Audit)
 - [ ] `RELEASE_GATE.md` nach bestandenem Gate-Check
 

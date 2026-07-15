@@ -18,9 +18,49 @@ env/
 *.env
 .env
 .env.*
+.envrc
+!.env.example
+!.env.sample
 secrets.json
 *_secrets.json
+secret*.json
+*.secret.json
+credentials.json
+*_credentials.json
+token.txt
+*_token.txt
+tokens.json
+*_tokens.json
+api_key.txt
+api_keys.json
+recovery_codes.txt
+*_recovery_codes.txt
+.npmrc
+.pypirc
 config.local.*
+*.local.json
+*.local.yaml
+*.local.yml
+
+# Private Schlüssel / Zertifikate
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cert
+id_rsa
+id_ed25519
+
+# Lokale Daten / Connector-Caches
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+data/
 
 # IDE
 .vscode/

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Security
+
+- `.gitignore` um typische lokale Token-, Credential-, Recovery-Code-,
+  Private-Key-, Zertifikats- und SQLite-Artefakte erweitert; neuer
+  Repository-Hygiene-Test hält die Schutzmuster fest.
+
 ### CI/CD & Testing
 
 - `pyproject.toml` um `test`-Extra erweitert (inkl. pytest und pyyaml), um Unit-Tests standardisiert auszuführen.
