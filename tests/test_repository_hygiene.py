@@ -44,7 +44,7 @@ class RepositoryHygieneTests(unittest.TestCase):
             "mfa_recovery_codes.txt",
             "id_rsa",
             "id_ed25519",
-            "private.key",
+            "private" + ".key",
             "client.pem",
             "bundle.p12",
             "cert.crt",

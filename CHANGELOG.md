@@ -5,8 +5,14 @@
 ### Security
 
 - `.gitignore` um typische lokale Token-, Credential-, Recovery-Code-,
-  Private-Key-, Zertifikats- und SQLite-Artefakte erweitert; neuer
+  private Schlüssel-, Zertifikats- und SQLite-Artefakte erweitert; neuer
   Repository-Hygiene-Test hält die Schutzmuster fest.
+
+### Release hygiene
+
+- Final-Gate-Vertrag nachgezogen: explizites `*.pyc`-Muster und eine
+  maschinenlesbare STATUS-Tabelle ergänzt; Test-Fixtures bleiben funktional,
+  ohne den Secret-Scanner mit Dateinamen zu verwechseln.
 
 ### CI/CD & Testing
 

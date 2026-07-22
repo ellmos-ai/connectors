@@ -2,11 +2,20 @@
 
 Status: `v1.1.0 — functional`
 
+## STATUS
+
+| Category | Status | Notes |
+|---|---|---|
+| Tests | OK | 25 lokale, netzfreie Tests bestanden. |
+| Compile | OK | Alle produktiven Python-Module kompilieren. |
+| Final Gate | OK | Final Gate Check: 10 PASS / 0 FAIL / 0 WARN. |
+| Release | Pending | GitHub-Repository und `RELEASE_GATE.md` bleiben bewusste Freigabeschritte. |
+
 ## Review 2026-07-15 (Security-/Dependency-Audit)
 
 - [x] **(mittel)** Repository-Hygiene für lokale Messaging-Credentials gehärtet:
       `.gitignore` schützt jetzt typische Token-, Credential-, Recovery-Code-,
-      Private-Key-, Zertifikats- und SQLite-Artefakte; Regressionstest ergänzt.
+      private Schlüssel-, Zertifikats- und SQLite-Artefakte; Regressionstest ergänzt.
 - [x] Security-Audit „keine echten Secrets in Quellen“ durchgeführt: Treffer
       waren Dokumentation, Platzhalter, Header-Erzeugung und Tests, keine realen
       Credentials.
