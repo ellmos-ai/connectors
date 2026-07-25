@@ -1,14 +1,19 @@
-[EN](README.md) | [DE](README_de.md) | [ES](README_es.md) | **JA** | [RU](README_ru.md) | [ZH](README_zh-Hans.md)
+<img src="assets/banner.svg" width="100%" alt="connectors Banner">
 
-# connectors
+# connectors — 日本語
+
+[🇬🇧 EN](README.md) | [🇩🇪 DE](README_de.md) | [🇪🇸 ES](README_es.md) | **🇯🇵 JA** | [🇷🇺 RU](README_ru.md) | [🇨🇳 ZH](README_zh-Hans.md)
+
+[![ライセンス: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![バージョン](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 
 Telegram、Discord、Signal、WhatsApp、Home Assistant、汎用 HTTP Webhook に対応した
 スタンドアロン Python メッセージングコネクターモジュール。
 
-[BACH](../../.AI/.OS/BACH/) (`.OS/BACH/system/connectors/`) から抽出・分離。
+[BACH](https://github.com/ellmos-ai/bach) から抽出・分離。
 フレームワーク不要。必須の外部依存関係なし（標準ライブラリのみ）。
 
-> **ステータス:** v1.0.0 — 動作確認済み、独立パッケージとしての公開は未実施。
+> **ステータス:** v1.1.0 — 動作確認済み、独立パッケージとしての公開は未実施。
 > 計画中の改善点は [TODO.md](TODO.md) を参照。
 
 ## 対応コネクター
@@ -138,6 +143,18 @@ connectors/
 - **セットアップウィザード:** `pyyaml` (`pip install pyyaml`)
 - **signal_connector:** `signal-cli` バイナリ — https://github.com/AsamK/signal-cli
 
+## 開発用スモークテスト
+
+```bash
+python -m pip install -e ".[wizard]"
+python tests/test_imports.py
+python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+```
+
+`templates/connector_template.py` は意図的にプレースホルダーを含んでおり、
+セットアップウィザードが具体的なコネクターモジュールを生成した後にのみ
+コンパイルされます。
+
 ## 関連プロジェクト
 
 - **lock-master** (https://github.com/dev-bricks/lock-master) — 関連マルチエージェントコンポーネント
@@ -145,6 +162,6 @@ connectors/
 
 ## 関連モジュール
 
-- **USMC** (`.MODULES/usmc`): エージェント間共有メモリ
-- **clutch** (`.MODULES/clutch`): モデルルーティング（エージェントから LLM へ）
+- **USMC** (https://github.com/ellmos-ai/usmc): エージェント間共有メモリ
+- **clutch** (https://github.com/ellmos-ai/clutch): モデルルーティング（エージェントから LLM へ）
 - **connectors**（このモジュール）: メッセージング（エージェントから人間へ）

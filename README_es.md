@@ -1,14 +1,19 @@
-[ES] | [EN](README.md) | [DE](README_de.md) | **ES** | [JA](README_ja.md) | [RU](README_ru.md) | [ZH](README_zh-Hans.md)
+<img src="assets/banner.svg" width="100%" alt="connectors Banner">
 
-# connectors
+# connectors — Español
+
+[🇬🇧 EN](README.md) | [🇩🇪 DE](README_de.md) | **🇪🇸 ES** | [🇯🇵 JA](README_ja.md) | [🇷🇺 RU](README_ru.md) | [🇨🇳 ZH](README_zh-Hans.md)
+
+[![Licencia: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Versión](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 
 Módulo Python independiente para conectores de mensajería: Telegram, Discord, Signal,
 WhatsApp, Home Assistant y webhooks HTTP genéricos.
 
-Extraído y desacoplado de [BACH](../../.AI/.OS/BACH/) (`.OS/BACH/system/connectors/`).
+Extraído y desacoplado de [BACH](https://github.com/ellmos-ai/bach).
 No requiere ningún framework. Sin dependencias externas obligatorias (solo stdlib).
 
-> **Estado:** v1.0.0 — funcional, aún no publicado como paquete independiente.
+> **Estado:** v1.1.0 — funcional, aún no publicado como paquete independiente.
 > Consulte [TODO.md](TODO.md) para mejoras planificadas.
 
 ## Conectores compatibles
@@ -138,6 +143,18 @@ connectors/
 - **Asistente de configuración:** `pyyaml` (`pip install pyyaml`)
 - **signal_connector:** binario `signal-cli` — https://github.com/AsamK/signal-cli
 
+## Pruebas de humo para desarrollo
+
+```bash
+python -m pip install -e ".[wizard]"
+python tests/test_imports.py
+python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+```
+
+`templates/connector_template.py` contiene marcadores de posición de forma
+intencionada y solo se compila una vez que el asistente de configuración
+genera un módulo de conector concreto.
+
 ## Proyectos relacionados
 
 - **lock-master** (https://github.com/dev-bricks/lock-master) — componente multiagente relacionado
@@ -145,6 +162,6 @@ connectors/
 
 ## Módulos relacionados
 
-- **USMC** (`.MODULES/usmc`): Memoria compartida entre agentes
-- **clutch** (`.MODULES/clutch`): Enrutamiento de modelos (Agente a LLM)
+- **USMC** (https://github.com/ellmos-ai/usmc): Memoria compartida entre agentes
+- **clutch** (https://github.com/ellmos-ai/clutch): Enrutamiento de modelos (Agente a LLM)
 - **connectors** (este módulo): Mensajería (Agente a humano)

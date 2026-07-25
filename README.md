@@ -158,6 +158,6 @@ compiled only after the setup wizard renders a concrete connector module.
 
 ## Related Modules
 
-- **USMC** (`.MODULES/usmc`): Agent-to-agent shared memory
-- **clutch** (`.MODULES/clutch`): Model routing (Agent-to-LLM)
+- **USMC** (https://github.com/ellmos-ai/usmc): Agent-to-agent shared memory
+- **clutch** (https://github.com/ellmos-ai/clutch): Model routing (Agent-to-LLM)
 - **connectors** (this module): Messaging (Agent-to-human)

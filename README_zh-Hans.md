@@ -1,14 +1,19 @@
-[EN](README.md) | [DE](README_de.md) | [ES](README_es.md) | [JA](README_ja.md) | [RU](README_ru.md) | **ZH**
+<img src="assets/banner.svg" width="100%" alt="connectors Banner">
 
-# connectors
+# connectors — 简体中文
+
+[🇬🇧 EN](README.md) | [🇩🇪 DE](README_de.md) | [🇪🇸 ES](README_es.md) | [🇯🇵 JA](README_ja.md) | [🇷🇺 RU](README_ru.md) | **🇨🇳 ZH**
+
+[![许可证: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![版本](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 
 独立的 Python 消息连接器模块，支持 Telegram、Discord、Signal、
 WhatsApp、Home Assistant 和通用 HTTP Webhook。
 
-从 [BACH](../../.AI/.OS/BACH/) (`.OS/BACH/system/connectors/`) 中提取并解耦。
+从 [BACH](https://github.com/ellmos-ai/bach) 中提取并解耦。
 无需任何框架。无强制外部依赖（仅使用标准库）。
 
-> **状态：** v1.0.0 — 功能完整，尚未作为独立包发布。
+> **状态：** v1.1.0 — 功能完整，尚未作为独立包发布。
 > 计划中的改进请参见 [TODO.md](TODO.md)。
 
 ## 支持的连接器
@@ -136,6 +141,17 @@ connectors/
 - **设置向导：** `pyyaml`（`pip install pyyaml`）
 - **signal_connector：** `signal-cli` 二进制文件 — https://github.com/AsamK/signal-cli
 
+## 开发冒烟测试
+
+```bash
+python -m pip install -e ".[wizard]"
+python tests/test_imports.py
+python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+```
+
+`templates/connector_template.py` 有意包含占位符，只有在设置向导生成
+具体的连接器模块之后才会被编译。
+
 ## 相关项目
 
 - **lock-master** (https://github.com/dev-bricks/lock-master) — 相关多智能体组件
@@ -143,6 +159,6 @@ connectors/
 
 ## 相关模块
 
-- **USMC** (`.MODULES/usmc`)：智能体间共享内存
-- **clutch** (`.MODULES/clutch`)：模型路由（智能体到 LLM）
+- **USMC** (https://github.com/ellmos-ai/usmc)：智能体间共享内存
+- **clutch** (https://github.com/ellmos-ai/clutch)：模型路由（智能体到 LLM）
 - **connectors**（本模块）：消息传递（智能体到人类）

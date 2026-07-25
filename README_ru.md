@@ -1,14 +1,19 @@
-[EN](README.md) | [DE](README_de.md) | [ES](README_es.md) | [JA](README_ja.md) | **RU** | [ZH](README_zh-Hans.md)
+<img src="assets/banner.svg" width="100%" alt="connectors Banner">
 
-# connectors
+# connectors — Русский
+
+[🇬🇧 EN](README.md) | [🇩🇪 DE](README_de.md) | [🇪🇸 ES](README_es.md) | [🇯🇵 JA](README_ja.md) | **🇷🇺 RU** | [🇨🇳 ZH](README_zh-Hans.md)
+
+[![Лицензия: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Версия](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 
 Автономный Python-модуль для коннекторов обмена сообщениями: Telegram, Discord, Signal,
 WhatsApp, Home Assistant и универсальные HTTP-вебхуки.
 
-Извлечён и отвязан от [BACH](../../.AI/.OS/BACH/) (`.OS/BACH/system/connectors/`).
+Извлечён и отвязан от [BACH](https://github.com/ellmos-ai/bach).
 Фреймворк не требуется. Нет обязательных внешних зависимостей (только стандартная библиотека).
 
-> **Статус:** v1.0.0 — работоспособен, ещё не опубликован как отдельный пакет.
+> **Статус:** v1.1.0 — работоспособен, ещё не опубликован как отдельный пакет.
 > Запланированные улучшения: [TODO.md](TODO.md)
 
 ## Поддерживаемые коннекторы
@@ -138,6 +143,18 @@ connectors/
 - **Мастер настройки:** `pyyaml` (`pip install pyyaml`)
 - **signal_connector:** бинарный файл `signal-cli` — https://github.com/AsamK/signal-cli
 
+## Дымовые тесты для разработки
+
+```bash
+python -m pip install -e ".[wizard]"
+python tests/test_imports.py
+python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+```
+
+`templates/connector_template.py` намеренно содержит заполнители и
+компилируется только после того, как мастер настройки сформирует
+конкретный модуль коннектора.
+
 ## Связанные проекты
 
 - **lock-master** (https://github.com/dev-bricks/lock-master) — связанный компонент мультиагентной системы
@@ -145,6 +162,6 @@ connectors/
 
 ## Связанные модули
 
-- **USMC** (`.MODULES/usmc`): Общая память агентов
-- **clutch** (`.MODULES/clutch`): Маршрутизация моделей (Агент → LLM)
+- **USMC** (https://github.com/ellmos-ai/usmc): Общая память агентов
+- **clutch** (https://github.com/ellmos-ai/clutch): Маршрутизация моделей (Агент → LLM)
 - **connectors** (этот модуль): Обмен сообщениями (Агент → человек)
