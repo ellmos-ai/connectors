@@ -6,9 +6,8 @@
 ## Kontext
 
 Das neutrale `connectors`-Modul wurde aus `BACH/system/connectors/` extrahiert
-und in `.MODULES/.CONNECTORS/connectors/` als standalone, BACH-freies Modul abgelegt (v1.0.0).
-
-Pfad: `C:\Users\User\OneDrive\.TOPICS\.AI\.MODULES\.CONNECTORS\connectors\`
+und als eigenständiges, BACH-freies Modul veröffentlicht (v1.0.0):
+https://github.com/ellmos-ai/connectors
 
 ## Offene Frage für BACH
 
@@ -18,11 +17,11 @@ BACH soll **selbst entscheiden**, ob und wann es sein internes
 Mögliche Optionen:
 
 1. **Beibehaltung Status quo:** BACH nutzt weiterhin `system/connectors/` intern.
-   Das Modul in `.MODULES/` wird für andere Projekte (Gardener, Rinnsal etc.) genutzt.
+   Dieses Modul wird von anderen Projekten (Gardener, Rinnsal etc.) genutzt.
    → Kein Handlungsbedarf für BACH.
 
 2. **Partieller Import:** BACH importiert `BaseConnector`, `Message` etc. aus
-   `.MODULES/.CONNECTORS/connectors/base.py`, behält aber eigene Connector-Implementierungen
+   `connectors/base.py` dieses Repositories, behält aber eigene Connector-Implementierungen
    (wegen VoiceSTT, DB-Registrierung, Daemon-Integration).
 
 3. **Vollständiger Reimport:** BACH stellt `system/connectors/` auf das Modul um,

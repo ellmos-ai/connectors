@@ -21,7 +21,7 @@ import importlib.util
 # temp clones, load the local root package under the canonical package name.
 _here = os.path.dirname(os.path.abspath(__file__))
 _pkg_root = os.path.dirname(_here)      # connectors/
-_modules_root = os.path.dirname(_pkg_root)  # .MODULES/
+_modules_root = os.path.dirname(_pkg_root)  # parent of the package dir
 
 if os.path.basename(_pkg_root) == "connectors":
     sys.path.insert(0, _modules_root)
