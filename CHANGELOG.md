@@ -14,10 +14,24 @@
   maschinenlesbare STATUS-Tabelle ergänzt; Test-Fixtures bleiben funktional,
   ohne den Secret-Scanner mit Dateinamen zu verwechseln.
 
+### Documentation
+
+- Sprachfassungen ES/JA/RU/ZH auf den Stand der englischen und deutschen
+  README nachgezogen: Banner, Lizenz- und Versions-Badge, einheitliche
+  Sprachleiste, Abschnitt „Development Smoke Tests"; der Statushinweis stand
+  dort noch auf v1.0.0.
+- Verweise auf BACH und die Nachbarmodule zeigen jetzt in allen sechs
+  Sprachfassungen auf die öffentlichen Repositories statt auf lokale,
+  von außen nicht auflösbare Pfade.
+- `TODO.md`: Release-Abschnitt an den tatsächlichen Stand angeglichen
+  (Repository ist veröffentlicht; offen bleiben Release-Tag und die
+  Entscheidung über eine PyPI-Veröffentlichung).
+- Modul-Manifest: `visibility` von `public-candidate` auf `public` gesetzt.
+
 ### CI/CD & Testing
 
 - `pyproject.toml` um `test`-Extra erweitert (inkl. pytest und pyyaml), um Unit-Tests standardisiert auszuführen.
-- `llms.txt` Metadaten Last-checked auf 2026-07-06 aktualisiert.
+- `llms.txt` Metadaten Last-checked auf 2026-07-25 aktualisiert.
 
 ## v1.1.0 (2026-07-04) — Modul-Review
 

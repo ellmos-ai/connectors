@@ -1,6 +1,6 @@
 # TODO — connectors
 
-Status: `v1.1.0 — functional`
+Status: `v1.1.0 — funktionsfähig, veröffentlicht`
 
 ## STATUS
 
@@ -9,7 +9,7 @@ Status: `v1.1.0 — functional`
 | Tests | OK | 25 lokale, netzfreie Tests bestanden. |
 | Compile | OK | Alle produktiven Python-Module kompilieren. |
 | Final Gate | OK | Final Gate Check: 10 PASS / 0 FAIL / 0 WARN. |
-| Release | Pending | GitHub-Repository und `RELEASE_GATE.md` bleiben bewusste Freigabeschritte. |
+| Release | Teilweise | Repository veröffentlicht: https://github.com/ellmos-ai/connectors. Ein Release-Tag `v1.1.0` existiert noch nicht. |
 
 ## Review 2026-07-15 (Security-/Dependency-Audit)
 
@@ -58,13 +58,17 @@ Status: `v1.1.0 — functional`
 
 - [ ] BACH-Reimport evaluieren (siehe BACH-REIMPORT-NOTE.md)
 - [ ] Gardener-Integration prüfen
-- [ ] Entscheidung: `.MODULES/` oder eigenständiges Repo
+- [x] Entscheidung: eigenständiges Repository (veröffentlicht als `ellmos-ai/connectors`)
 
-### Release-Vorbereitung (wenn veröffentlicht werden soll)
+### Release
 
 - [x] `pyproject.toml` erstellen
 - [x] Security-Audit (keine echten Secrets in Quellen)
-- [ ] GitHub-Repo anlegen (nur nach Audit)
+- [x] GitHub-Repo angelegt und veröffentlicht (`ellmos-ai/connectors`)
+- [ ] Release-Tag `v1.1.0` setzen — CHANGELOG und Version-Badge führen v1.1.0,
+      `gh release list` ist leer; wer die Version sucht, findet keinen Anhaltspunkt.
+- [ ] Entscheiden, ob `ellmos-connectors` auf PyPI veröffentlicht wird
+      (Name ist frei; derzeit nur Installation aus dem Repository möglich).
 - [ ] `RELEASE_GATE.md` nach bestandenem Gate-Check
 
 ## Erledigt
