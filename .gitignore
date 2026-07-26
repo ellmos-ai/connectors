@@ -80,3 +80,8 @@ htmlcov/
 
 # Multi-Agent Lock-System (lokal, nie committen)
 LOCK*.txt
+
+# Host-spezifische Sync-Dateien (OneDrive Sync-Konflikte)
+*-ASUS-GEI*
+*-WORKSTATION-LG*
+

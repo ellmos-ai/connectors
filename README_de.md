@@ -8,10 +8,38 @@
 
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/tests-27%20passed-brightgreen)](tests/)
 
 Aus [BACH](https://github.com/ellmos-ai/bach) extrahiert und vollständig entkoppelt. Kein Framework erforderlich. Keine externen Pflichtabhängigkeiten (nur Python stdlib).
 
-**Schnelleinstieg:** [Connectoren](#unterstützte-connectoren) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
+> [!NOTE]
+> **LLM & Agent-Native Architektur**: `connectors` wurde speziell für KI-Agenten, Multi-Agenten-Schwärme und autonome Schleifen entwickelt. Es bietet eine abhängigkeitsfreie, standardisierte Messaging-Schnittstelle (`connect()`, `send_message()`, `poll_threaded()`), über die LLM-Agenten plattformübergreifend mit menschlichen Nutzern kommunizieren können.
+
+**Schnelleinstieg:** [Connectoren](#unterstützte-connectoren) · [Architektur](#systemarchitektur) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
+
+## Systemarchitektur
+
+```mermaid
+graph TD
+    A[Autonomer Agent / App] -->|ConnectorConfig| B[create_connector Factory]
+    B -->|Instanziiert| C[BaseConnector]
+    C -->|Secret Lookup| D[SecretAdapter / env / dotenv]
+    
+    C --> E[TelegramConnector]
+    C --> F[DiscordConnector]
+    C --> G[SignalConnector]
+    C --> H[WhatsAppConnector]
+    C --> I[HomeAssistantConnector]
+    C --> J[WebhookConnector]
+
+    E -->|Telegram Bot API| K[Telegram Plattform]
+    F -->|Bot API / Webhook| L[Discord Server]
+    G -->|signal-cli| M[Signal Netzwerk]
+    H -->|Business API| N[WhatsApp Plattform]
+    I -->|REST API| O[Home Assistant Instanz]
+    J -->|HTTP POST| P[Eigener Webhook Endpunkt]
+```
 
 ## Unterstützte Connectoren
 

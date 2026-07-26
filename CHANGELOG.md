@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Discoverability & Documentation
+
+- README.md und README_de.md um Shields.io Badges (Python 3.8+, Pytest 27 passed), GFM LLM Note Callout (`> [!NOTE]`) & Mermaid Systemarchitektur-Diagramme erweitert.
+- `llms.txt` Metadaten Last-checked auf 2026-07-26 aktualisiert.
+
 ### Security
 
 - `.gitignore` um typische lokale Token-, Credential-, Recovery-Code-,

@@ -8,10 +8,38 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/tests-27%20passed-brightgreen)](tests/)
 
 Extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach). No framework required. Zero mandatory external dependencies (stdlib only).
 
-**Quick links:** [Supported Connectors](#supported-connectors) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
+> [!NOTE]
+> **LLM & Agent-Native Architecture**: `connectors` is built specifically for AI agents, multi-agent swarms, and autonomous loops. It provides a zero-dependency, standardized messaging interface (`connect()`, `send_message()`, `poll_threaded()`) so LLM agents can seamlessly communicate with human users across multi-channel platforms.
+
+**Quick links:** [Supported Connectors](#supported-connectors) · [Architecture](#system-architecture) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
+
+## System Architecture
+
+```mermaid
+graph TD
+    A[Autonomous Agent / App] -->|ConnectorConfig| B[create_connector Factory]
+    B -->|Instantiates| C[BaseConnector]
+    C -->|Secret Lookup| D[SecretAdapter / env / dotenv]
+    
+    C --> E[TelegramConnector]
+    C --> F[DiscordConnector]
+    C --> G[SignalConnector]
+    C --> H[WhatsAppConnector]
+    C --> I[HomeAssistantConnector]
+    C --> J[WebhookConnector]
+
+    E -->|Telegram Bot API| K[Telegram Platform]
+    F -->|Bot API / Webhook| L[Discord Server]
+    G -->|signal-cli| M[Signal Network]
+    H -->|Business API| N[WhatsApp Platform]
+    I -->|REST API| O[Home Assistant Instance]
+    J -->|HTTP POST| P[Custom Webhook Endpoint]
+```
 
 ## Supported Connectors
 
