@@ -2,7 +2,7 @@
 
 ## Last-checked: 2026-07-26
 
-Standalone Python-Modul für Messaging-Connectoren (27/27 Pytest passed).
+Standalone Python-Modul für Messaging-Connectoren (25/25 Pytest passed).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.
 
 ## Kernkonzept
@@ -49,4 +49,4 @@ Template-Dateien: `templates/*_template.yaml`
 
 - Installierbar via `python -m pip install -e ".[wizard]"`
 - Smoke-Test: `python tests/test_imports.py`
-- Compile-Check: `python -m compileall -q -x "templates[\\/]+connector_template\\.py" .`
+- Compile-Check: `python -m compileall -q -x "(^|[\\/])(build|templates[\\/]connector_template\.py)" .`

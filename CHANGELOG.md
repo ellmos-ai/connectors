@@ -2,9 +2,16 @@
 
 ## Unreleased
 
+### Documentation hygiene
+
+- Synchronised the documented test count with the current 25-test suite.
+- Corrected the documented compile command so it excludes both generated build
+  artefacts and the intentionally unrendered connector template.
+- Updated the supported-version table to the current 1.1.x release line.
+
 ### Discoverability & Documentation
 
-- README.md und README_de.md um Shields.io Badges (Python 3.8+, Pytest 27 passed), GFM LLM Note Callout (`> [!NOTE]`) & Mermaid Systemarchitektur-Diagramme erweitert.
+- README.md und README_de.md um Shields.io Badges (Python 3.8+, Pytest 25 passed), GFM LLM Note Callout (`> [!NOTE]`) & Mermaid Systemarchitektur-Diagramme erweitert.
 - `llms.txt` Metadaten Last-checked auf 2026-07-26 aktualisiert.
 
 ### Security

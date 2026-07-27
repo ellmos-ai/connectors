@@ -9,7 +9,7 @@
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-27%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen)](tests/)
 
 Aus [BACH](https://github.com/ellmos-ai/bach) extrahiert und vollständig entkoppelt. Kein Framework erforderlich. Keine externen Pflichtabhängigkeiten (nur Python stdlib).
 
@@ -172,7 +172,7 @@ connectors/
 ```bash
 python -m pip install -e ".[wizard]"
 python tests/test_imports.py
-python -m compileall -q -x "templates[\\/]+connector_template\\.py" .
+python -m compileall -q -x "(^|[\\/])(build|templates[\\/]connector_template\.py)" .
 ```
 
 `templates/connector_template.py` enthält bewusst Platzhalter und wird erst
