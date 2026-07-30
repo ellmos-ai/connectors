@@ -10,11 +10,13 @@
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
 [![Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen)](tests/)
+[![Ecosystem: ellmos-ai](https://img.shields.io/badge/Ecosystem-ellmos--ai-blueviolet)](https://github.com/ellmos-ai)
+[![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-darkblue)](https://github.com/open-bricks)
 
 Extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach). No framework required. Zero mandatory external dependencies (stdlib only).
 
 > [!NOTE]
-> **LLM & Agent-Native Architecture**: `connectors` is built specifically for AI agents, multi-agent swarms, and autonomous loops. It provides a zero-dependency, standardized messaging interface (`connect()`, `send_message()`, `poll_threaded()`) so LLM agents can seamlessly communicate with human users across multi-channel platforms.
+> **LLM & Agent-Native Architecture**: `connectors` is built specifically for AI agents, multi-agent swarms, and autonomous loops. It provides a zero-dependency, standardized messaging interface (`connect()`, `send_message()`, `poll_threaded()`) so LLM agents can seamlessly communicate with human users across multi-channel platforms. Machine-readable context available at [llms.txt](llms.txt).
 
 **Quick links:** [Supported Connectors](#supported-connectors) · [Architecture](#system-architecture) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
 

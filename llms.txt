@@ -1,6 +1,6 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-07-26
+## Last-checked: 2026-07-30
 
 Standalone Python-Modul für Messaging-Connectoren (25/25 Pytest passed).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.

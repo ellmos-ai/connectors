@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Discoverability & Marketing Audit (2026-07-30)
+
+- Updated `llms.txt` Last-checked timestamp to 2026-07-30.
+- Integrated Ecosystem (`ellmos-ai`) & Umbrella (`open-bricks`) Shields.io badges and machine-readable context links in `README.md` and `README_de.md`.
+- Verified 25/25 Pytest unit tests (100% green).
+
 ### Documentation hygiene
 
 - Synchronised the documented test count with the current 25-test suite.
