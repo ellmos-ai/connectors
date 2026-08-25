@@ -1,0 +1,131 @@
+# Template-Konfiguration für den Discord Bot/Webhook Connector
+# Wird vom Setup-Wizard verwendet (python -m connectors.templates.setup_wizard)
+
+connector_name: Discord
+connector_type: discord
+connector_display_name: Discord Bot/Webhook API
+connector_description: |
+  Implementiert BaseConnector für Discord im Bot- oder Webhook-Modus.
+  Secrets werden nur interaktiv erfasst; generierter Code referenziert Env-Variablen.
+
+connector_module: discord_connector
+connector_instance_name: discord_main
+recipient_example: "CHANNEL_ID"
+
+auth_type: api_key
+endpoint_example: 'os.environ.get("DISCORD_WEBHOOK_URL", "")'
+auth_config_example: |
+  {"bot_token": os.environ.get("DISCORD_BOT_TOKEN", "")}
+options_example: |
+  {"default_channel": os.environ.get("DISCORD_DEFAULT_CHANNEL", "")}
+
+api_base_comment: "# Discord API v10"
+api_base_url: "https://discord.com/api/v10"
+
+init_variables: |
+  self._bot_token = self._resolve_secret(config.auth_config, "bot_token")
+  self._webhook_url = config.endpoint
+  self._bot_info = None
+  self._last_message_id = config.options.get("last_message_id", "")
+
+connect_validation: |
+  if not self._bot_token and not self._webhook_url:
+      self._status = ConnectorStatus.ERROR
+      return False
+
+connect_implementation: |
+  if self._bot_token:
+      result = self._api_call("GET", "/users/@me")
+      if not result:
+          raise RuntimeError("Discord Bot-Token wurde abgelehnt")
+      self._bot_info = result
+
+send_message_implementation: |
+  self._warn_attachments_unsupported(attachments)
+  if self._webhook_url:
+      return self._send_webhook(content)
+  if self._bot_token:
+      result = self._api_call(
+          "POST", f"/channels/{recipient}/messages", {"content": content}
+      )
+      return result is not None
+  return False
+
+get_messages_implementation: |
+  if not self._bot_token:
+      return []
+  channel_id = self.config.options.get("default_channel", "")
+  if not channel_id:
+      return []
+  params = f"?limit={min(limit, 100)}"
+  if since:
+      params += f"&after={since}"
+  result = self._api_call("GET", f"/channels/{channel_id}/messages{params}")
+  if not isinstance(result, list):
+      return []
+
+parse_messages_implementation: |
+  for item in result:
+      author = item.get("author", {})
+      if self._bot_info and author.get("id") == self._bot_info.get("id"):
+          continue
+      message_id = item.get("id", "")
+      messages.append(Message(
+          channel="discord",
+          sender=author.get("username", "unknown"),
+          content=item.get("content", ""),
+          timestamp=item.get("timestamp", ""),
+          direction="in",
+          message_id=message_id,
+          metadata={"channel_id": item.get("channel_id", "")},
+      ))
+      if message_id:
+          self._last_message_id = message_id
+
+helper_methods: |
+  def _api_call(self, method, endpoint, data=None):
+      url = f"{self.API_BASE}{endpoint}"
+      headers = {
+          "Authorization": f"Bot {self._bot_token}",
+          "Content-Type": "application/json",
+      }
+      body = json.dumps(data, ensure_ascii=False).encode("utf-8") if data else None
+      request = urllib.request.Request(
+          url, data=body, headers=headers, method=method
+      )
+      with urllib.request.urlopen(request, timeout=10) as response:
+          return json.loads(response.read().decode("utf-8"))
+
+  def _send_webhook(self, content):
+      body = json.dumps({"content": content}, ensure_ascii=False).encode("utf-8")
+      request = urllib.request.Request(
+          self._webhook_url, data=body,
+          headers={"Content-Type": "application/json"},
+      )
+      with urllib.request.urlopen(request, timeout=10) as response:
+          return response.status < 400
+
+setup_questions:
+  - name: bot_token
+    prompt: "Discord Bot-Token (optional bei Webhook-Modus; keine Speicherung im Quellcode)"
+    type: secret
+    required: false
+    storage: auth_config
+
+  - name: webhook_url
+    prompt: "Discord Webhook-URL (optional bei Bot-Modus; keine Speicherung im Quellcode)"
+    type: secret
+    required: false
+    storage: endpoint
+
+  - name: default_channel
+    prompt: "Default Channel-ID für Bot-Empfang"
+    type: text
+    required: false
+    storage: options
+
+  - name: last_message_id
+    prompt: "Letzte verarbeitete Message-ID (optional)"
+    type: text
+    required: false
+    storage: options

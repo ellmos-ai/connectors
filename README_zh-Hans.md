@@ -127,7 +127,9 @@ connectors/
 │   ├── setup_wizard.py          # 交互式 CLI 向导
 │   ├── telegram_template.yaml
 │   ├── whatsapp_template.yaml
-│   └── notification_template.yaml
+│   ├── notification_template.yaml
+│   ├── signal_template.yaml
+│   └── discord_template.yaml
 ├── LICENSE                      # MIT
 ├── requirements.txt             # pyyaml（仅向导），其余为标准库
 ├── CHANGELOG.md

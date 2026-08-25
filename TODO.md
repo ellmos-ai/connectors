@@ -6,7 +6,7 @@ Status: `v1.1.0 — funktionsfähig, veröffentlicht`
 
 | Category | Status | Notes |
 |---|---|---|
-| Tests | OK | 25 lokale, netzfreie Tests bestanden. |
+| Tests | OK | 39 lokale, netzfreie Tests bestanden. |
 | Compile | OK | Alle produktiven Python-Module kompilieren. |
 | Final Gate | OK | Final Gate Check: 10 PASS / 0 FAIL / 0 WARN. |
 | Release | Teilweise | Repository veröffentlicht: https://github.com/ellmos-ai/connectors. Ein Release-Tag `v1.1.0` existiert noch nicht. |
@@ -51,8 +51,8 @@ Status: `v1.1.0 — funktionsfähig, veröffentlicht`
 - [ ] `slack_connector.py` — Niederpriorität
 - [ ] `matrix_connector.py` — Zukunftsidee
 - [ ] `webhook_connector.py` ausbauen: eingehender Webhook-Server (http.server)
-- [ ] Templates: `signal_template.yaml` hinzufügen (Wizard-Vorlage für Signal)
-- [ ] Templates: `discord_template.yaml` hinzufügen
+- [x] Templates: [`signal_template.yaml`](templates/signal_template.yaml) hinzugefügt (Wizard-Vorlage für Signal)
+- [x] Templates: [`discord_template.yaml`](templates/discord_template.yaml) hinzugefügt
 
 ### Integration
 

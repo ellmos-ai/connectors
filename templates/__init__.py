@@ -8,7 +8,8 @@ Interaktives Template-System zur Erstellung neuer Connectors.
 Komponenten:
 - connector_template.py: Basis-Template mit Platzhaltern
 - setup_wizard.py:       Interaktiver CLI-Wizard (standalone, kein Framework)
-- *_template.yaml:       Template-Konfigurationen (Telegram, WhatsApp)
+- *_template.yaml:       Template-Konfigurationen (Telegram, WhatsApp,
+                         Signal, Discord und Notifications)
 
 Verwendung:
     python -m connectors.templates.setup_wizard

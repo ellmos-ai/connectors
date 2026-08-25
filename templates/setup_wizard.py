@@ -157,6 +157,7 @@ class SetupWizard:
         user_config: Dict[str, Any] = {
             "auth_config": {},
             "options": {},
+            "endpoint": "",
             "instance_name": "",
         }
 
@@ -200,8 +201,13 @@ class SetupWizard:
 
             if storage == "auth_config":
                 user_config["auth_config"][name] = value
-            else:
+            elif storage == "options":
                 user_config["options"][name] = value
+            elif storage == "endpoint":
+                user_config["endpoint"] = value
+            else:
+                print(f"[Fehler] Unbekannter Speicherort im Template: {storage}")
+                return None
 
         print()
         print("-" * 60)
@@ -223,6 +229,10 @@ class SetupWizard:
             print(f"[Fehler] Template-Datei konnte nicht gelesen werden: {e}")
             return None
 
+        endpoint_example = template.get("endpoint_example", "")
+        endpoint_argument = (
+            f"endpoint={endpoint_example},\n        " if endpoint_example else ""
+        )
         replacements = {
             "{{CONNECTOR_NAME}}": template.get("connector_name", "My"),
             "{{CONNECTOR_TYPE}}": template.get("connector_type", "my"),
@@ -230,6 +240,7 @@ class SetupWizard:
             "{{CONNECTOR_DESCRIPTION}}": template.get("connector_description", ""),
             "{{CONNECTOR_MODULE}}": template.get("connector_module", "my_connector"),
             "{{CONNECTOR_INSTANCE_NAME}}": user_config["instance_name"],
+            "{{ENDPOINT_ARGUMENT}}": endpoint_argument,
             "{{RECIPIENT_EXAMPLE}}": template.get("recipient_example", "recipient_id"),
             "{{AUTH_TYPE}}": template.get("auth_type", "api_key"),
             "{{AUTH_CONFIG_EXAMPLE}}": template.get("auth_config_example", "{}"),

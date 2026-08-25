@@ -129,7 +129,9 @@ connectors/
 │   ├── setup_wizard.py          # 対話型 CLI ウィザード
 │   ├── telegram_template.yaml
 │   ├── whatsapp_template.yaml
-│   └── notification_template.yaml
+│   ├── notification_template.yaml
+│   ├── signal_template.yaml
+│   └── discord_template.yaml
 ├── LICENSE                      # MIT
 ├── requirements.txt             # pyyaml（ウィザードのみ）、他は stdlib
 ├── CHANGELOG.md

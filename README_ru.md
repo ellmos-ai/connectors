@@ -129,7 +129,9 @@ connectors/
 │   ├── setup_wizard.py          # Интерактивный CLI-мастер
 │   ├── telegram_template.yaml
 │   ├── whatsapp_template.yaml
-│   └── notification_template.yaml
+│   ├── notification_template.yaml
+│   ├── signal_template.yaml
+│   └── discord_template.yaml
 ├── LICENSE                      # MIT
 ├── requirements.txt             # pyyaml (только мастер), остальное — stdlib
 ├── CHANGELOG.md

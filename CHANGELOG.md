@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Setup-Wizard templates (2026-08-26)
+
+- Added credential-free, deterministic Signal and Discord templates aligned
+  with the real `ConnectorConfig`, secret, endpoint, and options contracts.
+- Added explicit Wizard support for `ConnectorConfig.endpoint` questions and
+  fixed generated-code indentation so all connector templates compile.
+- Added seven offline contract tests; the full suite now passes 39/39 tests
+  without platform connections or real credentials.
+
 ### Security & Dependency Audit (2026-08-25)
 
 - **Version Parity:** Synchronized `__init__.__version__` to `1.1.0` (matching `pyproject.toml` and `VERSION`).

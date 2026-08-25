@@ -1,0 +1,113 @@
+# Template-Konfiguration für den Signal Connector via signal-cli
+# Wird vom Setup-Wizard verwendet (python -m connectors.templates.setup_wizard)
+
+connector_name: Signal
+connector_type: signal
+connector_display_name: Signal via signal-cli
+connector_description: |
+  Implementiert BaseConnector für Signal über das lokale signal-cli.
+  Benötigt eine registrierte Telefonnummer und ein installiertes signal-cli.
+
+connector_module: signal_connector
+connector_instance_name: signal_main
+recipient_example: "+49XXXXXXXXXX"
+
+auth_type: none
+auth_config_example: |
+  {"phone_number": os.environ["SIGNAL_PHONE_NUMBER"]}
+options_example: |
+  {"signal_cli_path": os.environ.get("SIGNAL_CLI_PATH", "signal-cli")}
+
+api_base_comment: "# Lokaler signal-cli Prozess; keine HTTP-API"
+api_base_url: ""
+
+init_variables: |
+  self._phone_number = (
+      config.auth_config.get("phone_number", "")
+      or config.options.get("phone_number", "")
+  )
+  self._signal_cli_path = config.options.get("signal_cli_path", "signal-cli")
+  self._last_timestamp = config.options.get("last_timestamp", 0)
+
+connect_validation: |
+  if not self._phone_number:
+      self._status = ConnectorStatus.ERROR
+      return False
+
+connect_implementation: |
+  import subprocess
+  result = subprocess.run(
+      [self._signal_cli_path, "--version"],
+      capture_output=True, text=True, encoding="utf-8", errors="replace",
+      timeout=5,
+  )
+  if result.returncode != 0:
+      raise RuntimeError("signal-cli ist nicht verfügbar")
+
+send_message_implementation: |
+  import subprocess
+  cmd = [
+      self._signal_cli_path, "-a", self._phone_number,
+      "send", "-m", content, recipient,
+  ]
+  for attachment in attachments or []:
+      cmd.extend(["-a", attachment])
+  result = subprocess.run(
+      cmd, capture_output=True, text=True,
+      encoding="utf-8", errors="replace", timeout=30,
+  )
+  return result.returncode == 0
+
+get_messages_implementation: |
+  import subprocess
+  result = subprocess.run(
+      [self._signal_cli_path, "-a", self._phone_number, "receive", "--json"],
+      capture_output=True, text=True,
+      encoding="utf-8", errors="replace", timeout=30,
+  )
+  if result.returncode != 0:
+      return []
+
+parse_messages_implementation: |
+  for line in result.stdout.splitlines():
+      if not line:
+          continue
+      envelope_data = json.loads(line).get("envelope", {})
+      timestamp = envelope_data.get("timestamp", 0)
+      data_message = envelope_data.get("dataMessage") or {}
+      content = data_message.get("message", "")
+      if timestamp <= self._last_timestamp or not content:
+          continue
+      self._last_timestamp = timestamp
+      messages.append(Message(
+          channel="signal",
+          sender=envelope_data.get("source", "") or envelope_data.get("sourceNumber", ""),
+          content=content,
+          timestamp=datetime.fromtimestamp(timestamp / 1000).isoformat(),
+          direction="in",
+          message_id=str(timestamp),
+      ))
+
+helper_methods: |
+  pass
+
+setup_questions:
+  - name: phone_number
+    prompt: "Registrierte Signal-Telefonnummer (z.B. +49...; keine Speicherung im Quellcode)"
+    type: secret
+    required: true
+    storage: auth_config
+
+  - name: signal_cli_path
+    prompt: "Pfad zu signal-cli"
+    type: text
+    default: signal-cli
+    required: true
+    storage: options
+
+  - name: last_timestamp
+    prompt: "Letzter verarbeiteter Timestamp (optional)"
+    type: text
+    default: 0
+    required: false
+    storage: options

@@ -10,7 +10,7 @@
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-39%20passed-brightgreen)](tests/)
 [![Ökosystem: ellmos-ai](https://img.shields.io/badge/Ecosystem-ellmos--ai-blueviolet)](https://github.com/ellmos-ai)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-darkblue)](https://github.com/open-bricks)
 
@@ -156,13 +156,18 @@ connectors/
 │   ├── setup_wizard.py          # Interaktiver CLI-Wizard (standalone)
 │   ├── telegram_template.yaml
 │   ├── whatsapp_template.yaml
-│   └── notification_template.yaml
+│   ├── notification_template.yaml
+│   ├── signal_template.yaml
+│   └── discord_template.yaml
 ├── LICENSE                      # MIT
 ├── requirements.txt             # pyyaml (nur Wizard), sonst stdlib
 ├── CHANGELOG.md
 ├── TODO.md
 └── llms.txt
 ```
+
+Wizard-Vorlagen: [Signal](templates/signal_template.yaml) ·
+[Discord](templates/discord_template.yaml)
 
 ## Abhängigkeiten
 

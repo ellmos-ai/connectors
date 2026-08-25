@@ -16,7 +16,7 @@ Schnellstart:
     config = ConnectorConfig(
         name="{{CONNECTOR_INSTANCE_NAME}}",
         connector_type="{{CONNECTOR_TYPE}}",
-        auth_type="{{AUTH_TYPE}}",
+        {{ENDPOINT_ARGUMENT}}auth_type="{{AUTH_TYPE}}",
         auth_config={{AUTH_CONFIG_EXAMPLE}},
         options={{OPTIONS_EXAMPLE}},
     )
@@ -60,16 +60,16 @@ class {{CONNECTOR_NAME}}Connector(BaseConnector):
     def __init__(self, config: ConnectorConfig,
                  secret_adapter: Optional[SecretAdapter] = None):
         super().__init__(config, secret_adapter)
-        {{INIT_VARIABLES}}
+{{INIT_VARIABLES}}
         self._polling = False
 
     def connect(self) -> bool:
         """Verbindung herstellen."""
-        {{CONNECT_VALIDATION}}
+{{CONNECT_VALIDATION}}
 
         self._status = ConnectorStatus.CONNECTING
         try:
-            {{CONNECT_IMPLEMENTATION}}
+{{CONNECT_IMPLEMENTATION}}
             self._status = ConnectorStatus.CONNECTED
             return True
         except Exception as e:
@@ -89,7 +89,7 @@ class {{CONNECTOR_NAME}}Connector(BaseConnector):
                      attachments: Optional[List[str]] = None) -> bool:
         """Nachricht senden."""
         try:
-            {{SEND_MESSAGE_IMPLEMENTATION}}
+{{SEND_MESSAGE_IMPLEMENTATION}}
             return True
         except Exception as e:
             print(f"[{{CONNECTOR_NAME}} send_message Error] {type(e).__name__}: {e}",
@@ -100,10 +100,10 @@ class {{CONNECTOR_NAME}}Connector(BaseConnector):
                      limit: int = 50) -> List[Message]:
         """Neue Nachrichten abrufen."""
         try:
-            {{GET_MESSAGES_IMPLEMENTATION}}
+{{GET_MESSAGES_IMPLEMENTATION}}
 
             messages = []
-            {{PARSE_MESSAGES_IMPLEMENTATION}}
+{{PARSE_MESSAGES_IMPLEMENTATION}}
 
             return messages
         except Exception as e:
@@ -156,4 +156,4 @@ class {{CONNECTOR_NAME}}Connector(BaseConnector):
     # Internal Helper Methods
     # ------------------------------------------------------------------
 
-    {{HELPER_METHODS}}
+{{HELPER_METHODS}}
