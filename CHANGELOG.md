@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Security & Dependency Audit (2026-08-25)
+
+- **Version Parity:** Synchronized `__init__.__version__` to `1.1.0` (matching `pyproject.toml` and `VERSION`).
+- **Software & License Inventory (`THIRD_PARTY_LICENSES.md`):** Added comprehensive third-party inventory documenting zero runtime dependencies for the core library, optional `pyyaml` (MIT), `pytest` (MIT), and `signal-cli` (GPL-3.0) external process boundary. Referenced in `pyproject.toml` `license-files`.
+- **Security Policy (`SECURITY.md`):** Expanded policy into bilingual German/English document with explicit response SLA (48h acknowledgment, 5 days triage), token masking guarantees, and threat scope.
+- **CI Matrix & Concurrency (`.github/workflows/tests.yml`):** Added concurrency group with `cancel-in-progress: true`, multi-OS matrix (`ubuntu-latest`, `windows-latest`, `macos-latest`) across Python 3.10–3.13, and automated execution of the full `pytest` suite.
+- **Repository Hygiene & Contract Testsuite (`tests/test_repository_hygiene.py`):** Enhanced test suite with mirror-safe non-git fallback and 7 new security/contract tests covering version parity, zero-dependency invariant, secret masking across all connector classes, sync-conflict gitignore patterns, license inventories, and UTF-8 typography integrity (32/32 tests passed).
+- **Documentation & LLM Context:** Updated `llms.txt`, `README.md`, and `README_de.md` badges to 32 tests passed.
+
 ### Discoverability & Marketing Audit (2026-07-30)
 
 - Updated `llms.txt` Last-checked timestamp to 2026-07-30.

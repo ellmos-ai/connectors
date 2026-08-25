@@ -10,14 +10,14 @@
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)](tests/)
 [![Ökosystem: ellmos-ai](https://img.shields.io/badge/Ecosystem-ellmos--ai-blueviolet)](https://github.com/ellmos-ai)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-darkblue)](https://github.com/open-bricks)
 
 Aus [BACH](https://github.com/ellmos-ai/bach) extrahiert und vollständig entkoppelt. Kein Framework erforderlich. Keine externen Pflichtabhängigkeiten (nur Python stdlib).
 
 > [!NOTE]
-> **LLM & Agent-Native Architektur**: `connectors` wurde speziell für KI-Agenten, Multi-Agenten-Schwärme und autonome Schleifen entwickelt. Es bietet eine abhängigkeitsfreie, standardisierte Messaging-Schnittstelle (`connect()`, `send_message()`, `poll_threaded()`), über die LLM-Agenten plattformübergreifend mit menschlichen Nutzern kommunizieren können. Maschinenlesbarer Kontext verfügbar unter [llms.txt](llms.txt).
+> **LLM & Agent-Native Architektur**: `connectors` wurde speziell für KI-Agenten, Multi-Agenten-Schwärme und autonome Schleifen entwickelt. Es bietet eine abhängigkeitsfreie, standardisierte Messaging-Schnittstelle (`connect()`, `send_message()`, `poll_threaded()`), über die LLM-Agenten plattformübergreifend und zuverlässig mit menschlichen Nutzern sowie externen Systemen kommunizieren können. Schließen Sie eigene Key-Vaults nahtlos über `SecretAdapter` an. Maschinenlesbarer Kontext verfügbar unter [llms.txt](llms.txt).
 
 **Schnelleinstieg:** [Connectoren](#unterstützte-connectoren) · [Architektur](#systemarchitektur) · [Quick Start](#quick-start) · [Changelog](CHANGELOG.md)
 

@@ -1,35 +1,66 @@
-# Security Policy
+# Security Policy / Sicherheitsrichtlinie
 
-## Supported Versions
+**Project:** `connectors` (`ellmos-connectors`)
+**Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
+**Umbrella:** [open-bricks](https://github.com/open-bricks)
+**Last Updated:** 2026-08-25
 
-| Version | Supported          |
-|---------|-------------------|
-| 1.1.x   | :white_check_mark: |
+---
 
-## Reporting a Vulnerability
+## Supported Versions / Unterstützte Versionen
 
-If you discover a security vulnerability in this project, please do **not** open
-a public GitHub issue. Instead:
+| Version | Supported / Unterstützt | Status |
+|---------|------------------------|--------|
+| `1.1.x` | :white_check_mark: Yes | Current Active Release Line |
+| `< 1.1.0` | :x: No | End of Life / Upgrade Recommended |
 
-1. Open a [GitHub Security Advisory](https://github.com/ellmos-ai/connectors/security/advisories/new)
-   (recommended — keeps details private until a fix is released).
-2. Or email the maintainers directly via the contact listed in the repository profile.
+---
 
-Please include:
-- A description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- (Optional) A suggested fix
+## Reporting a Vulnerability / Sicherheitslücke Melden
 
-You can expect an initial response within 5 business days.
+If you discover a security vulnerability in this project, please do **not** open a public GitHub issue.
 
-## Scope
+### Preferred Channels / Bevorzugte Meldewege
 
-This module handles **no secrets at runtime** by default — all tokens and API keys
-must be supplied by the caller via environment variables or the `SecretAdapter`
-interface. The module never stores, logs, or transmits credentials on its own.
+1. **GitHub Security Advisory (Recommended / Empfohlen):**
+   Open a private advisory via [GitHub Security Advisories](https://github.com/ellmos-ai/connectors/security/advisories/new).
+2. **Direct Maintainer Contact:**
+   Reach out via the contact information published on the organization profile (`https://github.com/ellmos-ai`).
 
-Known out-of-scope items:
-- Security of the downstream messaging services (Telegram, Discord, etc.)
-- Vulnerabilities in `signal-cli` (report upstream to AsamK/signal-cli)
-- Issues arising from callers hardcoding secrets in `auth_config` (against documented best practice)
+### Information to Provide / Erforderliche Angaben
+
+Please include as much detail as possible:
+- Type of vulnerability (e.g., credential exposure, SSRF, command injection, path traversal)
+- Affected connector module (`telegram_connector.py`, `discord_connector.py`, `signal_connector.py`, etc.)
+- Step-by-step reproduction instructions and minimal proof-of-concept
+- Potential impact and threat model
+- Suggested mitigation or patch (if available)
+
+### Response SLA / Reaktionszeiten
+
+- **Acknowledgment:** Within 48 hours (Empfangsbestätigung innerhalb von 48 Stunden)
+- **Initial Assessment & Triage:** Within 5 business days (Ersteinschätzung innerhalb von 5 Werktagen)
+- **Fix & Advisory Release:** Coordinated disclosure following verified resolution
+
+---
+
+## Security Guarantees & Token Architecture / Sicherheitsgarantien & Token-Architektur
+
+1. **Zero Runtime Secret Persistence:**
+   `connectors` never writes API tokens, bot credentials, or session data to disk or persistent state stores.
+2. **Repr & Log Leak Prevention:**
+   `ConnectorConfig.auth_config` is defined with `field(repr=False)`. All connector classes ensure their `__repr__()` implementations mask secrets and only expose identifier and status metadata.
+3. **Pluggable Secret Resolution:**
+   Secrets can be resolved via environment variables (`os.environ`), `.env` files, or through the decoupled `SecretAdapter` interface for external key vaults.
+4. **Injection Safety:**
+   Process invocations in `SignalConnector` strictly pass arguments as structured arrays to `subprocess.run` (without `shell=True`) to prevent shell injection.
+5. **Zero Mandatory Runtime Dependencies:**
+   The core library relies exclusively on Python standard library modules (`urllib`, `json`, `threading`, `subprocess`, etc.), minimizing supply-chain attack surfaces.
+
+---
+
+## Out-of-Scope / Nicht im Sicherheitsbereich
+
+- Third-party platform infrastructure outages or security incidents (Telegram, Discord, Meta WhatsApp, Signal Network, Home Assistant).
+- Vulnerabilities within external system binaries such as `signal-cli` (report upstream to [AsamK/signal-cli](https://github.com/AsamK/signal-cli)).
+- Insecure storage of secrets in user code, configuration files, or environment variable management outside this library's boundaries.

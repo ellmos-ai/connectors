@@ -84,4 +84,7 @@ LOCK*.txt
 # Host-spezifische Sync-Dateien (OneDrive Sync-Konflikte)
 *-ASUS-GEI*
 *-WORKSTATION-LG*
+*.sync-conflict-*
+*.conflict
+*-conflict-*
 

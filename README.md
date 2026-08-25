@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-v1.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)](tests/)
 [![Ecosystem: ellmos-ai](https://img.shields.io/badge/Ecosystem-ellmos--ai-blueviolet)](https://github.com/ellmos-ai)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-darkblue)](https://github.com/open-bricks)
 

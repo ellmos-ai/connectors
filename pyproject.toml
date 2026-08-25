@@ -9,7 +9,7 @@ description = "Standalone messaging connectors for autonomous agents"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]
 authors = [
   { name = "connectors contributors" }
 ]

@@ -1,9 +1,10 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-07-30
+## Last-checked: 2026-08-25
 
-Standalone Python-Modul für Messaging-Connectoren (25/25 Pytest passed).
+Standalone Python-Modul für Messaging-Connectoren (32/32 Pytest passed, Version 1.1.0).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.
+Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library.
 
 ## Kernkonzept
 
@@ -24,12 +25,15 @@ Factory: `from connectors import create_connector, ConnectorConfig`
 - `homeassistant`: Home Assistant REST-API
 - `webhook`: Generischer HTTP Webhook (Stub/Basis)
 
-## Secrets
+## Secrets & Security-Integrität
 
 NIEMALS hardcoden. Übergabe via:
 1. `os.environ` direkt in `auth_config`
 2. `.env`-Datei + python-dotenv
 3. Optionaler `SecretAdapter` (DI, für Frameworks)
+
+Sicherheitsinvariante: `ConnectorConfig.auth_config` ist mit `field(repr=False)` geschützt. Weder `repr(config)` noch `repr(connector)` leaken Tokens oder Zugangsdaten in Logs.
+Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage). Lizenzinventar in `THIRD_PARTY_LICENSES.md`.
 
 ## BACH-Integration
 
@@ -47,6 +51,7 @@ Template-Dateien: `templates/*_template.yaml`
 
 ## Validierung
 
-- Installierbar via `python -m pip install -e ".[wizard]"`
+- Installierbar via `python -m pip install -e ".[wizard,test]"`
+- Pytest Suite: `pytest -v` (32 passed)
 - Smoke-Test: `python tests/test_imports.py`
 - Compile-Check: `python -m compileall -q -x "(^|[\\/])(build|templates[\\/]connector_template\.py)" .`
