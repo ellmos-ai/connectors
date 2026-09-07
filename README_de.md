@@ -103,7 +103,7 @@ flowchart TD
 
     TC -->|HTTPS POST / getUpdates| EP_TG
     DC -->|HTTPS POST / Webhook ausführen| EP_DC
-    SC -->|CLI-Argumente (ohne Shell)| EP_SG
+    SC -->|"CLI-Argumente (ohne Shell)"| EP_SG
     WC -->|HTTPS POST / Graph API| EP_WA
     HC -->|HTTPS POST / Dienste| EP_HA
     WH -->|JSON-Payload| EP_WH
