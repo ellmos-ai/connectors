@@ -1,36 +1,37 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-08-25
+## Last-checked: 2026-09-07
 
-Standalone Python-Modul für Messaging-Connectoren (39/39 Pytest passed, Version 1.1.0).
+Standalone Python-Modul für Messaging-Connectoren (Version 1.1.0).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.
-Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library.
+Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library (`urllib`, `json`, `threading`, `subprocess`).
 
-## Kernkonzept
+## Kernkonzept & Agenten-Schnittstelle
 
-Jeder Connector implementiert `BaseConnector` (base.py):
-- `connect() -> bool`
-- `disconnect() -> bool`
-- `send_message(recipient, content, attachments=None) -> bool`
-- `get_messages(since=None, limit=50) -> List[Message]`
+Jeder Connector implementiert die abstrakte Basisklasse `BaseConnector` (base.py):
+- `connect() -> bool`: Initialisiert Verbindung, validiert Zugangsdaten / Probe
+- `disconnect() -> bool`: Beendet Sessions und schließt Verbindungen sauber
+- `send_message(recipient, content, attachments=None) -> bool`: Standardisierter Nachrichtenversand
+- `get_messages(since=None, limit=50) -> List[Message]`: Abruf neuer Nachrichten
+- `poll_threaded(on_message, interval=5.0, stop_event=None) -> Tuple[Thread, Event]`: Asynchroner, nicht-blockierender Empfangs-Loop
 
 Factory: `from connectors import create_connector, ConnectorConfig`
 
-## Unterstützte Typen
+## Unterstützte Typen & Protokolle
 
-- `telegram`: Telegram Bot API, Long-Polling, stdlib-only
-- `discord`: Bot + Webhook-Modus, bidirektional
-- `signal`: via signal-cli (externes Binary erforderlich)
-- `whatsapp`: WhatsApp Business API, Empfang via Webhook
-- `homeassistant`: Home Assistant REST-API
-- `webhook`: Generischer HTTP Webhook (Stub/Basis)
+- `telegram`: Telegram Bot API, Long-Polling & HTTPS Send, stdlib-only
+- `discord`: Bot API + Webhook-Modus, bidirektional
+- `signal`: via signal-cli IPC (externes Binary `signal-cli`, ohne `shell=True`)
+- `whatsapp`: WhatsApp Business REST API (Meta Cloud / On-Premises)
+- `homeassistant`: Home Assistant REST API
+- `webhook`: Generischer HTTP Webhook (JSON POST, Baseline)
 
-## Secrets & Security-Integrität
+## Secrets & Sicherheits-Integrität
 
-NIEMALS hardcoden. Übergabe via:
-1. `os.environ` direkt in `auth_config`
+NIEMALS Secrets hardcoden. Übergabe via:
+1. `os.environ` direkt in `ConnectorConfig.auth_config`
 2. `.env`-Datei + python-dotenv
-3. Optionaler `SecretAdapter` (DI, für Frameworks)
+3. Entkoppelter `SecretAdapter` (Dependency Injection für Frameworks & Vaults)
 
 Sicherheitsinvariante: `ConnectorConfig.auth_config` ist mit `field(repr=False)` geschützt. Weder `repr(config)` noch `repr(connector)` leaken Tokens oder Zugangsdaten in Logs.
 Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage). Lizenzinventar in `THIRD_PARTY_LICENSES.md`.
@@ -44,14 +45,33 @@ Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage)
             from hub.secrets_handler import SecretsHandler
             return SecretsHandler().get_secret(key) or ""
 
-## Templates
+    config = ConnectorConfig(name="bach_telegram", connector_type="telegram")
+    connector = create_connector(config, secret_adapter=BachAdapter())
+
+## Scaffolding & Vorlagen
 
 Neuen Connector erstellen: `python -m connectors.templates.setup_wizard`
-Template-Dateien: `templates/*_template.yaml`
+Template-Dateien: `templates/*_template.yaml` (Signal, Discord, Telegram, WhatsApp)
 
-## Validierung
+## Geschwister-Ökosystem
+
+- `ellmos-ai/bach`: Kognitiver Kern für autonome Agenten
+- `ellmos-ai/usmc`: Universal Shared Memory Coordinator (Agent-zu-Agent-Zustand)
+- `ellmos-ai/clutch`: Dynamisches LLM-Routing & Model Fallback
+- `ellmos-ai/companion-for-agy`: PTY stdout Telemetrie-Erfassung
+- `ellmos-ai/system-gap-master`: Multi-Host Filesystem & Conflict Management
+- `dev-bricks/lock-master`: Verteilte Concurrency & kooperatives Locking
+- `dev-bricks/ticket-master`: Asynchrone Ticketwarteschlangen & Aufgabenverteilung
+- `dev-bricks/automation-master`: Multi-Agent Flotten-Orchestrierung
+- `file-bricks/CloudLockFixer`: Resiliente Cloud-Dateisperren-Handhabung (`cldflt.sys`)
+- `open-bricks/.github`: Zentrale Open-Source Governance
+
+## Validierung & Testbefehle
 
 - Installierbar via `python -m pip install -e ".[wizard,test]"`
-- Pytest Suite: `pytest -v` (39 passed)
+- Pytest Suite: `pytest -v`
+- Metadata & Contract Tests: `pytest tests/test_metadata.py`
+- Repository Hygiene: `pytest tests/test_repository_hygiene.py`
 - Smoke-Test: `python tests/test_imports.py`
 - Compile-Check: `python -m compileall -q -x "(^|[\\/])(build|templates[\\/]connector_template\.py)" .`
+- Linter: `ruff check .`

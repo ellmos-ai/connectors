@@ -3,7 +3,8 @@
 **Project:** `connectors` (`ellmos-connectors`)
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
-**Last Updated:** 2026-08-25
+**Last Updated:** 2026-09-07
+
 
 ---
 

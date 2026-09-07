@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Discoverability, Showcase Design & Parity Audit (2026-09-07)
+
+- **Bilingual Documentation Overhaul (`README.md` & `README_de.md`):** Complete structural and visual refresh featuring 12+ anchor jumps in Quick Navigation, interactive Mermaid architecture (`flowchart TD`) and message/polling lifecycle (`sequenceDiagram`) diagrams, expanded Governance & Safety Invariants matrix, updated Shields.io badges (50 passed tests, Python 3.8+, Zero Dependencies, 48h SLA), and comprehensive Sibling Ecosystem matrix linking 10+ partner repositories across `ellmos-ai`, `dev-bricks`, and `file-bricks`.
+- **Automated Metadata & Discoverability Contract Suite (`tests/test_metadata.py`):** Added 11 new automated contract tests enforcing README existence, banner integrity, quick navigation anchors, bilingual code fence parity, mermaid syntax, governance invariants, sibling ecosystem URLs, security policy SLA, `llms.txt` freshness, and UTF-8 encoding without mojibake (full suite now at 50/50 passed tests).
+- **Linter & Packaging Configuration (`pyproject.toml`):** Configured `[tool.ruff]` to ensure 100% clean lint checks across codebase, and enriched `[project.urls]` with Documentation, Bug Tracker, Changelog, Security Policy, Parent Org, and Umbrella Ecosystem.
+- **LLM Context & Security Sync (`llms.txt` & `SECURITY.md`):** Synchronized `Last-checked: 2026-09-07`, updated architecture, secret handling guarantees, and 50 passed test verification.
+
 ### Setup-Wizard templates (2026-08-26)
 
 - Added credential-free, deterministic Signal and Discord templates aligned

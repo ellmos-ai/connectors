@@ -12,8 +12,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 # Ensure connectors package is importable
-sys.path.insert(0, str(ROOT))
+if str(ROOT.parent) not in sys.path:
+    sys.path.insert(0, str(ROOT.parent))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 import connectors  # noqa: E402
+
 from connectors.base import ConnectorConfig  # noqa: E402
 from connectors import create_connector, SUPPORTED_TYPES  # noqa: E402
 
