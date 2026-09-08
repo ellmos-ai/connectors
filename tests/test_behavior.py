@@ -165,5 +165,76 @@ class TestFactory(unittest.TestCase):
             BaseConnector(_cfg())  # type: ignore[abstract]
 
 
+class TestSlackConnector(unittest.TestCase):
+    def test_slack_webhook_connect_and_send(self):
+        from connectors.slack_connector import SlackConnector
+
+        captured = {}
+
+        class DummyResponse:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self): return b"ok"
+
+        def fake_urlopen(req, timeout=15):
+            captured["url"] = req.full_url
+            captured["data"] = json.loads(req.data.decode("utf-8"))
+            return DummyResponse()
+
+        cfg = ConnectorConfig(
+            name="slack_wh",
+            connector_type="slack",
+            endpoint="https://hooks.slack.com/services/T00/B00/X00",
+        )
+        conn = SlackConnector(cfg)
+        self.assertTrue(conn.connect())
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            ok = conn.send_message("C123", "Test Nachricht")
+            self.assertTrue(ok)
+            self.assertEqual(captured["url"], "https://hooks.slack.com/services/T00/B00/X00")
+            self.assertEqual(captured["data"]["text"], "Test Nachricht")
+            self.assertEqual(captured["data"]["channel"], "C123")
+
+    def test_slack_bot_connect_and_send(self):
+        from connectors.slack_connector import SlackConnector
+
+        captured = {}
+
+        class DummyResponse:
+            status = 200
+            def __init__(self, payload): self._payload = payload
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self): return json.dumps(self._payload).encode("utf-8")
+
+        def fake_urlopen(req, timeout=15):
+            captured["auth"] = req.headers.get("Authorization")
+            if "auth.test" in req.full_url:
+                return DummyResponse({"ok": True, "user_id": "U123", "team_id": "T456"})
+            if "chat.postMessage" in req.full_url:
+                captured["body"] = json.loads(req.data.decode("utf-8"))
+                return DummyResponse({"ok": True, "ts": "1700000000.000100"})
+            return DummyResponse({"ok": False})
+
+        cfg = ConnectorConfig(
+            name="slack_bot",
+            connector_type="slack",
+            auth_config={"bot_token": "xoxb-secret-token"},
+            options={"default_channel": "C999"},
+        )
+        conn = SlackConnector(cfg)
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            self.assertTrue(conn.connect())
+            self.assertEqual(captured["auth"], "Bearer xoxb-secret-token")
+
+            ok = conn.send_message("", "Hallo Slack Bot!")
+            self.assertTrue(ok)
+            self.assertEqual(captured["body"]["channel"], "C999")
+            self.assertEqual(captured["body"]["text"], "Hallo Slack Bot!")
+
+
 if __name__ == "__main__":
     unittest.main()
