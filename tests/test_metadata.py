@@ -150,11 +150,13 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         sec_text = sec_path.read_text(encoding="utf-8")
 
         self.assertIn("1.1.x", sec_text)
+        self.assertIn("2026-09-08", sec_text)
         self.assertIn("48 hours", sec_text)
         self.assertIn("5 business days", sec_text)
         self.assertIn("Zero Runtime Secret Persistence", sec_text)
         self.assertIn("field(repr=False)", sec_text)
         self.assertIn("https://github.com/ellmos-ai/connectors/security/advisories/new", sec_text)
+        self.assertIn("security@open-bricks.org", sec_text)
 
     def test_llms_txt_structure_and_timestamp(self):
         llms_path = ROOT / "llms.txt"
@@ -162,7 +164,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         llms_text = llms_path.read_text(encoding="utf-8")
 
         self.assertIn("# connectors — LLM-Kontext", llms_text)
-        self.assertIn("## Last-checked: 2026-09-07", llms_text)
+        self.assertIn("## Last-checked: 2026-09-08", llms_text)
         self.assertIn("BaseConnector", llms_text)
         self.assertIn("create_connector", llms_text)
         self.assertIn("SecretAdapter", llms_text)
@@ -175,8 +177,37 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         self.assertIn('version = "1.1.0"', pyproject_text)
         self.assertIn('dependencies = []', pyproject_text)
         self.assertIn('"Parent Org" = "https://github.com/ellmos-ai"', pyproject_text)
+        self.assertIn('"Parent Organization" = "https://github.com/ellmos-ai"', pyproject_text)
         self.assertIn('"Umbrella Ecosystem" = "https://github.com/open-bricks"', pyproject_text)
+        self.assertIn('Operating System :: OS Independent', pyproject_text)
         self.assertIn('[tool.ruff]', pyproject_text)
+        self.assertIn('[tool.pytest.ini_options]', pyproject_text)
+
+    def test_ci_workflow_structure_and_matrix(self):
+        workflow_path = ROOT / ".github" / "workflows" / "tests.yml"
+        self.assertTrue(workflow_path.exists(), "tests.yml workflow must exist")
+        workflow_text = workflow_path.read_text(encoding="utf-8")
+
+        self.assertIn("actions/checkout@v4", workflow_text)
+        self.assertIn("actions/setup-python@v5", workflow_text)
+        self.assertIn('cache: "pip"', workflow_text)
+        self.assertIn("cancel-in-progress: true", workflow_text)
+        self.assertIn("ruff check .", workflow_text)
+        self.assertIn("ubuntu-latest", workflow_text)
+        self.assertIn("windows-latest", workflow_text)
+        self.assertIn("macos-latest", workflow_text)
+
+    def test_gitignore_hardened_patterns(self):
+        gitignore_path = ROOT / ".gitignore"
+        self.assertTrue(gitignore_path.exists(), ".gitignore must exist")
+        gitignore_text = gitignore_path.read_text(encoding="utf-8")
+
+        self.assertIn("*-CONFLIT-*", gitignore_text)
+        self.assertIn("*.lock", gitignore_text)
+        self.assertIn(".ruff_cache/", gitignore_text)
+        self.assertIn(".wheel-smoke/", gitignore_text)
+        self.assertIn("*.tmp", gitignore_text)
+        self.assertIn("*.bak", gitignore_text)
 
     def test_utf8_encoding_and_german_umlauts(self):
         readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")

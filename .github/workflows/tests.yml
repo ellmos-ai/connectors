@@ -22,17 +22,27 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Install package and test dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install ruff
           python -m pip install -e ".[test,wizard]"
+
+      - name: Run Ruff Linting
+        run: ruff check .
+
+      - name: Compile Python sources
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python -m compileall -q -x "templates[\\\\/]connector_template\\.py" .
 
       - name: Run Pytest test suite
         env:
@@ -43,8 +53,3 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
         run: python tests/test_imports.py
-
-      - name: Compile Python sources
-        env:
-          PYTHONIOENCODING: utf-8
-        run: python -m compileall -q -x "templates[\\\\/]connector_template\\.py" .

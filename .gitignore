@@ -77,9 +77,11 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+.ruff_cache/
 
 # Multi-Agent Lock-System (lokal, nie committen)
 LOCK*.txt
+*.lock
 
 # Host-spezifische Sync-Dateien (OneDrive Sync-Konflikte)
 *-ASUS-GEI*
@@ -87,4 +89,10 @@ LOCK*.txt
 *.sync-conflict-*
 *.conflict
 *-conflict-*
+*-CONFLIT-*
+
+# Temporäre Test- und Build-Artefakte
+.wheel-smoke/
+*.tmp
+*.bak
 

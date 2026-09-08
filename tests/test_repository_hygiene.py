@@ -121,11 +121,15 @@ class RepositoryHygieneTests(unittest.TestCase):
         conflict_samples = [
             "LOCK.txt",
             "LOCK.permissions.txt",
+            "repo.lock",
             "base-ASUS-GEI.py",
             "signal_connector-WORKSTATION-LG.py",
             "config.sync-conflict-20260825.json",
             "messages.conflict",
             "module-conflict-copy.py",
+            "file-CONFLIT-20260908.txt",
+            "debug.tmp",
+            "old.bak",
         ]
         if (ROOT / ".git").exists():
             result = _git("check-ignore", *conflict_samples)

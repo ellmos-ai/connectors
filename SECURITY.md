@@ -3,7 +3,7 @@
 **Project:** `connectors` (`ellmos-connectors`)
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
-**Last Updated:** 2026-09-07
+**Last Updated:** 2026-09-08
 
 
 ---
@@ -26,7 +26,7 @@ If you discover a security vulnerability in this project, please do **not** open
 1. **GitHub Security Advisory (Recommended / Empfohlen):**
    Open a private advisory via [GitHub Security Advisories](https://github.com/ellmos-ai/connectors/security/advisories/new).
 2. **Direct Maintainer Contact:**
-   Reach out via the contact information published on the organization profile (`https://github.com/ellmos-ai`).
+   Reach out via dedicated security contact emails: `security@open-bricks.org`, `security@ellmos.ai`, or maintainer email `support@lukasgeiger.com`.
 
 ### Information to Provide / Erforderliche Angaben
 

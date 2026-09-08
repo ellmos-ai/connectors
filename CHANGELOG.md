@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Technical Hygiene & CI Hardening — Pfad A (2026-09-08)
+
+- **GitHub Actions CI Hardening (`.github/workflows/tests.yml`):** Fixed action versions (`actions/checkout@v4`, `actions/setup-python@v5` with pip caching), integrated Ruff linting gate (`ruff check .`), added cross-platform Python bytecode compilation validation (`python -m compileall -q -x "templates[\\/]connector_template\.py" .`), and maintained full multi-OS matrix (`ubuntu-latest`, `windows-latest`, `macos-latest`) across Python 3.10–3.13 with concurrency `cancel-in-progress: true`.
+- **PEP 621 Standard Classifiers & Ecosystem URLs (`pyproject.toml`):** Added standard OS classifiers (`Operating System :: OS Independent`, `Operating System :: Microsoft :: Windows`, `Operating System :: POSIX :: Linux`, `Operating System :: MacOS`), standard project URLs (`Parent Organization` and `Parent Org`), and registered explicit `[tool.pytest.ini_options]`.
+- **Sync Conflict & Lock Hardening (`.gitignore`):** Hardened ignore patterns to cover international conflict files (`*-CONFLIT-*`), multi-agent lock patterns (`*.lock`), linter caches (`.ruff_cache/`), temporary artifacts (`*.tmp`, `*.bak`), and test distribution smoke directories (`.wheel-smoke/`).
+- **Security Policy & Direct Maintainer Contacts (`SECURITY.md`):** Updated policy to 2026-09-08 with direct security contact channels (`security@open-bricks.org`, `security@ellmos.ai`, `support@lukasgeiger.com`) alongside GitHub Security Advisories.
+- **Contract Test Suite Expansion (`tests/test_metadata.py` & `tests/test_repository_hygiene.py`):** Added automated contract tests validating CI workflow structure, PEP 621 classifier standards, and hardened sync-conflict patterns. Full suite now verified at 52/52 tests passing.
+- **Documentation & Machine-Readable Context Sync (`llms.txt`, `README.md`, `README_de.md`):** Updated badges to 52 passed tests, synchronized `Last-checked: 2026-09-08` in `llms.txt`.
+
 ### Discoverability, Showcase Design & Parity Audit (2026-09-07)
 
 - **Bilingual Documentation Overhaul (`README.md` & `README_de.md`):** Complete structural and visual refresh featuring 12+ anchor jumps in Quick Navigation, interactive Mermaid architecture (`flowchart TD`) and message/polling lifecycle (`sequenceDiagram`) diagrams, expanded Governance & Safety Invariants matrix, updated Shields.io badges (50 passed tests, Python 3.8+, Zero Dependencies, 48h SLA), and comprehensive Sibling Ecosystem matrix linking 10+ partner repositories across `ellmos-ai`, `dev-bricks`, and `file-bricks`.

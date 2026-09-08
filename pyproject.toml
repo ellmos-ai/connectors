@@ -34,6 +34,10 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
   "Topic :: Communications",
   "Topic :: Software Development :: Libraries :: Python Modules"
 ]
@@ -50,6 +54,7 @@ Repository = "https://github.com/ellmos-ai/connectors"
 "Bug Tracker" = "https://github.com/ellmos-ai/connectors/issues"
 Changelog = "https://github.com/ellmos-ai/connectors/blob/main/CHANGELOG.md"
 "Security Policy" = "https://github.com/ellmos-ai/connectors/blob/main/SECURITY.md"
+"Parent Organization" = "https://github.com/ellmos-ai"
 "Parent Org" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
 
@@ -83,3 +88,8 @@ ignore = ["E501", "I001"]
 "templates/setup_wizard.py" = ["F401", "F541"]
 "tests/test_imports.py" = ["F401"]
 "tests/test_templates.py" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v"
