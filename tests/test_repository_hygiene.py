@@ -221,6 +221,7 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
             ROOT / "homeassistant_connector.py",
             ROOT / "webhook_connector.py",
             ROOT / "slack_connector.py",
+            ROOT / "imessage_connector.py",
         ]
         for fp in files_to_check:
             if not fp.exists():

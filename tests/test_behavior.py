@@ -236,5 +236,119 @@ class TestSlackConnector(unittest.TestCase):
             self.assertEqual(captured["body"]["text"], "Hallo Slack Bot!")
 
 
+class TestIMessageConnector(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        import sqlite3
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.db_path = Path(self.temp_dir.name) / "chat.db"
+
+        # Create mock chat.db SQLite schema
+        conn = sqlite3.connect(str(self.db_path))
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE handle (
+                ROWID INTEGER PRIMARY KEY AUTOINCREMENT,
+                id TEXT NOT NULL
+            );
+        """)
+        cur.execute("""
+            CREATE TABLE message (
+                ROWID INTEGER PRIMARY KEY AUTOINCREMENT,
+                guid TEXT NOT NULL,
+                text TEXT,
+                handle_id INTEGER,
+                date INTEGER,
+                is_from_me INTEGER
+            );
+        """)
+        # Insert test handle
+        cur.execute("INSERT INTO handle (id) VALUES ('+491701234567')")
+        # Insert test messages (Apple epoch nano: ~2024-01-01)
+        # 2024-01-01 = 1704067200 unix = 725760000 apple sec = 725760000000000000 apple nano
+        cur.execute("""
+            INSERT INTO message (guid, text, handle_id, date, is_from_me)
+            VALUES ('msg-1', 'Hallo iMessage', 1, 725760000000000000, 0)
+        """)
+        cur.execute("""
+            INSERT INTO message (guid, text, handle_id, date, is_from_me)
+            VALUES ('msg-2', 'Antwort zurück', 1, 725760010000000000, 1)
+        """)
+        conn.commit()
+        conn.close()
+
+    def tearDown(self):
+        self.temp_dir.cleanup()
+
+    def test_imessage_connect_with_db(self):
+        from connectors.imessage_connector import iMessageConnector
+        from connectors.base import ConnectorStatus
+
+        cfg = ConnectorConfig(
+            name="imsg_test",
+            connector_type="imessage",
+            options={"chat_db_path": str(self.db_path)},
+        )
+        conn = iMessageConnector(cfg)
+        self.assertTrue(conn.connect())
+        self.assertEqual(conn.status, ConnectorStatus.CONNECTED)
+
+    def test_imessage_get_messages(self):
+        from connectors.imessage_connector import iMessageConnector
+
+        cfg = ConnectorConfig(
+            name="imsg_test",
+            connector_type="imessage",
+            options={"chat_db_path": str(self.db_path)},
+        )
+        conn = iMessageConnector(cfg)
+        msgs = conn.get_messages(limit=10)
+        self.assertEqual(len(msgs), 2)
+        self.assertEqual(msgs[0].content, "Hallo iMessage")
+        self.assertEqual(msgs[0].sender, "+491701234567")
+        self.assertEqual(msgs[0].direction, "in")
+        self.assertEqual(msgs[1].content, "Antwort zurück")
+        self.assertEqual(msgs[1].direction, "out")
+
+    def test_imessage_send_message_darwin(self):
+        from connectors.imessage_connector import iMessageConnector
+
+        cfg = ConnectorConfig(
+            name="imsg_test",
+            connector_type="imessage",
+            options={"chat_db_path": str(self.db_path), "default_recipient": "+491701234567"},
+        )
+        conn = iMessageConnector(cfg)
+
+        captured_cmd = []
+
+        def fake_run(cmd, *args, **kwargs):
+            captured_cmd.extend(cmd)
+            class Res:
+                returncode = 0
+            return Res()
+
+        with mock.patch.object(conn, "is_darwin", return_value=True):
+            with mock.patch("subprocess.run", side_effect=fake_run):
+                ok = conn.send_message("", "Testnachricht")
+                self.assertTrue(ok)
+                self.assertIn("osascript", captured_cmd)
+                self.assertIn("+491701234567", captured_cmd)
+                self.assertIn("Testnachricht", captured_cmd)
+
+    def test_imessage_fail_closed_non_darwin(self):
+        from connectors.imessage_connector import iMessageConnector
+
+        cfg = ConnectorConfig(
+            name="imsg_test",
+            connector_type="imessage",
+            options={"chat_db_path": "/nonexistent/path/chat.db"},
+        )
+        conn = iMessageConnector(cfg)
+        with mock.patch.object(conn, "is_darwin", return_value=False):
+            self.assertFalse(conn.connect())
+            self.assertFalse(conn.send_message("+491701234567", "Hallo"))
+
+
 if __name__ == "__main__":
     unittest.main()

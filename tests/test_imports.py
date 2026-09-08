@@ -69,6 +69,7 @@ def test_connector_imports():
     from connectors.homeassistant_connector import HomeAssistantConnector
     from connectors.webhook_connector import WebhookConnector
     from connectors.slack_connector import SlackConnector
+    from connectors.imessage_connector import iMessageConnector
 
     for cls in (
         TelegramConnector,
@@ -78,6 +79,7 @@ def test_connector_imports():
         HomeAssistantConnector,
         WebhookConnector,
         SlackConnector,
+        iMessageConnector,
     ):
         assert cls is not None, f"{cls} should not be None"
 
@@ -94,6 +96,7 @@ def test_create_connector_factory():
         ("homeassistant", "HomeAssistantConnector"),
         ("webhook", "WebhookConnector"),
         ("slack", "SlackConnector"),
+        ("imessage", "iMessageConnector"),
     ]
 
     for ctype, expected_class in test_cases:

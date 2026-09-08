@@ -32,7 +32,7 @@ Mit SecretAdapter (optionale Framework-Integration):
     conn = create_connector(config, secret_adapter=MyAdapter())
 
 Unterstützte Connector-Typen:
-    telegram, discord, signal, whatsapp, homeassistant, webhook, slack
+    telegram, discord, signal, whatsapp, homeassistant, webhook, slack, imessage
 
 MIT License — siehe LICENSE
 """
@@ -57,6 +57,7 @@ _CONNECTOR_MAP = {
     "homeassistant": ("connectors.homeassistant_connector", "HomeAssistantConnector"),
     "webhook": ("connectors.webhook_connector", "WebhookConnector"),
     "slack": ("connectors.slack_connector", "SlackConnector"),
+    "imessage": ("connectors.imessage_connector", "iMessageConnector"),
 }
 
 SUPPORTED_TYPES = list(_CONNECTOR_MAP.keys())
