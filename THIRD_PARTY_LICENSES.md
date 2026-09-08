@@ -37,9 +37,25 @@ All built-in connectors (`TelegramConnector`, `DiscordConnector`, `WhatsAppConne
 
 ---
 
+## Architectural References & Upstream Attribution
+
+`connectors` contains clean-room, zero-dependency implementations for messaging protocols. Specific interface patterns and protocol mappings draw conceptual inspiration from open-source multi-channel projects:
+
+| Project / Upstream | Repository | License | Notice & Attribution |
+|--------------------|------------|---------|----------------------|
+| **OpenClaw** | [openclaw/openclaw](https://github.com/openclaw/openclaw) | MIT License | Copyright (c) 2024-2026 OpenClaw Contributors. Multi-channel gateway abstractions (Slack, WhatsApp, Signal, Discord). |
+| **Hermes Agent** | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | MIT License | Copyright (c) 2024-2026 Nous Research. Agentic messaging gateway patterns and tool integration paradigms. |
+
+> **License Distinction Notice (Hermes Agent vs. Weights):**
+> Hermes Agent software is licensed under the MIT License. Model weights published under the "Nous Hermes" name (e.g. Hermes 3/4) are separate artifacts subject to upstream base model terms (e.g., Meta Llama Community License or Apache 2.0). `connectors` contains solely communication interfaces and does not bundle or distribute model weights.
+
+---
+
 ## License Texts & Attribution
 
-### MIT License (`pyyaml`, `pytest`, `connectors`)
+### MIT License (`connectors`, `pyyaml`, `pytest`, `OpenClaw`, `Hermes Agent`)
+
+Per the terms of the MIT License (*"The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software"*), the complete license text is provided below:
 
 ```
 Permission is hereby granted, free of charge, to any person obtaining a copy
