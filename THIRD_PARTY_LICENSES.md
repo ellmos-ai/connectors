@@ -2,7 +2,7 @@
 
 **Project:** `connectors` (`ellmos-connectors`)
 **License:** [MIT License](LICENSE)
-**Audit Date:** 2026-08-25
+**Audit Date:** 2026-09-10
 
 ---
 
@@ -13,17 +13,17 @@
 ### Core Runtime Dependencies
 
 | Package | Version | License | Direct/Transitive | Purpose |
-|---------|---------|---------|-------------------|---------|
-| *None* (Python Standard Library only) | >=3.8 | PSF License | N/A | `urllib`, `json`, `threading`, `subprocess`, `abc`, `dataclasses`, `enum`, `socket`, `datetime` |
+|:---|:---|:---|:---|:---|
+| *None* (Python Standard Library only) | >=3.8 | PSF License | N/A | `urllib`, `json`, `threading`, `subprocess`, `sqlite3`, `abc`, `dataclasses`, `enum`, `socket`, `datetime`, `pathlib` |
 
-All built-in connectors (`TelegramConnector`, `DiscordConnector`, `WhatsAppConnector`, `HomeAssistantConnector`, `WebhookConnector`, `SignalConnector`) rely exclusively on Python standard library modules.
+All built-in connectors (`TelegramConnector`, `DiscordConnector`, `WhatsAppConnector`, `HomeAssistantConnector`, `WebhookConnector`, `SignalConnector`, `SlackConnector`, `iMessageConnector`) rely exclusively on Python standard library modules.
 
 ---
 
 ## Optional & Development Dependencies
 
 | Package / Tool | Version / Spec | License | Scope | Purpose |
-|----------------|----------------|---------|-------|---------|
+|:---|:---|:---|:---|:---|
 | [pyyaml](https://pyyaml.org/) | `>=6.0` | MIT | `[wizard]`, `[test]` | YAML template parsing for interactive setup wizard |
 | [pytest](https://pytest.org/) | `>=7.0` | MIT | `[test]` | Automated test runner and contract verification |
 
@@ -32,8 +32,9 @@ All built-in connectors (`TelegramConnector`, `DiscordConnector`, `WhatsAppConne
 ## External Binary Boundaries
 
 | External Binary / Protocol | Interface / Protocol | License | Scope | Notice / Boundary |
-|---------------------------|----------------------|---------|-------|-------------------|
+|:---|:---|:---|:---|:---|
 | [signal-cli](https://github.com/AsamK/signal-cli) | CLI / JSON-RPC via `subprocess` | GPL-3.0-or-later | Optional (`SignalConnector`) | Not bundled or distributed with `connectors`. Executed strictly via external CLI invocation if configured. |
+| macOS `osascript` | AppleScript IPC via `subprocess` | Apple Proprietary / System | Optional (`iMessageConnector`) | Native macOS system tool for AppleScript execution. Not bundled; available only on Darwin systems. |
 
 ---
 
@@ -42,7 +43,7 @@ All built-in connectors (`TelegramConnector`, `DiscordConnector`, `WhatsAppConne
 `connectors` contains clean-room, zero-dependency implementations for messaging protocols. Specific interface patterns and protocol mappings draw conceptual inspiration from open-source multi-channel projects:
 
 | Project / Upstream | Repository | License | Notice & Attribution |
-|--------------------|------------|---------|----------------------|
+|:---|:---|:---|:---|
 | **OpenClaw** | [openclaw/openclaw](https://github.com/openclaw/openclaw) | MIT License | Copyright (c) 2024-2026 OpenClaw Contributors. Multi-channel gateway abstractions (Slack, WhatsApp, Signal, Discord). |
 | **Hermes Agent** | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | MIT License | Copyright (c) 2024-2026 Nous Research. Agentic messaging gateway patterns and tool integration paradigms. |
 

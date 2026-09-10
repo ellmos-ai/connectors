@@ -32,7 +32,6 @@ Schnellstart:
 MIT License — siehe LICENSE / THIRD_PARTY_LICENSES.md
 """
 
-import os
 import sys
 import sqlite3
 import subprocess
@@ -40,7 +39,7 @@ import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Optional, Callable, Tuple, Dict, Any
+from typing import List, Optional, Callable, Tuple, Any
 
 from connectors.base import (
     BaseConnector,

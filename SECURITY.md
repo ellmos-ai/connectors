@@ -3,16 +3,16 @@
 **Project:** `connectors` (`ellmos-connectors`)
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
-**Last Updated:** 2026-09-08
-
+**Last Updated:** 2026-09-10
 
 ---
 
 ## Supported Versions / Unterstützte Versionen
 
 | Version | Supported / Unterstützt | Status |
-|---------|------------------------|--------|
-| `1.1.x` | :white_check_mark: Yes | Current Active Release Line |
+|:---|:---|:---|
+| `1.2.x` | :white_check_mark: Yes | Current Active Release Line |
+| `1.1.x` | :white_check_mark: Yes | Maintenance Release Line |
 | `< 1.1.0` | :x: No | End of Life / Upgrade Recommended |
 
 ---
@@ -26,13 +26,13 @@ If you discover a security vulnerability in this project, please do **not** open
 1. **GitHub Security Advisory (Recommended / Empfohlen):**
    Open a private advisory via [GitHub Security Advisories](https://github.com/ellmos-ai/connectors/security/advisories/new).
 2. **Direct Maintainer Contact:**
-   Reach out via dedicated security contact emails: `security@open-bricks.org`, `security@ellmos.ai`, or maintainer email `support@lukasgeiger.com`.
+   Reach out via dedicated security contact emails: `security@open-bricks.org`, `security@ellmos.ai`, `lukas@open-bricks.org`, or maintainer email `support@lukasgeiger.com`.
 
 ### Information to Provide / Erforderliche Angaben
 
 Please include as much detail as possible:
 - Type of vulnerability (e.g., credential exposure, SSRF, command injection, path traversal)
-- Affected connector module (`telegram_connector.py`, `discord_connector.py`, `signal_connector.py`, etc.)
+- Affected connector module (`telegram_connector.py`, `discord_connector.py`, `signal_connector.py`, `slack_connector.py`, `imessage_connector.py`, etc.)
 - Step-by-step reproduction instructions and minimal proof-of-concept
 - Potential impact and threat model
 - Suggested mitigation or patch (if available)
@@ -54,14 +54,18 @@ Please include as much detail as possible:
 3. **Pluggable Secret Resolution:**
    Secrets can be resolved via environment variables (`os.environ`), `.env` files, or through the decoupled `SecretAdapter` interface for external key vaults.
 4. **Injection Safety:**
-   Process invocations in `SignalConnector` strictly pass arguments as structured arrays to `subprocess.run` (without `shell=True`) to prevent shell injection.
+   Process invocations in `SignalConnector` and `iMessageConnector` strictly pass arguments as structured arrays to `subprocess.run` (without `shell=True`) to prevent shell injection.
 5. **Zero Mandatory Runtime Dependencies:**
-   The core library relies exclusively on Python standard library modules (`urllib`, `json`, `threading`, `subprocess`, etc.), minimizing supply-chain attack surfaces.
+   The core library relies exclusively on Python standard library modules (`urllib`, `json`, `threading`, `subprocess`, `sqlite3`, etc.), minimizing supply-chain attack surfaces.
+6. **Local Platform & SQLite Isolation:**
+   `iMessageConnector` queries local macOS `chat.db` in read-only mode using strict parameterized queries, never modifies database records, and immediately fails closed with safe status on non-Darwin platforms.
+7. **Encrypted Transport:**
+   All HTTP-based connectors (`SlackConnector`, `TelegramConnector`, `DiscordConnector`, `WhatsAppConnector`, `WebhookConnector`, `HomeAssistantConnector`) enforce TLS/HTTPS endpoints.
 
 ---
 
 ## Out-of-Scope / Nicht im Sicherheitsbereich
 
-- Third-party platform infrastructure outages or security incidents (Telegram, Discord, Meta WhatsApp, Signal Network, Home Assistant).
+- Third-party platform infrastructure outages or security incidents (Slack, Telegram, Discord, Meta WhatsApp, Signal Network, Home Assistant).
 - Vulnerabilities within external system binaries such as `signal-cli` (report upstream to [AsamK/signal-cli](https://github.com/AsamK/signal-cli)).
 - Insecure storage of secrets in user code, configuration files, or environment variable management outside this library's boundaries.

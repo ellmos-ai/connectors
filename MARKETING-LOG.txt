@@ -1,0 +1,95 @@
+# Marketing & Discoverability Log — connectors
+
+**Project:** `connectors` (`ellmos-connectors`)
+**Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
+**Umbrella:** [open-bricks](https://github.com/open-bricks)
+**Maintained By:** connectors contributors
+**Last Updated:** 2026-09-10
+**Current Version:** 1.2.0
+
+---
+
+## 1. Product Positioning & Value Proposition
+
+`connectors` is the sovereign, zero-dependency messaging bridge engineered specifically for autonomous AI agents, multi-agent swarms, and cognitive runtime loops. Originally extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach), it provides a standard Python standard-library-only interface to all major consumer, developer, and smart home messaging channels.
+
+### Core Value Pillars
+1. **100% Python Standard Library Core:** Zero external runtime pip dependencies (`urllib.request`, `json`, `threading`, `subprocess`, `sqlite3`). Minimal attack surface, zero supply-chain risk, instant cold starts.
+2. **Zero Secret Persistence & Leakage Prevention:** Credentials in `ConnectorConfig.auth_config` are shielded by dataclass `field(repr=False)`. All class `__repr__()` methods mask tokens to ensure logs, stack traces, and LLM prompts never expose credentials.
+3. **Unified Abstract Connector Contract:** Every connector implements the standardized `BaseConnector` ABC (`connect()`, `disconnect()`, `send_message()`, `get_messages()`, `poll_threaded()`). Autonomous agents switch or multiplex channels with zero code rewriting.
+4. **Thread-Safe Decoupled Polling:** Built-in `poll_threaded()` background worker with `threading.Event` stop triggers and isolated exception handling for seamless agent integration.
+5. **Local-First & Sovereign Execution:** No telemetry, no external telemetry brokers, no vendor lock-in.
+
+---
+
+## 2. Target Personas
+
+### Persona 1: Autonomous AI Agent Engineers & Cognitive Loop Architects
+- **Profile:** Developers building agent frameworks (e.g., BACH, USMC, LangChain, AutoGen, CrewAI, custom LLM loops) needing reliable, non-blocking I/O to communicate with human operators.
+- **Pain Point:** Bloated SDKs (discord.py, python-telegram-bot) with complex async event loop dependencies that conflict with host agent runtimes.
+- **Why `connectors` Wins:** Zero external dependencies, pure stdlib, synchronous base methods with built-in optional thread polling, pluggable `SecretAdapter` for vault integration.
+
+### Persona 2: Self-Hosted Smart Home & Homelab Automation Developers
+- **Profile:** Engineers automating notifications and command handling across Home Assistant, Signal, Telegram, Discord, and Webhooks.
+- **Pain Point:** Disparate APIs, fragmented configurations, and risk of accidental token leakage in git commits or log files.
+- **Why `connectors` Wins:** Uniform YAML template wizard, strict token masking in repr/logs, and instant setup across multi-OS hosts (Linux, Windows, macOS).
+
+### Persona 3: Privacy-Conscious Enterprise SecOps & Compliance Teams
+- **Profile:** Security officers and compliance teams requiring strict software supply chain auditing and zero credential persistence.
+- **Pain Point:** External packages pulling hundreds of transitive dependencies with unpredictable CVE footprints.
+- **Why `connectors` Wins:** `dependencies = []` in PEP 621 manifest, strict unprivileged execution, shell injection immunity (`shell=False`), and clear 48-hour security response SLA.
+
+### Persona 4: Multi-Platform Notification & Incident Response Dispatcher Builders
+- **Profile:** DevOps engineers building alerting gateways that must reliably dispatch incidents to Slack, iMessage, WhatsApp, and Webhooks simultaneously.
+- **Pain Point:** Maintaining distinct SDKs, auth patterns, and error handlers for each platform.
+- **Why `connectors` Wins:** Identical `send_message(recipient, content)` interface across all 8 supported channels, fail-closed error handling that prevents cascade failures.
+
+---
+
+## 3. Governance & Runtime Invariants Matrix
+
+| Invariant ID | Name | Architectural Guarantee | Enforcement & Verification |
+|:---|:---|:---|:---|
+| `INV-LOCAL-01` | **Zero External Runtime Dependencies** | 100% Python Standard Library core (`urllib.request`, `json`, `threading`, `subprocess`, `sqlite3`). No third-party pip dependencies at runtime. | Verified in `pyproject.toml` (`dependencies = []`) and regression test suite. |
+| `INV-SECRET-02` | **Zero Runtime Secret Persistence** | Credentials stored exclusively in-memory during process lifetime. Tokens and secrets are never persisted to disk, databases, or cache files. | Verified in `tests/test_repository_hygiene.py` and `.gitignore` hygiene tests. |
+| `INV-MASK-03` | **Masked String Representation** | `ConnectorConfig.auth_config` defined with `field(repr=False)`. All connector `__repr__()` methods explicitly mask credentials. | Verified across all 8 connectors in `tests/test_repository_hygiene.py`. |
+| `INV-SHELL-04` | **Shell Injection Immunity** | Subprocess calls in `SignalConnector` and `iMessageConnector` strictly pass arguments as structured lists without `shell=True`. | Codebase audited; verified across POSIX and Windows test runs. |
+| `INV-ASYNC-05` | **Non-Blocking Threaded Polling** | `poll_threaded()` manages daemon threads with cooperative cancellation via `threading.Event` and thread join timeouts. | Verified in `tests/test_behavior.py` and threaded lifecycle tests. |
+| `INV-FAIL-06` | **Fail-Closed Error Handling** | Network timeouts and malformed payloads return `False` or empty collections gracefully without crashing the calling agent. | Standardized return types tested in behavior and mock tests. |
+| `INV-PLAT-07` | **Local Platform Isolation & Safe SQLite Access** | `iMessageConnector` queries macOS `chat.db` in read-only mode with strict parameterized queries; fails closed safely on non-Darwin platforms. | Verified in `tests/test_behavior.py` non-Darwin isolation tests. |
+| `INV-PRIV-08` | **Unprivileged User-Mode Execution** | Operates strictly within user-space without requiring administrative elevation (no root/sudo/admin tokens). | Hardened in security policy and verified in test suites. |
+| `INV-CI-09` | **Multi-OS GitHub Actions Matrix Integrity** | Full test matrix runs across Ubuntu Linux, Windows, and macOS with Python 3.10–3.13, Ruff linting, and bytecode checks. | Verified in `.github/workflows/tests.yml` with concurrency cancellation. |
+| `INV-SLA-10` | **Bilingual Security Governance & SLA** | Dual-language `SECURITY.md` specifying 48-hour response SLA and 5 business days triage commitment. | Tested in `tests/test_metadata.py` and `tests/test_repository_hygiene.py`. |
+
+---
+
+## 4. Sibling Ecosystem Synergies
+
+`connectors` seamlessly interoperates with partner repositories across the `ellmos-ai`, `dev-bricks`, `file-bricks`, `doc-bricks`, and `open-bricks` ecosystem:
+
+1. [`ellmos-ai/bach`](https://github.com/ellmos-ai/bach): Autonomous cognitive agent core using `connectors` for external operator dispatch.
+2. [`ellmos-ai/usmc`](https://github.com/ellmos-ai/usmc): Universal Shared Memory Coordinator synchronizing agent states across nodes.
+3. [`ellmos-ai/clutch`](https://github.com/ellmos-ai/clutch): Dynamic LLM routing, inference fallbacks, and multi-model dispatch.
+4. [`ellmos-ai/companion-for-agy`](https://github.com/ellmos-ai/companion-for-agy): PTY stdout capture and interactive telemetry.
+5. [`ellmos-ai/system-gap-master`](https://github.com/ellmos-ai/system-gap-master): Multi-host filesystem reconciliation and sync conflict prevention.
+6. [`dev-bricks/lock-master`](https://github.com/dev-bricks/lock-master): Distributed multi-agent concurrency and cooperative lock governance.
+7. [`dev-bricks/ticket-master`](https://github.com/dev-bricks/ticket-master): Asynchronous task queuing and autonomous ticket dispatching.
+8. [`dev-bricks/automation-master`](https://github.com/dev-bricks/automation-master): Multi-agent fleet orchestration and headless automation controllers.
+9. [`dev-bricks/safe-start-for-codex`](https://github.com/dev-bricks/safe-start-for-codex): Secure agent sandbox initialization and process lifecycle control.
+10. [`file-bricks/CloudLockFixer`](https://github.com/file-bricks/CloudLockFixer): Resilient cloud-synced IO engine (`cldflt.sys` lock mitigation).
+11. [`file-bricks/ProSync`](https://github.com/file-bricks/ProSync): Real-time folder mirroring and cross-drive synchronization.
+12. [`file-bricks/ExplorerPro`](https://github.com/file-bricks/ExplorerPro): Advanced Windows Explorer shell extensions and metadata inspectors.
+13. [`doc-bricks/FormularErstellen`](https://github.com/doc-bricks/FormularErstellen): Sovereign document drafting and form generation workflows.
+14. [`ellmos-ai/n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp): Autonomous n8n workflow management and deployment over MCP.
+15. [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp): Local-first smart home telemetry and agent bridge over MCP.
+16. [`open-bricks/.github`](https://github.com/open-bricks): Global open-source umbrella governance and shared CI workflows.
+
+---
+
+## 5. Release 1.2.0 Highlights
+
+- **Slack Integration (`SlackConnector`):** Direct support for Slack Bot API (`chat.postMessage`, `conversations.history`) and Incoming Webhooks using zero-dependency `urllib`.
+- **macOS iMessage Integration (`iMessageConnector`):** Read incoming iMessages directly from local macOS `chat.db` (SQLite) and send outgoing messages via `osascript` AppleScript execution with automatic non-Darwin fail-closed safety.
+- **Third-Party Attribution:** Formal attribution in `THIRD_PARTY_LICENSES.md` for OpenClaw and Hermes Agent messaging patterns.
+- **Discoverability & Documentation:** Expanded 15+ point bilingual Quick Navigation, dual Mermaid diagrams (flowchart and sequence lifecycle), 10 Governance Invariants, and 16 Sibling Ecosystem links.
+- **Automated Contract Tests:** Expanded contract test suite in `tests/test_metadata.py` and `tests/test_repository_hygiene.py` guaranteeing 100% green verification.

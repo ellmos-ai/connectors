@@ -1,10 +1,10 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-09-08
+## Last-checked: 2026-09-10
 
-Standalone Python-Modul für Messaging-Connectoren (Version 1.1.0).
+Standalone Python-Modul für Messaging-Connectoren (Version 1.2.0).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.
-Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library (`urllib`, `json`, `threading`, `subprocess`).
+Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library (`urllib`, `json`, `threading`, `subprocess`, `sqlite3`).
 
 ## Kernkonzept & Agenten-Schnittstelle
 
@@ -25,6 +25,8 @@ Factory: `from connectors import create_connector, ConnectorConfig`
 - `whatsapp`: WhatsApp Business REST API (Meta Cloud / On-Premises)
 - `homeassistant`: Home Assistant REST API
 - `webhook`: Generischer HTTP Webhook (JSON POST, Baseline)
+- `slack`: Slack Bot API (`chat.postMessage`, `conversations.history`) & Incoming Webhooks (HTTPS stdlib)
+- `imessage`: macOS `chat.db` (SQLite read-only) & AppleScript `osascript` Dispatch (Darwin-native, fail-closed non-Darwin)
 
 ## Secrets & Sicherheits-Integrität
 
@@ -34,7 +36,20 @@ NIEMALS Secrets hardcoden. Übergabe via:
 3. Entkoppelter `SecretAdapter` (Dependency Injection für Frameworks & Vaults)
 
 Sicherheitsinvariante: `ConnectorConfig.auth_config` ist mit `field(repr=False)` geschützt. Weder `repr(config)` noch `repr(connector)` leaken Tokens oder Zugangsdaten in Logs.
-Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage). Lizenzinventar in `THIRD_PARTY_LICENSES.md`.
+Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage). Lizenzinventar in `THIRD_PARTY_LICENSES.md`. Lokales Marketing-Log in `MARKETING-LOG.txt`.
+
+## Governance & Laufzeit-Invarianten (INV-LOCAL-01 bis INV-SLA-10)
+
+- `INV-LOCAL-01`: Zero External Runtime Dependencies (100% Python Standard Library)
+- `INV-SECRET-02`: Zero Runtime Secret Persistence (In-Memory Only, keine Tokens auf Disk)
+- `INV-MASK-03`: Masked String Representation (`field(repr=False)` & Class `__repr__()` Token Sanitization)
+- `INV-SHELL-04`: Shell Injection Immunity (Subprocess argv list without `shell=True`)
+- `INV-ASYNC-05`: Non-Blocking Threaded Polling (`poll_threaded` via `threading.Event`)
+- `INV-FAIL-06`: Fail-Closed Error Handling (Netzwerk- und Parsing-Fehler führen zu leerer Liste/False)
+- `INV-PLAT-07`: Local Platform Isolation & Safe SQLite Access (macOS `chat.db` read-only, fail-closed non-Darwin)
+- `INV-PRIV-08`: Unprivileged User-Mode Execution (Keine Root-/Admin-Rechte erforderlich)
+- `INV-CI-09`: Multi-OS GitHub Actions Matrix Integrity (Ubuntu, Windows, macOS mit Python 3.10–3.13)
+- `INV-SLA-10`: Bilingual Security Governance & Response SLA (48h Acknowledgment, 5 Werktage Triage)
 
 ## BACH-Integration
 
@@ -53,7 +68,7 @@ Sicherheitsrichtlinie & SLA in `SECURITY.md` (48h Acknowledgment, 5 Tage Triage)
 Neuen Connector erstellen: `python -m connectors.templates.setup_wizard`
 Template-Dateien: `templates/*_template.yaml` (Signal, Discord, Telegram, WhatsApp)
 
-## Geschwister-Ökosystem
+## Geschwister-Ökosystem (16 Partner-Repositories)
 
 - `ellmos-ai/bach`: Kognitiver Kern für autonome Agenten
 - `ellmos-ai/usmc`: Universal Shared Memory Coordinator (Agent-zu-Agent-Zustand)
@@ -63,8 +78,14 @@ Template-Dateien: `templates/*_template.yaml` (Signal, Discord, Telegram, WhatsA
 - `dev-bricks/lock-master`: Verteilte Concurrency & kooperatives Locking
 - `dev-bricks/ticket-master`: Asynchrone Ticketwarteschlangen & Aufgabenverteilung
 - `dev-bricks/automation-master`: Multi-Agent Flotten-Orchestrierung
+- `dev-bricks/safe-start-for-codex`: Sichere Agent-Sandbox & Prozess-Initialisierung
 - `file-bricks/CloudLockFixer`: Resiliente Cloud-Dateisperren-Handhabung (`cldflt.sys`)
-- `open-bricks/.github`: Zentrale Open-Source Governance
+- `file-bricks/ProSync`: Lokale Echtzeit-Ordnersynchronisation & Multi-Drive Mirror
+- `file-bricks/ExplorerPro`: Windows Shell Extensions & Datei-Inspektion
+- `doc-bricks/FormularErstellen`: Vorlagengesteuerte Dokumenten- und Formularerstellung
+- `ellmos-ai/n8n-manager-mcp`: Autonome n8n-Workflow-Steuerung über MCP
+- `ellmos-ai/ellmos-homebase-mcp`: Lokale Smart-Home Telemetrie & MCP Gateway
+- `open-bricks/.github`: Zentrale Open-Source Governance & CI Workflows
 
 ## Validierung & Testbefehle
 

@@ -150,9 +150,9 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
         self.assertIsNotNone(match, "pyproject.toml must declare version")
         pyproject_version = match.group(1)
 
-        self.assertEqual(connectors.__version__, "1.1.0")
-        self.assertEqual(version_file, "1.1.0")
-        self.assertEqual(pyproject_version, "1.1.0")
+        self.assertEqual(connectors.__version__, "1.2.0")
+        self.assertEqual(version_file, "1.2.0")
+        self.assertEqual(pyproject_version, "1.2.0")
 
     def test_zero_external_runtime_dependencies(self):
         pyproject_content = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
@@ -199,6 +199,7 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
         sec_file = ROOT / "SECURITY.md"
         self.assertTrue(sec_file.exists(), "SECURITY.md must exist")
         content = sec_file.read_text(encoding="utf-8")
+        self.assertIn("1.2.x", content)
         self.assertIn("1.1.x", content)
         self.assertIn("Security Policy", content)
         self.assertIn("Sicherheitsrichtlinie", content)
@@ -211,6 +212,7 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
             ROOT / "README_de.md",
             ROOT / "SECURITY.md",
             ROOT / "THIRD_PARTY_LICENSES.md",
+            ROOT / "MARKETING-LOG.txt",
             ROOT / "llms.txt",
             ROOT / "CHANGELOG.md",
             ROOT / "base.py",

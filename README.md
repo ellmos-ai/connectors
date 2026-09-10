@@ -4,12 +4,12 @@
 
 **🇬🇧 English** | [🇩🇪 DE](README_de.md) | [🇪🇸 ES](README_es.md) | [🇯🇵 JA](README_ja.md) | [🇷🇺 RU](README_ru.md) | [🇨🇳 ZH](README_zh-Hans.md)
 
-> Standalone, zero-dependency messaging connectors for autonomous AI agents — Telegram, Discord, Signal, WhatsApp, Home Assistant, and Webhooks.
+> Standalone, zero-dependency messaging connectors for autonomous AI agents — Telegram, Discord, Signal, WhatsApp, Home Assistant, Webhooks, Slack, and macOS iMessage.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-v1.1.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v1.2.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-52%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-58%2B%20passed-brightgreen.svg)](tests/)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows%20%7C%20macOS-informational.svg)](.github/workflows/tests.yml)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-100%25%20Stdlib-success.svg)](pyproject.toml)
 [![Security Policy](https://img.shields.io/badge/security-policy%20%7C%2048h%20SLA-orange.svg)](SECURITY.md)
@@ -32,6 +32,7 @@ Extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach). No exter
 - [Supported Connectors & Status](#supported-connectors--status)
 - [Governance & Safety Invariants](#governance--safety-invariants)
 - [Quick Start](#quick-start)
+- [Slack & iMessage Connectors](#slack--imessage-connectors)
 - [Secret Management & Zero Leakage](#secret-management--zero-leakage)
 - [Threaded Polling & Event Callbacks](#threaded-polling--event-callbacks)
 - [Interactive Setup Wizard & Templates](#interactive-setup-wizard--templates)
@@ -39,16 +40,20 @@ Extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach). No exter
 - [Sibling Ecosystem & Partner Repositories](#sibling-ecosystem--partner-repositories)
 - [Smoke Testing & Verification](#smoke-testing--verification)
 - [Security Policy & Vulnerability Reporting](#security-policy--vulnerability-reporting)
+- [Third-Party Licenses & Notices](#third-party-licenses--notices)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
 ## Key Features
 
-- **100% Python Standard Library Core**: Zero external runtime pip dependencies (`urllib`, `json`, `threading`, `subprocess`). No bloat, minimal attack surface.
-- **Unified Abstract Connector Contract**: Standardized `BaseConnector` ABC with uniform signatures across Telegram, Discord, Signal, WhatsApp, Home Assistant, and Webhooks.
-- **Zero Runtime Secret Leakage**: Credentials stored in `ConnectorConfig.auth_config` are hidden via `field(repr=False)`. All class `__repr__()` implementations mask secrets to prevent token exposure in logs.
+- **100% Python Standard Library Core**: Zero external runtime pip dependencies (`urllib.request`, `json`, `threading`, `subprocess`, `sqlite3`). No bloat, minimal attack surface, instant cold starts.
+- **Unified Abstract Connector Contract**: Standardized `BaseConnector` ABC with uniform signatures across Telegram, Discord, Signal, WhatsApp, Home Assistant, Webhooks, Slack, and macOS iMessage.
+- **Zero Runtime Secret Leakage**: Credentials stored in `ConnectorConfig.auth_config` are hidden via `field(repr=False)`. All class `__repr__()` implementations mask secrets to prevent token exposure in logs or stack traces.
 - **Pluggable Credential Resolution**: Direct environment access (`os.environ`), `.env` support, or pluggable `SecretAdapter` for vault and framework integration.
-- **Thread-Safe Decoupled Polling**: Built-in `poll_threaded()` background worker with `threading.Event` stop triggers and error isolation.
+- **Thread-Safe Decoupled Polling**: Built-in `poll_threaded()` background worker with `threading.Event` stop triggers and isolated exception handling.
+- **Native macOS iMessage Support**: Direct read-only querying of macOS `chat.db` (SQLite) and AppleScript `osascript` message dispatch with fail-closed safety on non-Darwin platforms.
 - **Multi-Platform Certified**: Verified and tested across Ubuntu Linux, Windows, and macOS via GitHub Actions.
 - **Interactive Scaffolding CLI**: Standalone setup wizard (`python -m connectors.templates.setup_wizard`) with YAML templates for rapid connector authoring.
 
@@ -59,24 +64,26 @@ Extracted and decoupled from [BACH](https://github.com/ellmos-ai/bach). No exter
 ```mermaid
 flowchart TD
     subgraph AgentLayer ["Autonomous Agent / Client Layer"]
-        A[Autonomous Agent / Multi-Agent Swarm]
-        B[Cognitive Loop / Scheduler]
+        A["Autonomous Agent / Multi-Agent Swarm (BACH / USMC)"]
+        B["Cognitive Loop / Scheduler"]
     end
 
     subgraph CoreFactory ["Core Factory & Configuration"]
-        CF[create_connector Factory]
-        CC[ConnectorConfig DataClass]
-        SA[SecretAdapter Hook]
+        CF["create_connector Factory"]
+        CC["ConnectorConfig DataClass"]
+        SA["SecretAdapter Hook"]
     end
 
     subgraph ConnectorsModule ["connectors Standalone Core (100% Stdlib)"]
         BC["BaseConnector (ABC)"]
-        TC[TelegramConnector]
-        DC[DiscordConnector]
-        SC[SignalConnector]
-        WC[WhatsAppConnector]
-        HC[HomeAssistantConnector]
-        WH[WebhookConnector]
+        TC["TelegramConnector"]
+        DC["DiscordConnector"]
+        SC["SignalConnector"]
+        WC["WhatsAppConnector"]
+        HC["HomeAssistantConnector"]
+        WH["WebhookConnector"]
+        SLC["SlackConnector"]
+        IMC["iMessageConnector"]
     end
 
     subgraph ExternalPlatforms ["External Messaging Channels & Protocols"]
@@ -86,13 +93,15 @@ flowchart TD
         EP_WA["WhatsApp Cloud / On-Premises Business API"]
         EP_HA["Home Assistant REST API / Notify"]
         EP_WH["Custom Webhook Endpoint (HTTP POST)"]
+        EP_SL["Slack Web API / Incoming Webhooks"]
+        EP_IM["macOS chat.db (Read) & osascript (Send)"]
     end
 
-    A -->|Instantiates Config| CC
-    B -->|Secret Resolution| SA
+    A -->|"Instantiates Config"| CC
+    B -->|"Secret Resolution"| SA
     CC --> CF
     SA --> CF
-    CF -->|Instantiates| BC
+    CF -->|"Instantiates"| BC
 
     BC --> TC
     BC --> DC
@@ -100,13 +109,17 @@ flowchart TD
     BC --> WC
     BC --> HC
     BC --> WH
+    BC --> SLC
+    BC --> IMC
 
-    TC -->|HTTPS POST / getUpdates| EP_TG
-    DC -->|HTTPS POST / Execute Webhook| EP_DC
+    TC -->|"HTTPS POST / getUpdates"| EP_TG
+    DC -->|"HTTPS POST / Execute Webhook"| EP_DC
     SC -->|"CLI Arguments (No Shell)"| EP_SG
-    WC -->|HTTPS POST / Graph API| EP_WA
-    HC -->|HTTPS POST / Services| EP_HA
-    WH -->|JSON Payload| EP_WH
+    WC -->|"HTTPS POST / Graph API"| EP_WA
+    HC -->|"HTTPS POST / Services"| EP_HA
+    WH -->|"JSON Payload"| EP_WH
+    SLC -->|"HTTPS POST / chat.postMessage"| EP_SL
+    IMC -->|"SQLite Read-Only / AppleScript"| EP_IM
 ```
 
 ---
@@ -117,14 +130,14 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor Operator as Human / External User
-    participant Platform as Messaging Platform (Telegram/Discord/Signal)
+    participant Platform as Messaging Platform (Telegram/Discord/Slack/iMessage)
     participant Worker as Background Polling Loop (poll_threaded)
     participant Conn as BaseConnector Instance
     participant Agent as Autonomous Agent Loop
 
     Agent->>Conn: connect()
-    Conn->>Platform: Probe API / Verify Credentials
-    Platform-->>Conn: 200 OK / Authenticated
+    Conn->>Platform: Probe API / Verify Credentials / Check DB
+    Platform-->>Conn: 200 OK / Authenticated / DB Accessible
     Conn-->>Agent: True (Connected)
 
     Agent->>Conn: poll_threaded(on_message=callback)
@@ -133,15 +146,15 @@ sequenceDiagram
 
     loop Polling Loop (interval=5.0s)
         Worker->>Conn: get_messages(since, limit=50)
-        Conn->>Platform: Fetch pending updates
-        Platform-->>Conn: Return JSON updates / events
+        Conn->>Platform: Fetch pending updates / Query chat.db
+        Platform-->>Conn: Return JSON updates / New message rows
         Conn->>Conn: Parse & sanitize into List[Message]
         Conn-->>Worker: messages
         alt New Messages Available
             Worker->>Agent: callback(message)
             Agent->>Agent: Process cognitive prompt
             Agent->>Conn: send_message(recipient_id, response_text)
-            Conn->>Platform: Dispatch HTTP POST / CLI send
+            Conn->>Platform: Dispatch HTTP POST / osascript send
             Platform-->>Operator: Deliver message to user
         end
     end
@@ -164,20 +177,25 @@ sequenceDiagram
 | `whatsapp` | WhatsApp Business REST API | Meta Cloud API / On-Premises | **Production** | `api_token`, `phone_number_id` |
 | `homeassistant` | Home Assistant REST API | Smart Home Notifications | **Production** | `access_token` |
 | `webhook` | Generic HTTP POST (JSON Payload) | Custom Webhooks & Ingestion | **Baseline** | Optional `api_key` / `secret` |
+| `slack` | Slack Web API / Incoming Webhook (HTTPS) | Slack Channels & Workspaces | **Production** | `bot_token` or `webhook_url` |
+| `imessage` | macOS `chat.db` SQLite & `osascript` IPC | Apple iMessage / macOS Desktop | **Production** | None (macOS Full Disk Access) |
 
 ---
 
 ## Governance & Safety Invariants
 
-| Safety Invariant | Architectural Implementation | Validation & Guarantees |
-|:---|:---|:---|
-| **Zero Runtime Dependencies** | 100% Python Standard Library (`urllib.request`, `json`, `threading`, `subprocess`). | Audited in `pyproject.toml` (`dependencies = []`) and regression tests. |
-| **Zero Secret Persistence** | Credentials stored exclusively in-memory; tokens are never written to disk or logs. | Validated in `tests/test_repository_hygiene.py` and `tests/test_behavior.py`. |
-| **Masked String Representation** | `ConnectorConfig.auth_config` has `field(repr=False)`; connector `__repr__()` masks secrets. | Strict assertion tests prevent credentials from leaking into debug prints. |
-| **Shell Injection Immune** | Process calls in `SignalConnector` strictly use array parameter passing (`shell=False`). | Prevents arbitrary command execution on POSIX and Windows environments. |
-| **Non-Blocking Execution** | `poll_threaded()` manages daemon threads with cooperative cancellation (`threading.Event`). | Prevents event loops from freezing; clean shutdown guaranteed. |
-| **Fail-Closed Error Handling** | Network anomalies and malformed responses return `False` or empty collections; errors to stderr. | Agent loops remain resilient without uncaught runtime crashes. |
-| **Multi-Platform Support** | Platform path separators and sub-process execution normalized across OS families. | Verified in CI matrix across Ubuntu Linux, Windows, and macOS. |
+| Invariant ID | Safety Invariant | Architectural Implementation | Validation & Guarantees |
+|:---|:---|:---|:---|
+| `INV-LOCAL-01` | **Zero Runtime Dependencies** | 100% Python Standard Library (`urllib.request`, `json`, `threading`, `subprocess`, `sqlite3`). | Audited in `pyproject.toml` (`dependencies = []`) and regression tests. |
+| `INV-SECRET-02` | **Zero Secret Persistence** | Credentials stored exclusively in-memory; tokens are never written to disk or logs. | Validated in `tests/test_repository_hygiene.py` and `tests/test_behavior.py`. |
+| `INV-MASK-03` | **Masked String Representation** | `ConnectorConfig.auth_config` has `field(repr=False)`; connector `__repr__()` masks secrets. | Strict assertion tests prevent credentials from leaking into debug prints. |
+| `INV-SHELL-04` | **Shell Injection Immune** | Process calls in `SignalConnector` and `iMessageConnector` strictly use array parameter passing (`shell=False`). | Prevents arbitrary command execution on POSIX and Windows environments. |
+| `INV-ASYNC-05` | **Non-Blocking Execution** | `poll_threaded()` manages daemon threads with cooperative cancellation (`threading.Event`). | Prevents event loops from freezing; clean shutdown guaranteed. |
+| `INV-FAIL-06` | **Fail-Closed Error Handling** | Network anomalies and malformed responses return `False` or empty collections; errors to stderr. | Agent loops remain resilient without uncaught runtime crashes. |
+| `INV-PLAT-07` | **Local Platform Isolation** | `iMessageConnector` queries macOS `chat.db` read-only; non-Darwin platforms fail closed safely. | Verified in cross-platform test fixtures and mock isolation suites. |
+| `INV-PRIV-08` | **Unprivileged Execution** | Operates strictly within user-space without requiring root, sudo, or system elevation. | Hardened in security policy and audited against privileged syscalls. |
+| `INV-CI-09` | **Multi-Platform Support** | Platform path separators and sub-process execution normalized across OS families. | Verified in CI matrix across Ubuntu Linux, Windows, and macOS. |
+| `INV-SLA-10` | **Bilingual Security Governance** | 48-hour response SLA and 5-day triage commitment in dual-language `SECURITY.md`. | Verified in `tests/test_metadata.py` and `tests/test_repository_hygiene.py`. |
 
 ---
 
@@ -241,6 +259,61 @@ config = ConnectorConfig(
 connector = create_connector(config)
 if connector.connect():
     connector.send_message(recipient="", content="Deployment pipeline completed successfully! :rocket:")
+```
+
+---
+
+## Slack & iMessage Connectors
+
+### Slack Bot & Webhook Usage
+
+```python
+import os
+from connectors import create_connector, ConnectorConfig
+
+# Option A: Slack Bot API (Token-based)
+config_bot = ConnectorConfig(
+    name="slack_bot",
+    connector_type="slack",
+    auth_config={"bot_token": os.environ["SLACK_BOT_TOKEN"]},
+    options={"channel": "#general"},
+)
+slack_conn = create_connector(config_bot)
+if slack_conn.connect():
+    slack_conn.send_message(recipient="#general", content="Hello from autonomous agent!")
+
+# Option B: Slack Incoming Webhook
+config_webhook = ConnectorConfig(
+    name="slack_webhook",
+    connector_type="slack",
+    auth_config={"webhook_url": os.environ["SLACK_WEBHOOK_URL"]},
+)
+webhook_conn = create_connector(config_webhook)
+if webhook_conn.connect():
+    webhook_conn.send_message(recipient="", content="Alert: High latency detected.")
+```
+
+### macOS iMessage Usage
+
+```python
+from connectors import create_connector, ConnectorConfig
+
+# Connect to local macOS iMessage (requires macOS and Full Disk Access for chat.db)
+config_imessage = ConnectorConfig(
+    name="imessage_local",
+    connector_type="imessage",
+    options={"service": "iMessage"},
+)
+
+imessage_conn = create_connector(config_imessage)
+if imessage_conn.connect():
+    # Query recent messages from SQLite chat.db
+    messages = imessage_conn.get_messages(limit=5)
+    for msg in messages:
+        print(f"[{msg.timestamp}] {msg.sender}: {msg.content}")
+
+    # Dispatch outgoing message via AppleScript osascript
+    imessage_conn.send_message(recipient="+1234567890", content="Agent task completed.")
 ```
 
 ---
@@ -366,6 +439,11 @@ connector = create_connector(config, secret_adapter=BachSecretAdapter())
 | [`dev-bricks/automation-master`](https://github.com/dev-bricks/automation-master) | `dev-bricks` | Multi-agent fleet orchestration & headless automation controller. |
 | [`dev-bricks/safe-start-for-codex`](https://github.com/dev-bricks/safe-start-for-codex) | `dev-bricks` | Secure agent sandbox initialization & process management. |
 | [`file-bricks/CloudLockFixer`](https://github.com/file-bricks/CloudLockFixer) | `file-bricks` | Resilient cloud-synced IO engine (`cldflt.sys` lock mitigation). |
+| [`file-bricks/ProSync`](https://github.com/file-bricks/ProSync) | `file-bricks` | High-performance folder mirroring & cross-device sync. |
+| [`file-bricks/ExplorerPro`](https://github.com/file-bricks/ExplorerPro) | `file-bricks` | Advanced Windows Explorer shell extensions & inspector tools. |
+| [`doc-bricks/FormularErstellen`](https://github.com/doc-bricks/FormularErstellen) | `doc-bricks` | Automated document drafting & sovereign form generation. |
+| [`ellmos-ai/n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) | `ellmos-ai` | Autonomous n8n workflow management & staging via MCP. |
+| [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp) | `ellmos-ai` | Smart home telemetry & local bridge protocol over MCP. |
 | [`open-bricks/.github`](https://github.com/open-bricks) | `open-bricks` | Global open-source umbrella governance & shared CI templates. |
 
 ---
@@ -394,6 +472,30 @@ ruff check .
 
 Security and privacy are fundamental design requirements for `connectors`. We maintain a strict security response policy:
 
-- **Supported Versions**: Security updates and patches are actively provided for `1.1.x`.
+- **Supported Versions**: Security updates and patches are actively provided for `1.2.x` and `1.1.x`.
 - **48-Hour Response SLA**: All security disclosures receive an acknowledgment within 48 hours and an initial triage assessment within 5 business days.
 - **Reporting Channel**: Disclose vulnerabilities privately via [GitHub Security Advisories](https://github.com/ellmos-ai/connectors/security/advisories/new) or directly via maintainer contacts listed in [`SECURITY.md`](SECURITY.md).
+
+---
+
+## Third-Party Licenses & Notices
+
+`connectors` is built on a clean-room, zero-dependency architecture. All core messaging modules rely exclusively on the Python standard library under the PSF License.
+
+Attribution notices and licensing terms for conceptual inspirations ([OpenClaw](https://github.com/openclaw/openclaw), [Hermes Agent](https://github.com/NousResearch/hermes-agent)) and development tooling ([PyYAML](https://pyyaml.org/), [pytest](https://pytest.org/), [signal-cli](https://github.com/AsamK/signal-cli)) are documented in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+
+---
+
+## Contributing
+
+Contributions are welcome! Please ensure:
+1. All changes adhere to the zero-dependency core principle (`dependencies = []` in `pyproject.toml`).
+2. Secrets are masked in string representations and never written to disk or logs (`field(repr=False)`).
+3. Subprocess calls avoid shell invocation (`shell=False`).
+4. Automated test suites and linter checks pass cleanly (`pytest -v` and `ruff check .`).
+
+---
+
+## License
+
+This project is licensed under the terms of the [MIT License](LICENSE).

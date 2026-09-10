@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ellmos-connectors"
-version = "1.1.0"
+version = "1.2.0"
 description = "Standalone messaging connectors for autonomous agents"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -22,6 +22,8 @@ keywords = [
   "whatsapp",
   "home-assistant",
   "webhook",
+  "slack",
+  "imessage",
   "local-first"
 ]
 classifiers = [
@@ -54,6 +56,8 @@ Repository = "https://github.com/ellmos-ai/connectors"
 "Bug Tracker" = "https://github.com/ellmos-ai/connectors/issues"
 Changelog = "https://github.com/ellmos-ai/connectors/blob/main/CHANGELOG.md"
 "Security Policy" = "https://github.com/ellmos-ai/connectors/blob/main/SECURITY.md"
+"Third-Party Licenses" = "https://github.com/ellmos-ai/connectors/blob/main/THIRD_PARTY_LICENSES.md"
+"Marketing Log" = "https://github.com/ellmos-ai/connectors/blob/main/MARKETING-LOG.txt"
 "Parent Organization" = "https://github.com/ellmos-ai"
 "Parent Org" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"

@@ -1,6 +1,19 @@
 # CHANGELOG — connectors
 
-## Unreleased
+## [1.2.0] - 2026-09-10
+
+### Added & Enhanced — Pfad B (Marketing, Discoverability & New Connectors)
+
+- **Slack Integration (`SlackConnector`):** Direct support for Slack Bot API (`chat.postMessage`, `conversations.history`) and Incoming Webhooks using zero-dependency `urllib.request`.
+- **macOS iMessage Integration (`iMessageConnector`):** Read incoming messages directly from local macOS `chat.db` (SQLite) and dispatch outgoing messages via AppleScript `osascript` subprocess execution. Built-in fail-closed platform guards for non-Darwin environments.
+- **Third-Party Attribution (`THIRD_PARTY_LICENSES.md`):** Formal attribution in `THIRD_PARTY_LICENSES.md` for OpenClaw and Hermes Agent multi-channel and agentic messaging abstractions under MIT License.
+- **Discoverability & Bilingual Showcase Overhaul (`README.md` & `README_de.md`):** 15+ point bilingual Quick Navigation with 100% anchor parity, dual Mermaid diagrams (`flowchart TD` architecture covering all 8 connectors and `sequenceDiagram` lifecycle with autonumbering), standardized 10 Governance & Runtime Invariants (`INV-LOCAL-01` to `INV-SLA-10`), and expanded 16-repository Sibling Ecosystem.
+- **Local Marketing & Personas Strategy (`MARKETING-LOG.txt`):** Codified 4 target personas (Autonomous AI Agent Engineers, Smart Home Automators, Privacy-Conscious SecOps, Multi-Platform Dispatchers), architectural pillars, and roadmap.
+- **Packaging & PEP 621 Parity (`pyproject.toml`, `VERSION`, `connectors/__init__.py`):** Synchronized version to `1.2.0`, added `slack` and `imessage` keywords, and added project URLs for `"Third-Party Licenses"` and `"Marketing Log"`.
+- **Security Policy (`SECURITY.md`):** Updated to 2026-09-10, verified `1.2.x` active support line, added iMessage and Slack security guarantees, and updated direct maintainer contacts.
+- **Automated Contract & Hygiene Suite (`tests/test_metadata.py`, `tests/test_repository_hygiene.py`):** Expanded contract tests covering 15+ quick nav anchors, dual Mermaid diagrams, 10 invariants, 16 sibling repos, version parity across all manifests at `1.2.0`, and full test suite passing 100%.
+
+## [1.1.0] - 2026-09-08
 
 ### Technical Hygiene & CI Hardening — Pfad A (2026-09-08)
 
