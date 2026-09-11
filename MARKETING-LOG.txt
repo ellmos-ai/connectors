@@ -4,8 +4,8 @@
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
 **Maintained By:** connectors contributors
-**Last Updated:** 2026-09-10
-**Current Version:** 1.2.0
+**Last Updated:** 2026-09-11
+**Current Version:** 1.2.1
 
 ---
 
@@ -93,3 +93,13 @@
 - **Third-Party Attribution:** Formal attribution in `THIRD_PARTY_LICENSES.md` for OpenClaw and Hermes Agent messaging patterns.
 - **Discoverability & Documentation:** Expanded 15+ point bilingual Quick Navigation, dual Mermaid diagrams (flowchart and sequence lifecycle), 10 Governance Invariants, and 16 Sibling Ecosystem links.
 - **Automated Contract Tests:** Expanded contract test suite in `tests/test_metadata.py` and `tests/test_repository_hygiene.py` guaranteeing 100% green verification.
+
+---
+
+## 6. Release 1.2.1 Highlights (Pfad A — Quality & Technical Hygiene Audit 2026-09-11)
+
+- **CI Workflow Hardening:** Added `timeout-minutes: 15` execution bounds to prevent orphaned CI runners and standardized testing command across all platforms.
+- **PEP 621 Standard Compliance:** Registered `"LLM Ready"` context URL pointing to `llms.txt`, expanded `[tool.pytest.ini_options]` with `-ra -v`, and configured 7-rule Ruff linting standard.
+- **Multi-Host & Conflict Hardening:** Extended `.gitignore` to safeguard against multi-host conflict files, sync temporary states, multi-agent locks, and coverage directories.
+- **Linter & Runtime Hygiene:** Alphabetically sorted module exports, optimized dictionary lookups, wrapped long lines, combined mock contexts, and replaced raw assertions.
+- **Contract Enforcement:** Contract test suite expanded to audit CI timeout guardrails, PEP 621 extended URLs, and multi-host lock exclusions.

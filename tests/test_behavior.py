@@ -15,10 +15,10 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from connectors.base import (  # noqa: E402
+from connectors.base import (
     BaseConnector, ConnectorConfig, SecretAdapter,
 )
-from connectors import create_connector  # noqa: E402
+from connectors import create_connector
 
 
 class DictAdapter(SecretAdapter):
@@ -47,7 +47,7 @@ class DummyConnector(BaseConnector):
 
 
 def _cfg(**kw):
-    base = dict(name="t", connector_type="dummy")
+    base = {"name": "t", "connector_type": "dummy"}
     base.update(kw)
     return ConnectorConfig(**base)
 
@@ -328,13 +328,14 @@ class TestIMessageConnector(unittest.TestCase):
                 returncode = 0
             return Res()
 
-        with mock.patch.object(conn, "is_darwin", return_value=True):
-            with mock.patch("subprocess.run", side_effect=fake_run):
-                ok = conn.send_message("", "Testnachricht")
-                self.assertTrue(ok)
-                self.assertIn("osascript", captured_cmd)
-                self.assertIn("+491701234567", captured_cmd)
-                self.assertIn("Testnachricht", captured_cmd)
+        with mock.patch.object(conn, "is_darwin", return_value=True), mock.patch(
+            "subprocess.run", side_effect=fake_run
+        ):
+            ok = conn.send_message("", "Testnachricht")
+            self.assertTrue(ok)
+            self.assertIn("osascript", captured_cmd)
+            self.assertIn("+491701234567", captured_cmd)
+            self.assertIn("Testnachricht", captured_cmd)
 
     def test_imessage_fail_closed_non_darwin(self):
         from connectors.imessage_connector import iMessageConnector

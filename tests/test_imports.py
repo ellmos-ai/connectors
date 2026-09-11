@@ -113,7 +113,7 @@ def test_create_connector_unknown_type():
     config = ConnectorConfig(name="bad", connector_type="nonexistent")
     try:
         create_connector(config)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 

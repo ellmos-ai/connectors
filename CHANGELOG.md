@@ -1,5 +1,16 @@
 # CHANGELOG — connectors
 
+## [1.2.1] - 2026-09-11
+
+### Technical Hygiene & CI Hardening — Pfad A (2026-09-11)
+
+- **CI Workflow & Runner Hardening (`.github/workflows/tests.yml`):** Added `timeout-minutes: 15` job guardrail to eliminate runaway runner risks, and standardized test step to `python -m pytest -ra -v`.
+- **PEP 621 Standard URLs & Pytest Runner Options (`pyproject.toml`):** Added `"LLM Ready"` machine-readable context URL pointing to `llms.txt`, expanded `[tool.pytest.ini_options]` with `addopts = "-ra -v"`, and strengthened Ruff linting configuration with 7 rule sets (`E`, `F`, `W`, `B`, `SIM`, `C4`, `RUF`).
+- **Multi-Host Sync & Lock Exclusions (`.gitignore`):** Hardened gitignore patterns covering multi-host sync conflicts (`* (kopie)*`, `* (copy)*`, `*.sync-temp-*`, `*-ASUS-GEI*`, `*-WORKSTATION*`), multi-agent locks (`LOCK.*`, `uv.lock`, `*.lock`), coverage caches (`.coverage.*`, `coverage/`, `wheelhouse/`), and editor artifacts (`*~`, `*.orig`).
+- **Code Modernization & Linter Hygiene:** Sorted `__all__` exports in `__init__.py` (RUF022), optimized dictionary lookups in `base.py` (RUF019), wrapped overlong lines in test suites (E501), combined multiple mock contexts in `tests/test_behavior.py`, and sanitized exception assertions in `tests/test_imports.py` (B011).
+- **Security Policy & LLM Context Freshness (`SECURITY.md`, `llms.txt`):** Synchronized audit timestamps to `2026-09-11`, verified `1.2.x` active release support line, and updated verified test baseline.
+- **Automated Contract Suite Expansion (`tests/test_metadata.py`, `tests/test_repository_hygiene.py`):** Added contract tests for CI job timeout (`timeout-minutes: 15`), PEP 621 extended URLs (`LLM Ready`), expanded gitignore patterns, and changelog release section.
+
 ## [1.2.0] - 2026-09-10
 
 ### Added & Enhanced — Pfad B (Marketing, Discoverability & New Connectors)

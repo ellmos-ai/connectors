@@ -37,7 +37,7 @@ Unterstützte Connector-Typen:
 MIT License — siehe LICENSE
 """
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 __author__ = "connectors contributors"
 
 from connectors.base import (
@@ -94,11 +94,11 @@ def create_connector(
 
 
 __all__ = [
+    "SUPPORTED_TYPES",
     "BaseConnector",
     "ConnectorConfig",
     "ConnectorStatus",
     "Message",
     "SecretAdapter",
     "create_connector",
-    "SUPPORTED_TYPES",
 ]

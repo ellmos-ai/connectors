@@ -73,26 +73,40 @@ data/
 .DS_Store
 Thumbs.db
 
-# Pytest / Coverage
-.pytest_cache/
-.coverage
-htmlcov/
-.ruff_cache/
-
 # Multi-Agent Lock-System (lokal, nie committen)
 LOCK*.txt
 *.lock
+LOCK.*
+LOCK
+uv.lock
 
 # Host-spezifische Sync-Dateien (OneDrive Sync-Konflikte)
 *-ASUS-GEI*
 *-WORKSTATION-LG*
+*-WORKSTATION*
 *.sync-conflict-*
 *.conflict
 *-conflict-*
 *-CONFLIT-*
+* (kopie)*
+* (copy)*
+*.sync-temp-*
+
+# Pytest / Coverage / Caches
+.pytest_cache/
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+.ruff_cache/
+.tox/
+.mypy_cache/
+wheelhouse/
 
 # Temporäre Test- und Build-Artefakte
 .wheel-smoke/
 *.tmp
 *.bak
+*~
+*.orig
 

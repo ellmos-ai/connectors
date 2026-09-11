@@ -121,15 +121,21 @@ class RepositoryHygieneTests(unittest.TestCase):
         conflict_samples = [
             "LOCK.txt",
             "LOCK.permissions.txt",
+            "LOCK.user.lukas",
+            "uv.lock",
             "repo.lock",
             "base-ASUS-GEI.py",
             "signal_connector-WORKSTATION-LG.py",
+            "signal_connector-WORKSTATION.py",
             "config.sync-conflict-20260825.json",
             "messages.conflict",
             "module-conflict-copy.py",
             "file-CONFLIT-20260908.txt",
+            "data (kopie).json",
+            "state.sync-temp-01",
             "debug.tmp",
             "old.bak",
+            "patch.orig",
         ]
         if (ROOT / ".git").exists():
             result = _git("check-ignore", *conflict_samples)
@@ -150,16 +156,18 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
         self.assertIsNotNone(match, "pyproject.toml must declare version")
         pyproject_version = match.group(1)
 
-        self.assertEqual(connectors.__version__, "1.2.0")
-        self.assertEqual(version_file, "1.2.0")
-        self.assertEqual(pyproject_version, "1.2.0")
+        self.assertEqual(connectors.__version__, "1.2.1")
+        self.assertEqual(version_file, "1.2.1")
+        self.assertEqual(pyproject_version, "1.2.1")
 
     def test_zero_external_runtime_dependencies(self):
         pyproject_content = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         match = re.search(r'dependencies\s*=\s*\[(.*?)\]', pyproject_content, re.DOTALL)
         self.assertIsNotNone(match, "dependencies array must exist in pyproject.toml")
         deps_block = match.group(1).strip()
-        self.assertEqual(deps_block, "", "Core runtime dependencies must be empty (zero-dependency stdlib architecture)")
+        self.assertEqual(
+            deps_block, "", "Core runtime dependencies must be empty (zero-dependency stdlib architecture)"
+        )
 
     def test_all_connectors_repr_masking(self):
         secret_value = "SECRET_SUPER_TOKEN_99999"

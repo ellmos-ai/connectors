@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ellmos-connectors"
-version = "1.2.0"
+version = "1.2.1"
 description = "Standalone messaging connectors for autonomous agents"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -58,6 +58,7 @@ Changelog = "https://github.com/ellmos-ai/connectors/blob/main/CHANGELOG.md"
 "Security Policy" = "https://github.com/ellmos-ai/connectors/blob/main/SECURITY.md"
 "Third-Party Licenses" = "https://github.com/ellmos-ai/connectors/blob/main/THIRD_PARTY_LICENSES.md"
 "Marketing Log" = "https://github.com/ellmos-ai/connectors/blob/main/MARKETING-LOG.txt"
+"LLM Ready" = "https://github.com/ellmos-ai/connectors/blob/main/llms.txt"
 "Parent Organization" = "https://github.com/ellmos-ai"
 "Parent Org" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
@@ -84,6 +85,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
+select = ["E", "F", "W", "B", "SIM", "C4", "RUF"]
 ignore = ["E501", "I001"]
 
 [tool.ruff.lint.per-file-ignores]
@@ -96,4 +98,4 @@ ignore = ["E501", "I001"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-v"
+addopts = "-ra -v"

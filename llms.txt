@@ -1,8 +1,8 @@
 # connectors — LLM-Kontext
 
-## Last-checked: 2026-09-10
+## Last-checked: 2026-09-11
 
-Standalone Python-Modul für Messaging-Connectoren (Version 1.2.0).
+Standalone Python-Modul für Messaging-Connectoren (Version 1.2.1).
 Extrahiert aus BACH (https://github.com/ellmos-ai/bach, `system/connectors/`), vollständig entkoppelt.
 Zero-Dependency-Architektur: Kernmodule basieren zu 100% auf der Python Standard Library (`urllib`, `json`, `threading`, `subprocess`, `sqlite3`).
 
@@ -90,7 +90,7 @@ Template-Dateien: `templates/*_template.yaml` (Signal, Discord, Telegram, WhatsA
 ## Validierung & Testbefehle
 
 - Installierbar via `python -m pip install -e ".[wizard,test]"`
-- Pytest Suite: `pytest -v`
+- Pytest Suite: `python -m pytest -ra -v`
 - Metadata & Contract Tests: `pytest tests/test_metadata.py`
 - Repository Hygiene: `pytest tests/test_repository_hygiene.py`
 - Smoke-Test: `python tests/test_imports.py`

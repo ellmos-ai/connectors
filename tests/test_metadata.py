@@ -173,7 +173,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         self.assertIn("1.2.x", sec_text)
         self.assertIn("1.1.x", sec_text)
-        self.assertIn("2026-09-10", sec_text)
+        self.assertIn("2026-09-11", sec_text)
         self.assertIn("48 hours", sec_text)
         self.assertIn("5 business days", sec_text)
         self.assertIn("Zero Runtime Secret Persistence", sec_text)
@@ -188,7 +188,8 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         llms_text = llms_path.read_text(encoding="utf-8")
 
         self.assertIn("# connectors — LLM-Kontext", llms_text)
-        self.assertIn("## Last-checked: 2026-09-10", llms_text)
+        self.assertIn("## Last-checked: 2026-09-11", llms_text)
+        self.assertIn("1.2.1", llms_text)
         self.assertIn("BaseConnector", llms_text)
         self.assertIn("create_connector", llms_text)
         self.assertIn("SecretAdapter", llms_text)
@@ -201,16 +202,18 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
     def test_pyproject_metadata_and_urls(self):
         pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         self.assertIn('name = "ellmos-connectors"', pyproject_text)
-        self.assertIn('version = "1.2.0"', pyproject_text)
+        self.assertIn('version = "1.2.1"', pyproject_text)
         self.assertIn('dependencies = []', pyproject_text)
         self.assertIn('"Third-Party Licenses"', pyproject_text)
         self.assertIn('"Marketing Log"', pyproject_text)
+        self.assertIn('"LLM Ready"', pyproject_text)
         self.assertIn('"Parent Org" = "https://github.com/ellmos-ai"', pyproject_text)
         self.assertIn('"Parent Organization" = "https://github.com/ellmos-ai"', pyproject_text)
         self.assertIn('"Umbrella Ecosystem" = "https://github.com/open-bricks"', pyproject_text)
         self.assertIn('Operating System :: OS Independent', pyproject_text)
         self.assertIn('[tool.ruff]', pyproject_text)
         self.assertIn('[tool.pytest.ini_options]', pyproject_text)
+        self.assertIn('addopts = "-ra -v"', pyproject_text)
 
     def test_ci_workflow_structure_and_matrix(self):
         workflow_path = ROOT / ".github" / "workflows" / "tests.yml"
@@ -221,7 +224,9 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         self.assertIn("actions/setup-python@v5", workflow_text)
         self.assertIn('cache: "pip"', workflow_text)
         self.assertIn("cancel-in-progress: true", workflow_text)
+        self.assertIn("timeout-minutes: 15", workflow_text)
         self.assertIn("ruff check .", workflow_text)
+        self.assertIn("python -m pytest -ra -v", workflow_text)
         self.assertIn("ubuntu-latest", workflow_text)
         self.assertIn("windows-latest", workflow_text)
         self.assertIn("macos-latest", workflow_text)
@@ -233,6 +238,9 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         self.assertIn("*-CONFLIT-*", gitignore_text)
         self.assertIn("*.lock", gitignore_text)
+        self.assertIn("uv.lock", gitignore_text)
+        self.assertIn("* (kopie)*", gitignore_text)
+        self.assertIn(".coverage.*", gitignore_text)
         self.assertIn(".ruff_cache/", gitignore_text)
         self.assertIn(".wheel-smoke/", gitignore_text)
         self.assertIn("*.tmp", gitignore_text)
@@ -250,8 +258,8 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         mlog_text = mlog_path.read_text(encoding="utf-8")
 
         self.assertIn("Marketing & Discoverability Log — connectors", mlog_text)
-        self.assertIn("1.2.0", mlog_text)
-        self.assertIn("2026-09-10", mlog_text)
+        self.assertIn("1.2.1", mlog_text)
+        self.assertIn("2026-09-11", mlog_text)
         self.assertIn("Autonomous AI Agent Engineers", mlog_text)
         self.assertIn("Self-Hosted Smart Home & Homelab Automation Developers", mlog_text)
         self.assertIn("Privacy-Conscious Enterprise SecOps", mlog_text)
@@ -271,6 +279,17 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         self.assertIn("iMessageConnector", readme_de)
         self.assertIn("SlackConnector", third_party)
         self.assertIn("iMessageConnector", third_party)
+
+    def test_changelog_release_sections(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertIn("## [1.2.1] - 2026-09-11", changelog)
+        self.assertIn("## [1.2.0] - 2026-09-10", changelog)
+        self.assertIn("## [1.1.0] - 2026-09-08", changelog)
+
+    def test_ci_timeout_guardrail_and_runner_flags(self):
+        workflow = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        self.assertIn("timeout-minutes: 15", workflow)
+        self.assertIn("python -m pytest -ra -v", workflow)
 
 
 if __name__ == "__main__":

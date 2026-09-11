@@ -122,16 +122,17 @@ class BaseConnector(ABC):
         self._status = ConnectorStatus.DISCONNECTED
 
     def _resolve_secret(self, auth_config: Dict[str, str], key: str) -> str:
-        """Löst einen Secret auf – direkt oder via SecretAdapter.
+        """Löst einen Secret auf - direkt oder via SecretAdapter.
 
         Reihenfolge:
-        1. Direkt in auth_config vorhanden → zurückgeben
-        2. ``_secret_refs[key]`` vorhanden + SecretAdapter gesetzt → nachschlagen
-        3. Sonst leerer String
+        1. auth_config[key] direkt (wenn vorhanden und nicht leer)
+        2. secret_adapter.get_secret(key) falls Adapter gesetzt
+        3. "" (Fallback)
         """
         # Direkter Wert
-        if key in auth_config and auth_config[key]:
-            return auth_config[key]
+        val = auth_config.get(key)
+        if val:
+            return val
         # Über Adapter
         if self._secret_adapter:
             refs = auth_config.get("_secret_refs", {})
