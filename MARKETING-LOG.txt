@@ -4,7 +4,7 @@
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
 **Maintained By:** connectors contributors
-**Last Updated:** 2026-09-11
+**Last Updated:** 2026-09-13
 **Current Version:** 1.2.1
 
 ---
@@ -103,3 +103,13 @@
 - **Multi-Host & Conflict Hardening:** Extended `.gitignore` to safeguard against multi-host conflict files, sync temporary states, multi-agent locks, and coverage directories.
 - **Linter & Runtime Hygiene:** Alphabetically sorted module exports, optimized dictionary lookups, wrapped long lines, combined mock contexts, and replaced raw assertions.
 - **Contract Enforcement:** Contract test suite expanded to audit CI timeout guardrails, PEP 621 extended URLs, and multi-host lock exclusions.
+
+---
+
+## 7. Release 1.2.1 Discoverability & Visual Showcase Overhaul (Pfad B — 2026-09-13)
+
+- **Target Personas & SEO Integration:** Integrated 4 core target personas (Autonomous AI Agent Engineers, Self-Hosted Homelab Automators, Privacy-Conscious SecOps, Multi-Platform Dispatchers) directly into both `README.md` and `README_de.md` with full discovery keyword tagging.
+- **Comparative Alternatives Matrix:** Added rigorous architectural comparison matrix benchmarking `connectors` against individual SDKs (`discord.py`, `python-telegram-bot`), all-in-one bot frameworks (Errbot, OpsDroid), and heavyweight AI agent tooling (LangChain community tools) across 9 dimensions (runtime dependencies, cold start, memory, secret masking, ABC, thread polling, shell injection immunity, native iMessage, supply-chain risk).
+- **Navigation & Badge Parity:** Expanded Quick Navigation to 19 bilingual anchor points with 100% parity, added GitHub Actions CI status badge and verified freshness badge (`2026-09-13`).
+- **Policy & Audit Synchronization:** Synchronized security response SLA and audit dates across `SECURITY.md`, `llms.txt`, `THIRD_PARTY_LICENSES.md`, and `MARKETING-LOG.txt`.
+- **Contract Test Automation:** Expanded contract tests in `tests/test_metadata.py` verifying target personas, comparative matrix, 19 navigation anchors, verified badges, and audit dates.

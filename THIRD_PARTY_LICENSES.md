@@ -2,7 +2,7 @@
 
 **Project:** `connectors` (`ellmos-connectors`)
 **License:** [MIT License](LICENSE)
-**Audit Date:** 2026-09-10
+**Audit Date:** 2026-09-13
 
 ---
 

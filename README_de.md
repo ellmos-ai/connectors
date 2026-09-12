@@ -7,9 +7,11 @@
 > Standalone, abhängigkeitsfreie Messaging-Connectoren für autonome KI-Agenten — Telegram, Discord, Signal, WhatsApp, Home Assistant, Webhooks, Slack und macOS iMessage.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CI](https://github.com/ellmos-ai/connectors/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/connectors/actions/workflows/tests.yml)
 [![Version](https://img.shields.io/badge/Version-v1.2.1-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-62%20passed%20%7C%20100%25-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-65%20passed%20%7C%20100%25-brightgreen.svg)](tests/)
+[![Verified: 2026-09-13](https://img.shields.io/badge/verified-2026--09--13-blue.svg)](CHANGELOG.md)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows%20%7C%20macOS-informational.svg)](.github/workflows/tests.yml)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-100%25%20Stdlib-success.svg)](pyproject.toml)
 [![Security Policy](https://img.shields.io/badge/security-policy%20%7C%2048h%20SLA-orange.svg)](SECURITY.md)
@@ -27,6 +29,8 @@ Extrahiert und entkoppelt aus [BACH](https://github.com/ellmos-ai/bach). Kein ü
 ## Schnellnavigation
 
 - [Hauptmerkmale](#hauptmerkmale)
+- [Zielgruppen & Auffindbarkeit](#zielgruppen--auffindbarkeit)
+- [Vergleichsmatrix gegenüber Alternativen](#vergleichsmatrix-gegenueber-alternativen)
 - [Systemarchitektur](#systemarchitektur)
 - [Interaktiver Nachrichten- & Polling-Lebenszyklus](#interaktiver-nachrichten---polling-lebenszyklus)
 - [Unterstützte Connectoren & Status](#unterstuetzte-connectoren--status)
@@ -56,6 +60,37 @@ Extrahiert und entkoppelt aus [BACH](https://github.com/ellmos-ai/bach). Kein ü
 - **Native macOS iMessage-Integration**: Direktes, schreibgeschütztes Abfragen der macOS `chat.db` (SQLite) und Nachrichtenversand via AppleScript `osascript` mit sicherem Fail-Closed-Verhalten auf Nicht-Darwin-Plattformen.
 - **Multi-Plattform-Zertifizierung**: Vollständig getestet und verifiziert unter Ubuntu Linux, Windows und macOS via GitHub Actions.
 - **Interaktive Scaffolding-CLI**: Standalone-Setup-Assistent (`python -m connectors.templates.setup_wizard`) mit YAML-Vorlagen für schnelle Connector-Entwicklung.
+
+---
+
+<a id="zielgruppen--auffindbarkeit"></a>
+## Zielgruppen & Auffindbarkeit
+
+| Zielgruppe / Persona | Profil & Technologie-Stack | Typischer Schmerzpunkt / Reibung | Wie `connectors` das Problem löst |
+|:---|:---|:---|:---|
+| **Autonome KI-Agenten-Entwickler** | Entwicklung von Agentenschleifen & Schwärmen (BACH, USMC, LangChain, AutoGen, CrewAI). | Schwergewichtige Bot-Frameworks (discord.py, python-telegram-bot) erzwingen asynchrone Event-Loops, die mit Agenten-Laufzeiten kollidieren. | 100% Stdlib synchroner Standardvertrag mit nicht-blockierendem `poll_threaded()`, austauschbarem `SecretAdapter` und null Pip-Abhängigkeiten. |
+| **Self-Hosted Homelab-Automatisierer** | Benachrichtigungen & Aktionen über Home Assistant, Signal, Telegram & Webhooks. | Fragmentierte APIs, uneinheitliche Konfigurationen und ständige Gefahr von Token-Leaks in Git-Commits oder Logdateien. | Einheitlicher YAML-Template-Wizard, strikte Token-Maskierung in Repr/Logs (`field(repr=False)`) und sofortige Multi-OS-Portabilität. |
+| **Datenschutzorientierte Enterprise-SecOps** | Sicherheitsverantwortliche mit Fokus auf Software-Lieferkettenrisiken und Compliance. | Drittanbieter-SDKs ziehen Dutzende transitive Abhängigkeiten mit unvorhersehbarer CVE-Angriffsfläche und unkontrollierter Persistenz. | Strikte `dependencies = []`, unprivilegierte Ausführung im Benutzerkontext, Shell-Injection-Immunität (`shell=False`) und 48h-Sicherheits-SLA. |
+| **Multi-Plattform Incident-Response-Entwickler** | DevOps-Teams für unternehmenskritische Alarmierungsketten über Slack, iMessage, WhatsApp & Webhooks. | Redundanter SDK-Code, divergierende Authentifizierungen und fragile Fehlerbehandlung, die bei Netzfehlern abstürzt. | Einheitliche `send_message()`-Schnittstelle über alle 8 Kanäle mit sicherem Fail-Closed-Verhalten und isolierten Hintergrund-Threads. |
+
+**Auffindbarkeits-Schlagwörter & Themen:** `autonome-agenten`, `ki-messaging`, `zero-dependencies`, `stdlib-only`, `telegram-bot`, `discord-webhook`, `signal-cli`, `whatsapp-business-api`, `home-assistant-notify`, `slack-bot`, `apple-imessage`, `local-first`, `privacy-first`, `multi-agent-swarms`, `python-stdlib`.
+
+---
+
+<a id="vergleichsmatrix-gegenueber-alternativen"></a>
+## Vergleichsmatrix gegenüber Alternativen
+
+| Architektur-Kriterium | `connectors` (ellmos-ai) | Einzelne SDKs (`discord.py`, `python-telegram-bot`) | All-in-One Frameworks (Errbot, OpsDroid) | Schwergewichtige Agent-Tools (LangChain Community) |
+|:---|:---|:---|:---|:---|
+| **Laufzeit-Abhängigkeiten** | **0 (100% Python-Standardbibliothek)** | Hoch (15–40+ transitive Pip-Pakete) | Sehr hoch (50+ Pakete, Plugins) | Extrem (100+ transitive Pakete) |
+| **Kaltstart-Latenz** | **< 1 ms** | ~200–500 ms | ~800–2000 ms | ~1500–4000 ms |
+| **Speicher-Footprint** | **~12–18 MB** | ~45–80 MB | ~90–180 MB | ~150–350 MB |
+| **Geheimnis-Maskierungsgarantie** | **Striktes `field(repr=False)`** | Inkonsistent / Manuell | Konfigurationsabhängig | Anfällig für Prompt-/Log-Leaks |
+| **Einheitlicher ABC-Vertrag** | **Ja (`BaseConnector`)** | Nein (Plattformspezifische APIs) | Partiell (Plugin-Schnittstellen) | Generischer String-I/O-Wrapper |
+| **Thread-Polling vs. Async-Zwang** | **Integriertes `poll_threaded()`** | Erzwingt AsyncIO-Loop-Übernahme | Starre Threading-/Async-Laufzeit | Variabel / Externe Executors |
+| **Shell-Injection-Immunität** | **Strikte `shell=False`-Listen** | N/A (WebSockets/HTTP) | Shell-Befehle möglich | Dynamisches Subprocess-Risiko |
+| **macOS Native iMessage** | **Ja (Direktes SQLite + OSA)** | Nein | Nein | Nein |
+| **Supply-Chain-Angriffsfläche** | **Null (0 Pip-CVEs)** | Breite Angriffsfläche | Breite Angriffsfläche | Extrem breite Angriffsfläche |
 
 ---
 

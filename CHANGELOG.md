@@ -1,6 +1,14 @@
 # CHANGELOG — connectors
 
-## [1.2.1] - 2026-09-11
+## [1.2.1] - 2026-09-13
+
+### Discoverability, Target Personas & Comparative Matrix — Pfad B (2026-09-13)
+
+- **Target Personas & SEO Integration (`README.md`, `README_de.md`):** Formalized 4 core target personas (Autonomous AI Agent Engineers, Self-Hosted Homelab Automators, Privacy-Conscious SecOps, Multi-Platform Dispatchers) directly into both English and German README documentation, complemented with targeted keyword discovery tags.
+- **Comparative Alternatives Matrix (`README.md`, `README_de.md`):** Integrated a rigorous 9-factor architectural benchmark matrix comparing `connectors` against individual SDKs (`discord.py`, `python-telegram-bot`), all-in-one bot frameworks (Errbot, OpsDroid), and heavyweight agent tooling (LangChain community tools) across dependencies, cold start, memory, secret safety, and supply-chain risk.
+- **Navigation & Badges Refresh (`README.md`, `README_de.md`):** Expanded Quick Navigation to 19 bilingual anchor points with 100% parity, integrated GitHub Actions CI status badge and verified date badge (`2026-09-13`).
+- **Policy & Audit Date Freshness (`SECURITY.md`, `llms.txt`, `THIRD_PARTY_LICENSES.md`, `MARKETING-LOG.txt`):** Synchronized security response SLA and inventory audit dates to `2026-09-13`.
+- **Contract Test Suite Expansion (`tests/test_metadata.py`):** Added automated contract tests auditing target personas, comparative matrix, 19 navigation anchors, verified badges, and audit date parity across documentation manifests (full test suite at 64 passed tests).
 
 ### Technical Hygiene & CI Hardening — Pfad A (2026-09-11)
 

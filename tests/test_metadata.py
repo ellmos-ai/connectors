@@ -50,12 +50,14 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         anchors_en = re.findall(r"\[([^\]]+)\]\(#([^\)]+)\)", readme_en)
         anchors_de = re.findall(r"\[([^\]]+)\]\(#([^\)]+)\)", readme_de)
 
-        self.assertGreaterEqual(len(anchors_en), 15, "README.md must have at least 15 quick navigation anchor links")
-        self.assertGreaterEqual(len(anchors_de), 15, "README_de.md must have at least 15 quick navigation anchor links")
+        self.assertGreaterEqual(len(anchors_en), 19, "README.md must have at least 19 quick navigation anchor links")
+        self.assertGreaterEqual(len(anchors_de), 19, "README_de.md must have at least 19 quick navigation anchor links")
 
         # Verify key anchors exist in English
         expected_anchors_en = [
             "key-features",
+            "target-personas--discoverability",
+            "comparative-matrix-vs-alternatives",
             "system-architecture",
             "interactive-messaging--polling-lifecycle",
             "supported-connectors--status",
@@ -75,6 +77,32 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         ]
         for anchor in expected_anchors_en:
             self.assertIn(f"(#{anchor})", readme_en, f"Anchor #{anchor} missing in README.md")
+
+        # Verify key anchors exist in German
+        expected_anchors_de = [
+            "hauptmerkmale",
+            "zielgruppen--auffindbarkeit",
+            "vergleichsmatrix-gegenueber-alternativen",
+            "systemarchitektur",
+            "interaktiver-nachrichten---polling-lebenszyklus",
+            "unterstuetzte-connectoren--status",
+            "governance---sicherheits-invarianten",
+            "schnellstart",
+            "slack---imessage-connectoren",
+            "geheimnis-verwaltung--null-datenabfluss",
+            "thread-polling--event-callbacks",
+            "interaktiver-setup-wizard--vorlagen",
+            "bach-framework-integration",
+            "geschwister-oekosystem--partner-repositories",
+            "smoke-testing--verifikation",
+            "sicherheitsrichtlinie--meldeprozess",
+            "drittanbieter-lizenzen--hinweise",
+            "mitwirken",
+            "lizenz",
+        ]
+        for anchor in expected_anchors_de:
+            self.assertIn(f"(#{anchor})", readme_de, f"Anchor #{anchor} missing in README_de.md")
+
 
     def test_bilingual_readme_parity(self):
         readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -173,7 +201,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         self.assertIn("1.2.x", sec_text)
         self.assertIn("1.1.x", sec_text)
-        self.assertIn("2026-09-11", sec_text)
+        self.assertIn("2026-09-13", sec_text)
         self.assertIn("48 hours", sec_text)
         self.assertIn("5 business days", sec_text)
         self.assertIn("Zero Runtime Secret Persistence", sec_text)
@@ -188,7 +216,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         llms_text = llms_path.read_text(encoding="utf-8")
 
         self.assertIn("# connectors — LLM-Kontext", llms_text)
-        self.assertIn("## Last-checked: 2026-09-11", llms_text)
+        self.assertIn("## Last-checked: 2026-09-13", llms_text)
         self.assertIn("1.2.1", llms_text)
         self.assertIn("BaseConnector", llms_text)
         self.assertIn("create_connector", llms_text)
@@ -259,7 +287,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         self.assertIn("Marketing & Discoverability Log — connectors", mlog_text)
         self.assertIn("1.2.1", mlog_text)
-        self.assertIn("2026-09-11", mlog_text)
+        self.assertIn("2026-09-13", mlog_text)
         self.assertIn("Autonomous AI Agent Engineers", mlog_text)
         self.assertIn("Self-Hosted Smart Home & Homelab Automation Developers", mlog_text)
         self.assertIn("Privacy-Conscious Enterprise SecOps", mlog_text)
@@ -282,7 +310,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
     def test_changelog_release_sections(self):
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-        self.assertIn("## [1.2.1] - 2026-09-11", changelog)
+        self.assertIn("## [1.2.1] - 2026-09-13", changelog)
         self.assertIn("## [1.2.0] - 2026-09-10", changelog)
         self.assertIn("## [1.1.0] - 2026-09-08", changelog)
 
@@ -290,6 +318,48 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
         self.assertIn("timeout-minutes: 15", workflow)
         self.assertIn("python -m pytest -ra -v", workflow)
+
+    def test_target_personas_and_seo_integration(self):
+        readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+        # English
+        self.assertIn("Target Personas & Discoverability", readme_en)
+        self.assertIn("Autonomous AI Agent Engineers", readme_en)
+        self.assertIn("Self-Hosted Homelab Automators", readme_en)
+        self.assertIn("Privacy-Conscious SecOps", readme_en)
+        self.assertIn("Multi-Platform Dispatcher Builders", readme_en)
+        self.assertIn("Discovery Keywords & Topic Tags", readme_en)
+
+        # German
+        self.assertIn("Zielgruppen & Auffindbarkeit", readme_de)
+        self.assertIn("Autonome KI-Agenten-Entwickler", readme_de)
+        self.assertIn("Self-Hosted Homelab-Automatisierer", readme_de)
+        self.assertIn("Datenschutzorientierte Enterprise-SecOps", readme_de)
+        self.assertIn("Multi-Plattform Incident-Response-Entwickler", readme_de)
+        self.assertIn("Auffindbarkeits-Schlagwörter & Themen", readme_de)
+
+    def test_comparative_matrix_vs_alternatives(self):
+        readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+        for text, name in [(readme_en, "README.md"), (readme_de, "README_de.md")]:
+            self.assertIn("discord.py", text, f"Missing discord.py in {name}")
+            self.assertIn("python-telegram-bot", text, f"Missing python-telegram-bot in {name}")
+            self.assertIn("Errbot", text, f"Missing Errbot in {name}")
+            self.assertIn("OpsDroid", text, f"Missing OpsDroid in {name}")
+            self.assertIn("LangChain", text, f"Missing LangChain in {name}")
+            self.assertIn("0 (100% Python", text, f"Missing 0 stdlib guarantee in {name}")
+
+    def test_badges_and_ci_indicator(self):
+        readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+        for text, name in [(readme_en, "README.md"), (readme_de, "README_de.md")]:
+            self.assertIn("workflows/tests.yml/badge.svg", text, f"Missing CI workflow badge in {name}")
+            self.assertIn("verified-2026--09--13", text, f"Missing verified date badge in {name}")
+            self.assertIn("License-MIT", text, f"Missing MIT badge in {name}")
+            self.assertIn("LLM--Ready-llms.txt", text, f"Missing LLM-Ready badge in {name}")
 
 
 if __name__ == "__main__":
