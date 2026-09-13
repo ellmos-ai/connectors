@@ -1,14 +1,14 @@
 # TODO — connectors
 
-Status: `v1.1.0 — funktionsfähig, veröffentlicht`
+Status: `v1.1.0 — funktionsfähig, veröffentlicht; CI-/Release-Nachweise offen`
 
 ## STATUS
 
 | Category | Status | Notes |
 |---|---|---|
 | Tests | OK | 39 lokale, netzfreie Tests bestanden. |
-| Compile | OK | Alle produktiven Python-Module kompilieren. |
-| Final Gate | OK | Final Gate Check: 10 PASS / 0 FAIL / 0 WARN. |
+| Compile | BLOCKIERT | Lokale Produktionsmodule kompilieren; GitHub-Run 33709473384 scheitert auf Windows beim über-escaped Template-Ausschluss (TASKPLAN 205). |
+| Final Gate | NACHWEIS VERALTET | Historischer Check 10 PASS / 0 FAIL / 0 WARN; `RELEASE_GATE.md` fehlt im aktuellen Checkout (TASKPLAN 211). |
 | Release | Teilweise | Repository veröffentlicht: https://github.com/ellmos-ai/connectors. Ein Release-Tag `v1.1.0` existiert noch nicht. |
 
 ## Review 2026-07-15 (Security-/Dependency-Audit)
@@ -99,3 +99,61 @@ Status: `v1.1.0 — funktionsfähig, veröffentlicht`
 - [x] Package-Installation über `pyproject.toml`
 - [x] GitHub-Actions-Smoke-Test für installierbare Imports
 - [x] Temp-Klon-unabhängiger Import-Smoke
+
+## TASKWRITER-Review 2026-09-05
+
+Presentation `66ba31f8-407e-4f59-ac60-35689d418651`; vollständig gelesen
+wurden die sechs Sprachfassungen der README, TODO.md, CHANGELOG.md,
+SECURITY.md, llms.txt, pyproject.toml, VERSION, BACH-REIMPORT-NOTE.md,
+ellmos-module.v2.json, requirements.txt, der GitHub-Workflow sowie die
+Paketmodule und Tests. `main` war sauber und exakt auf `origin/main`
+(`225a9f5`). Das Repository ist öffentlich; es gab keine offenen Issues oder
+Pull Requests.
+
+Lokal liefen 39 Tests, Import-Smoke und produktives `compileall` erfolgreich.
+`ruff check .` meldete 50 Befunde (darunter echte ungenutzte Imports und die
+bewusst nicht-Python-Platzhalterdatei). Der Live-Workflow-Run `33709473384`
+war auf Ubuntu/macOS erfolgreich, aber auf Windows 3.10–3.13 im Compile-Schritt
+rot; die 39 Pytest blieben dort grün. Der aktuelle Status oben wurde deshalb
+von „Compile/Final Gate OK“ auf belegte Zustände korrigiert.
+
+### Neue, formalisierte Aufgaben
+
+- [ ] **TASKPLAN 205 — Windows-CI-Compile-Gate und deklarierte
+      Python-Unterstützung konsistent machen** (high, medium, local). Das
+      über-escaped Ausschlussregex verfehlt `templates/connector_template.py`;
+      außerdem sind Python 3.8/3.9 deklariert, aber nicht in der Matrix.
+- [ ] **TASKPLAN 206 — Lint- und Template-Prüfgrenze reproduzierbar festlegen**
+      (medium, medium, local). Produktions-/Testcode, Roh-Platzhalter und
+      gerenderte Templates brauchen einen klaren Qualitätsbefehl.
+- [ ] **TASKPLAN 207 — Message-Zeitstempel und since-Pagination
+      kanalübergreifend vereinheitlichen** (medium, medium, local). Mehrere
+      Connectoren liefern naive Zeitstempel oder ignorieren/überladen `since`.
+- [ ] **TASKPLAN 208 — Echte Attachment-Unterstützung nur mit kanalgenauen
+      Verträgen ergänzen** (medium, large, local). Die vorhandene Warnung bleibt
+      korrekt; reale Media-APIs sind ein gesondertes, nicht autonomes Vorhaben.
+- [ ] **TASKPLAN 209 — Niedrigprioritäre Connector-Erweiterungen und
+      Webhook-Eingang als Roadmap-Entscheidungen formalisieren** (low, large,
+      local): E-Mail, Slack, Matrix und eingehender Webhook-Server.
+- [ ] **TASKPLAN 210 — BACH- und Gardener-Integration ausschließlich als
+      externe Entscheidung vorbereiten** (medium, special, local). Keine fremden
+      Repositories ohne deren Owner ändern.
+- [ ] **TASKPLAN 211 — v1.1.0 Release-Tag, RELEASE_GATE und PyPI-Frage als
+      Nutzerentscheidung behandeln** (high, special, local). Kein Tagging,
+      Upload oder Push ohne ausdrückliche Freigabe und Gate-Nachweis.
+
+### Offene Entscheidungen und Schutzgrenzen
+
+- TASKPLAN 205/206 benötigen eine bewusste CI-/Lint-Scope-Entscheidung; ein
+  grüner Job darf die Rohvorlage nicht einfach global verschweigen.
+- TASKPLAN 208–211 sind large/special bzw. extern: Der TASKWRITER führt sie
+  nur als sichtbare nächste Schritte, führt sie nicht aus und behauptet keinen
+  Release-, Upload-, Integrations- oder Live-Plattform-Erfolg.
+
+### Review-Log
+
+- Keine Aufgabe ausgeführt; bestehende Dateien außerhalb dieses Registers sowie
+  externe Repositories unverändert.
+- TASKPLAN-Register synchronisiert: IDs 205–211; alle mit Ergebnis, Quelle,
+  Herleitung, Abnahme, Verifikation, Abhängigkeiten/Blocker, Aufwand, Scope und
+  Prioritätsbegründung.
