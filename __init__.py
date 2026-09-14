@@ -37,7 +37,7 @@ Unterstützte Connector-Typen:
 MIT License — siehe LICENSE
 """
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
 __author__ = "connectors contributors"
 
 from connectors.base import (

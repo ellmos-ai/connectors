@@ -8,10 +8,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![CI](https://github.com/ellmos-ai/connectors/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/connectors/actions/workflows/tests.yml)
-[![Version](https://img.shields.io/badge/Version-v1.2.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v1.2.2-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-65%20passed%20%7C%20100%25-brightgreen.svg)](tests/)
-[![Verified: 2026-09-13](https://img.shields.io/badge/verified-2026--09--13-blue.svg)](CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/tests-67%20passed%20%7C%20100%25-brightgreen.svg)](tests/)
+[![Verified: 2026-09-14](https://img.shields.io/badge/verified-2026--09--14-blue.svg)](CHANGELOG.md)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows%20%7C%20macOS-informational.svg)](.github/workflows/tests.yml)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-100%25%20Stdlib-success.svg)](pyproject.toml)
 [![Security Policy](https://img.shields.io/badge/security-policy%20%7C%2048h%20SLA-orange.svg)](SECURITY.md)

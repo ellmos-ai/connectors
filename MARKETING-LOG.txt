@@ -4,8 +4,8 @@
 **Ecosystem:** [ellmos-ai](https://github.com/ellmos-ai)
 **Umbrella:** [open-bricks](https://github.com/open-bricks)
 **Maintained By:** connectors contributors
-**Last Updated:** 2026-09-13
-**Current Version:** 1.2.1
+**Last Updated:** 2026-09-14
+**Current Version:** 1.2.2
 
 ---
 
@@ -113,3 +113,13 @@
 - **Navigation & Badge Parity:** Expanded Quick Navigation to 19 bilingual anchor points with 100% parity, added GitHub Actions CI status badge and verified freshness badge (`2026-09-13`).
 - **Policy & Audit Synchronization:** Synchronized security response SLA and audit dates across `SECURITY.md`, `llms.txt`, `THIRD_PARTY_LICENSES.md`, and `MARKETING-LOG.txt`.
 - **Contract Test Automation:** Expanded contract tests in `tests/test_metadata.py` verifying target personas, comparative matrix, 19 navigation anchors, verified badges, and audit dates.
+
+---
+
+## 8. Release 1.2.2 Highlights (Pfad A — Quality, Stale Automation & Multi-Host Defense Audit 2026-09-14)
+
+- **Stale Issues & PRs Lifecycle Automation:** Added `.github/workflows/stale.yml` using `actions/stale@v9` with `timeout-minutes: 10`, concurrency group cancellation, daily schedule (`30 1 * * *`), and least-privilege permissions (`issues: write`, `pull-requests: write`) to automatically triage idle community threads (30 days before stale, 7 days grace period).
+- **Multi-Host & Conflict Hardening:** Extended `.gitignore` against cross-system sync artifacts across multi-host setups (`* (Kopie)*`, `* (Copy)*`, `*conflicted copy*`, `*-ASUS*`, `*-LAPTOP*`, `*-Mac Studio*`), multi-agent lock permissions (`LOCK.permissions.json`), cache directories (`.hypothesis/`, `.turbo/`, `.nyc_output/`), and patch artifacts (`*.rej`).
+- **Version Harmonization & Parity:** Synchronized release version to `1.2.2` across package manifests, PEP 621 metadata, and LLM context files with updated audit timestamp (`2026-09-14`).
+- **Security Policy & Third-Party Inventory Audit:** Updated policy verification and inventory audit timestamps to `2026-09-14`, reaffirming `1.2.x` active release support line and zero external runtime dependencies.
+- **Contract Test Suite Expansion:** Added automated contract tests auditing stale workflow presence, multi-host sync exclusions, and version parity across manifests.

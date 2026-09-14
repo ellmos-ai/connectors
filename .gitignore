@@ -78,18 +78,25 @@ LOCK*.txt
 *.lock
 LOCK.*
 LOCK
+LOCK.permissions.json
 uv.lock
 
 # Host-spezifische Sync-Dateien (OneDrive Sync-Konflikte)
 *-ASUS-GEI*
+*-ASUS*
 *-WORKSTATION-LG*
 *-WORKSTATION*
+*-LAPTOP*
+*-Mac Studio*
 *.sync-conflict-*
 *.conflict
 *-conflict-*
 *-CONFLIT-*
 * (kopie)*
 * (copy)*
+* (Kopie)*
+* (Copy)*
+*conflicted copy*
 *.sync-temp-*
 
 # Pytest / Coverage / Caches
@@ -101,6 +108,9 @@ htmlcov/
 .ruff_cache/
 .tox/
 .mypy_cache/
+.hypothesis/
+.turbo/
+.nyc_output/
 wheelhouse/
 
 # Temporäre Test- und Build-Artefakte
@@ -109,4 +119,5 @@ wheelhouse/
 *.bak
 *~
 *.orig
+*.rej
 

@@ -121,21 +121,30 @@ class RepositoryHygieneTests(unittest.TestCase):
         conflict_samples = [
             "LOCK.txt",
             "LOCK.permissions.txt",
+            "LOCK.permissions.json",
             "LOCK.user.lukas",
             "uv.lock",
             "repo.lock",
             "base-ASUS-GEI.py",
+            "notes-ASUS.txt",
             "signal_connector-WORKSTATION-LG.py",
             "signal_connector-WORKSTATION.py",
+            "notes-LAPTOP.txt",
+            "mac-Mac Studio.py",
             "config.sync-conflict-20260825.json",
             "messages.conflict",
             "module-conflict-copy.py",
             "file-CONFLIT-20260908.txt",
             "data (kopie).json",
+            "data (copy).json",
+            "data (Kopie).json",
+            "data (Copy).json",
+            "state conflicted copy.json",
             "state.sync-temp-01",
             "debug.tmp",
             "old.bak",
             "patch.orig",
+            "patch.rej",
         ]
         if (ROOT / ".git").exists():
             result = _git("check-ignore", *conflict_samples)
@@ -156,9 +165,9 @@ class MetadataAndSecurityContractTests(unittest.TestCase):
         self.assertIsNotNone(match, "pyproject.toml must declare version")
         pyproject_version = match.group(1)
 
-        self.assertEqual(connectors.__version__, "1.2.1")
-        self.assertEqual(version_file, "1.2.1")
-        self.assertEqual(pyproject_version, "1.2.1")
+        self.assertEqual(connectors.__version__, "1.2.2")
+        self.assertEqual(version_file, "1.2.2")
+        self.assertEqual(pyproject_version, "1.2.2")
 
     def test_zero_external_runtime_dependencies(self):
         pyproject_content = (ROOT / "pyproject.toml").read_text(encoding="utf-8")

@@ -1,5 +1,15 @@
 # CHANGELOG — connectors
 
+## [1.2.2] - 2026-09-14
+
+### Technical Hygiene, Stale Lifecycle Automation & Multi-Host Defense — Pfad A (2026-09-14)
+
+- **Stale Issues & PRs Lifecycle Automation (`.github/workflows/stale.yml`):** Implemented automated lifecycle workflow using `actions/stale@v9` with `timeout-minutes: 10`, concurrency group cancellation, daily schedule (`30 1 * * *`), and least-privilege permissions (`issues: write`, `pull-requests: write`) to automatically triage idle community threads (30 days inactivity before stale, 7 days grace period).
+- **Multi-Host Cloud-Sync & Lock Defense Hardening (`.gitignore`):** Hardened gitignore patterns against cross-system sync artifacts across multi-host setups (`* (Kopie)*`, `* (Copy)*`, `*conflicted copy*`, `*-ASUS*`, `*-LAPTOP*`, `*-Mac Studio*`), multi-agent lock permissions (`LOCK.permissions.json`), cache directories (`.hypothesis/`, `.turbo/`, `.nyc_output/`), and patch artifacts (`*.rej`).
+- **Version Harmonization & Metadata Parity (`VERSION`, `pyproject.toml`, `__init__.py`, `llms.txt`):** Synchronized release version to `1.2.2` across package manifests, PEP 621 metadata, and LLM context files with updated audit timestamp (`2026-09-14`).
+- **Security Policy & Third-Party Inventory Audit (`SECURITY.md`, `THIRD_PARTY_LICENSES.md`):** Updated policy verification and inventory audit timestamps to `2026-09-14`, reaffirming `1.2.x` active release support line and zero external runtime dependencies.
+- **Contract Test Suite Expansion (`tests/test_metadata.py`, `tests/test_repository_hygiene.py`):** Added automated contract tests auditing stale workflow presence, multi-host sync exclusions, and version parity.
+
 ## [1.2.1] - 2026-09-13
 
 ### Discoverability, Target Personas & Comparative Matrix — Pfad B (2026-09-13)

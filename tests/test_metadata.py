@@ -201,7 +201,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         self.assertIn("1.2.x", sec_text)
         self.assertIn("1.1.x", sec_text)
-        self.assertIn("2026-09-13", sec_text)
+        self.assertIn("2026-09-14", sec_text)
         self.assertIn("48 hours", sec_text)
         self.assertIn("5 business days", sec_text)
         self.assertIn("Zero Runtime Secret Persistence", sec_text)
@@ -216,8 +216,8 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         llms_text = llms_path.read_text(encoding="utf-8")
 
         self.assertIn("# connectors — LLM-Kontext", llms_text)
-        self.assertIn("## Last-checked: 2026-09-13", llms_text)
-        self.assertIn("1.2.1", llms_text)
+        self.assertIn("## Last-checked: 2026-09-14", llms_text)
+        self.assertIn("1.2.2", llms_text)
         self.assertIn("BaseConnector", llms_text)
         self.assertIn("create_connector", llms_text)
         self.assertIn("SecretAdapter", llms_text)
@@ -230,7 +230,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
     def test_pyproject_metadata_and_urls(self):
         pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         self.assertIn('name = "ellmos-connectors"', pyproject_text)
-        self.assertIn('version = "1.2.1"', pyproject_text)
+        self.assertIn('version = "1.2.2"', pyproject_text)
         self.assertIn('dependencies = []', pyproject_text)
         self.assertIn('"Third-Party Licenses"', pyproject_text)
         self.assertIn('"Marketing Log"', pyproject_text)
@@ -267,12 +267,24 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         self.assertIn("*-CONFLIT-*", gitignore_text)
         self.assertIn("*.lock", gitignore_text)
         self.assertIn("uv.lock", gitignore_text)
+        self.assertIn("LOCK.permissions.json", gitignore_text)
         self.assertIn("* (kopie)*", gitignore_text)
+        self.assertIn("* (copy)*", gitignore_text)
+        self.assertIn("* (Kopie)*", gitignore_text)
+        self.assertIn("* (Copy)*", gitignore_text)
+        self.assertIn("*conflicted copy*", gitignore_text)
+        self.assertIn("*-ASUS*", gitignore_text)
+        self.assertIn("*-LAPTOP*", gitignore_text)
+        self.assertIn("*-Mac Studio*", gitignore_text)
         self.assertIn(".coverage.*", gitignore_text)
         self.assertIn(".ruff_cache/", gitignore_text)
+        self.assertIn(".hypothesis/", gitignore_text)
+        self.assertIn(".turbo/", gitignore_text)
+        self.assertIn(".nyc_output/", gitignore_text)
         self.assertIn(".wheel-smoke/", gitignore_text)
         self.assertIn("*.tmp", gitignore_text)
         self.assertIn("*.bak", gitignore_text)
+        self.assertIn("*.rej", gitignore_text)
 
     def test_utf8_encoding_and_german_umlauts(self):
         readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
@@ -286,8 +298,8 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         mlog_text = mlog_path.read_text(encoding="utf-8")
 
         self.assertIn("Marketing & Discoverability Log — connectors", mlog_text)
-        self.assertIn("1.2.1", mlog_text)
-        self.assertIn("2026-09-13", mlog_text)
+        self.assertIn("1.2.2", mlog_text)
+        self.assertIn("2026-09-14", mlog_text)
         self.assertIn("Autonomous AI Agent Engineers", mlog_text)
         self.assertIn("Self-Hosted Smart Home & Homelab Automation Developers", mlog_text)
         self.assertIn("Privacy-Conscious Enterprise SecOps", mlog_text)
@@ -310,6 +322,7 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
     def test_changelog_release_sections(self):
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertIn("## [1.2.2] - 2026-09-14", changelog)
         self.assertIn("## [1.2.1] - 2026-09-13", changelog)
         self.assertIn("## [1.2.0] - 2026-09-10", changelog)
         self.assertIn("## [1.1.0] - 2026-09-08", changelog)
@@ -318,6 +331,24 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
         self.assertIn("timeout-minutes: 15", workflow)
         self.assertIn("python -m pytest -ra -v", workflow)
+
+    def test_stale_workflow_presence_and_guardrails(self):
+        stale_path = ROOT / ".github" / "workflows" / "stale.yml"
+        self.assertTrue(stale_path.exists(), "stale.yml workflow must exist")
+        content = stale_path.read_text(encoding="utf-8")
+        self.assertIn("actions/stale@v9", content)
+        self.assertIn("timeout-minutes: 10", content)
+        self.assertIn("cancel-in-progress: true", content)
+        self.assertIn("issues: write", content)
+        self.assertIn("pull-requests: write", content)
+        self.assertIn("cron: '30 1 * * *'", content)
+        self.assertIn("days-before-stale: 30", content)
+        self.assertIn("days-before-close: 7", content)
+
+    def test_ci_concurrency_and_cancellation(self):
+        workflow = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        self.assertIn("concurrency:", workflow)
+        self.assertIn("cancel-in-progress: true", workflow)
 
     def test_target_personas_and_seo_integration(self):
         readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -357,7 +388,8 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
 
         for text, name in [(readme_en, "README.md"), (readme_de, "README_de.md")]:
             self.assertIn("workflows/tests.yml/badge.svg", text, f"Missing CI workflow badge in {name}")
-            self.assertIn("verified-2026--09--13", text, f"Missing verified date badge in {name}")
+            self.assertIn("verified-2026--09--14", text, f"Missing verified date badge in {name}")
+            self.assertIn("Version-v1.2.2-blue.svg", text, f"Missing Version badge in {name}")
             self.assertIn("License-MIT", text, f"Missing MIT badge in {name}")
             self.assertIn("LLM--Ready-llms.txt", text, f"Missing LLM-Ready badge in {name}")
 
