@@ -1,4 +1,4 @@
-<img src="assets/banner.png" width="100%" alt="connectors Banner">
+<img src="assets/banner.gif" width="100%" alt="connectors Banner">
 
 # connectors
 
