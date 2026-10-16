@@ -43,7 +43,7 @@ jobs:
       - name: Compile Python sources
         env:
           PYTHONIOENCODING: utf-8
-        run: python -m compileall -q -x "templates[\\\\/]connector_template\\.py" .
+        run: python -m compileall -q -x 'templates[\\/]connector_template[.]py$' .
 
       - name: Run Pytest test suite
         env:
