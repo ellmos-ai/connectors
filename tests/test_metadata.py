@@ -32,13 +32,31 @@ class MetadataAndDiscoverabilityContractTests(unittest.TestCase):
         self.assertTrue(banner_png.exists(), "assets/banner.png must exist")
         self.assertTrue(banner_svg.exists(), "assets/banner.svg must exist")
 
-        readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
-        readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+        banners = {}
+        for name in ("README.md", "README_de.md", "README_es.md", "README_ja.md", "README_ru.md", "README_zh-Hans.md"):
+            with self.subTest(readme=name):
+                readme = (ROOT / name).read_text(encoding="utf-8")
+                banner = re.search(r'<img\b[^>]*>', readme)
+                self.assertIsNotNone(banner, f"{name} must contain a banner image")
+                tag = banner.group(0)
+                self.assertIn('alt="connectors Banner"', tag)
+                source = re.search(r'src="(assets/banner\.(?:png|gif|svg))"', tag)
+                self.assertIsNotNone(source, f"{name} must reference a local banner asset")
+                asset = ROOT / source.group(1)
+                self.assertTrue(asset.is_file(), f"Referenced banner must exist: {asset}")
+                if asset.suffix == ".svg":
+                    from xml.etree import ElementTree
 
-        self.assertIn('src="assets/banner.png"', readme_en)
-        self.assertIn('alt="connectors Banner"', readme_en)
-        self.assertIn('src="assets/banner.png"', readme_de)
-        self.assertIn('alt="connectors Banner"', readme_de)
+                    self.assertEqual(ElementTree.parse(asset).getroot().tag.rsplit("}", 1)[-1], "svg")
+                else:
+                    with asset.open("rb") as stream:
+                        signature = stream.read(8)
+                    if asset.suffix == ".gif":
+                        self.assertIn(signature[:6], (b"GIF87a", b"GIF89a"))
+                    else:
+                        self.assertEqual(signature, b"\x89PNG\r\n\x1a\n")
+                banners[name] = source.group(1)
+        self.assertEqual(banners.get("README.md"), banners.get("README_de.md"))
 
     def test_quick_navigation_anchors(self):
         readme_en = (ROOT / "README.md").read_text(encoding="utf-8")

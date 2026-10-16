@@ -1,5 +1,9 @@
 # CHANGELOG — connectors
 
+## Unreleased
+
+- Validate the actual local GIF/PNG/SVG banner references, accessibility text and file signatures across all six READMEs, preserving EN/DE banner parity and the existing translated SVG banners.
+
 ## [1.2.2] - 2026-09-14
 
 ### Technical Hygiene, Stale Lifecycle Automation & Multi-Host Defense — Pfad A (2026-09-14)
