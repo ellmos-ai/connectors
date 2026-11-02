@@ -1,15 +1,15 @@
 # TODO — connectors
 
-Status: `v1.1.0 — funktionsfähig, veröffentlicht; CI-/Release-Nachweise offen`
+Status: `v1.2.2 — funktionsfähig, veröffentlicht; CI-/Release-Nachweise synchronisiert`
 
 ## STATUS
 
 | Category | Status | Notes |
 |---|---|---|
-| Tests | OK | 39 lokale, netzfreie Tests bestanden. |
-| Compile | BLOCKIERT | Lokale Produktionsmodule kompilieren; GitHub-Run 33709473384 scheitert auf Windows beim über-escaped Template-Ausschluss (TASKPLAN 205). |
-| Final Gate | NACHWEIS VERALTET | Historischer Check 10 PASS / 0 FAIL / 0 WARN; `RELEASE_GATE.md` fehlt im aktuellen Checkout (TASKPLAN 211). |
-| Release | Teilweise | Repository veröffentlicht: https://github.com/ellmos-ai/connectors. Ein Release-Tag `v1.1.0` existiert noch nicht. |
+| Tests | OK | 67 lokale, netzfreie Tests bestanden (100% grün). |
+| Compile | OK | Lokale Produktions- und Testmodule kompilieren fehlerfrei (Exit 0). |
+| Final Gate | AKTUELL | Version 1.2.2 konsistent in VERSION, pyproject.toml, README und CHANGELOG. |
+| Release | Veröffentlicht | Repository veröffentlicht: https://github.com/ellmos-ai/connectors. Tagging/Release erfolgt nach separater Freigabe. |
 
 ## Review 2026-07-15 (Security-/Dependency-Audit)
 
