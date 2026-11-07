@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- **Security (PB-13, #3996):** `HomeAssistantConnector` validates `domain`, `service`, `entity_id` (also inside service data), `event_type` and blocks dangerous domains (`shell_command`, `hassio`, `rest_command`, ...) before any network call, closing URL-path traversal / SSRF through the HA REST URL. `send_message` accepts `notify.<service>` recipients.
 - Validate the actual local GIF/PNG/SVG banner references, accessibility text and file signatures across all six READMEs, preserving EN/DE banner parity and the existing translated SVG banners.
 
 ## [1.2.2] - 2026-09-14

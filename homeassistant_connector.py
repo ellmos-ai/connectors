@@ -33,6 +33,7 @@ MIT License — siehe LICENSE
 
 import json
 import os
+import re
 import sys
 import urllib.request
 import urllib.error
@@ -51,6 +52,36 @@ except Exception:
 from connectors.base import (
     BaseConnector, ConnectorConfig, ConnectorStatus, Message, SecretAdapter
 )
+
+
+# HA has no service-level access control, so URL-path safety lives here (PB-13, #3996).
+# Pattern follows the MIT-licensed hermes-agent HA tool (Nous Research, 2025);
+# see THIRD_PARTY_LICENSES.md. fullmatch() (not match + "$") also rejects a trailing newline.
+_NAME_RE = re.compile(r"[a-z0-9_]+")
+_ENTITY_ID_RE = re.compile(r"[a-z0-9_]+\.[a-z0-9_]+")
+_BLOCKED_DOMAINS = frozenset({
+    "shell_command",   # arbitrary shell commands on the HA host
+    "command_line",    # sensors/switches that execute shell commands
+    "python_script",   # can escalate via hass.services.call()
+    "pyscript",        # scripting integration with broad access
+    "hassio",          # add-on control, host shutdown/reboot
+    "rest_command",    # HTTP requests from the HA server (SSRF vector)
+})
+
+
+def _valid_name(value: Any) -> bool:
+    return isinstance(value, str) and _NAME_RE.fullmatch(value) is not None
+
+
+def _valid_entity_id(value: Any) -> bool:
+    return isinstance(value, str) and _ENTITY_ID_RE.fullmatch(value) is not None
+
+
+def _valid_entity_ids(value: Any) -> bool:
+    """entity_id in service data: one id or a list of ids."""
+    if isinstance(value, list):
+        return bool(value) and all(_valid_entity_id(v) for v in value)
+    return _valid_entity_id(value)
 
 
 class HomeAssistantConnector(BaseConnector):
@@ -98,7 +129,8 @@ class HomeAssistantConnector(BaseConnector):
             attachments: NICHT unterstuetzt (Warnung auf stderr).
         """
         self._warn_attachments_unsupported(attachments)
-        return self.call_service("notify", recipient, {"message": content})
+        return self.call_service("notify", recipient.removeprefix("notify."),
+                                 {"message": content})
 
     def get_messages(self, since: Optional[str] = None,
                      limit: int = 50) -> List[Message]:
@@ -119,6 +151,8 @@ class HomeAssistantConnector(BaseConnector):
 
     def get_state(self, entity_id: str) -> Optional[Dict[str, Any]]:
         """Status einer einzelnen Entity abrufen."""
+        if not _valid_entity_id(entity_id):
+            return None
         return self._api_call("GET", f"/api/states/{entity_id}")
 
     def call_service(self, domain: str, service: str,
@@ -129,7 +163,14 @@ class HomeAssistantConnector(BaseConnector):
             domain:  Service-Domain (z.B. "light", "switch", "notify").
             service: Service-Name (z.B. "turn_on").
             data:    Service-Daten (z.B. {"entity_id": "light.living_room"}).
+
+        Ungueltige Namen/entity_ids und gesperrte Domains (shell_command, hassio, ...)
+        werden ohne Netzaufruf abgelehnt (False).
         """
+        if not (_valid_name(domain) and _valid_name(service)) or domain in _BLOCKED_DOMAINS:
+            return False
+        if isinstance(data, dict) and "entity_id" in data and not _valid_entity_ids(data["entity_id"]):
+            return False
         result = self._api_call("POST", f"/api/services/{domain}/{service}", data)
         return result is not None
 
@@ -140,6 +181,8 @@ class HomeAssistantConnector(BaseConnector):
             entity_id: HA-Entity-ID (z.B. "sensor.temperature").
             hours:     Stunden zurück (Standard: 24).
         """
+        if not _valid_entity_id(entity_id):
+            return []
         since = (
             datetime.now(timezone.utc) - timedelta(hours=hours)
         ).isoformat().replace("+00:00", "Z")
@@ -152,6 +195,8 @@ class HomeAssistantConnector(BaseConnector):
     def fire_event(self, event_type: str,
                    data: Optional[Dict[str, Any]] = None) -> bool:
         """HA-Event feuern."""
+        if not _valid_name(event_type):
+            return False
         result = self._api_call("POST", f"/api/events/{event_type}", data)
         return result is not None
 
