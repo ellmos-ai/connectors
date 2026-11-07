@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """HomeAssistantConnector: URL-path / SSRF hardening (PB-13, #3996). No network."""
-import io
 import json
 import sys
 import unittest
